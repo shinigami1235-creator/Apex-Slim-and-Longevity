@@ -1,20 +1,27 @@
 (() => {
   const T = {
-    wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'index.html#treatments' },
-    cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', cls: 'cold' },
-    en: { sym: 'En', name: 'Emsculpt Neo', url: 'index.html#treatments' },
-    ff: { sym: 'Ff', name: 'FIT FIRM', url: 'index.html#treatments' },
-    iv: { sym: 'Iv', name: 'IV Therapy', url: 'index.html#longevity', cls: 'long' },
-    hb: { sym: 'Hb', name: 'HBOT', url: 'index.html#longevity', cls: 'long' },
-    sl: { sym: 'Sl', name: 'Snorelase', url: 'index.html#longevity', cls: 'long' }
+    wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'index.html#treatments', time: 'Once a week for 4 weeks',
+      desc: 'A weekly program prescribed by the doctor that works on the hunger that rises when you eat less.' },
+    cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', cls: 'cold', time: 'About 35 min per area',
+      desc: 'Cools a fold of fat until the fat cells in it die, and you go back to work the same day.' },
+    en: { sym: 'En', name: 'Emsculpt Neo', url: 'index.html#treatments', time: '30 min, 4 sessions',
+      desc: 'Heat and magnetic pulses work on fat and muscle in the same session.' },
+    ff: { sym: 'Ff', name: 'FIT FIRM', url: 'index.html#treatments', time: 'Buttocks and thighs',
+      desc: '' },
+    iv: { sym: 'Iv', name: 'IV Therapy', url: 'index.html#longevity', cls: 'long', time: '30 to 60 min drip',
+      desc: 'Vitamins, minerals and fluids through a drip, mixed by the doctor for your goal.' },
+    hb: { sym: 'Hb', name: 'HBOT', url: 'index.html#longevity', cls: 'long', time: '60 to 90 min in the chamber',
+      desc: 'You breathe pure oxygen in a pressurised chamber, which raises the oxygen carried in your blood.' },
+    sl: { sym: 'Sl', name: 'Snorelase', url: 'index.html#longevity', cls: 'long', time: '3 sessions, no cuts',
+      desc: 'A laser tightens the soft palate to reduce snoring, with no anaesthetic.' }
   };
   const GOALS = {
-    weight: { label: 'Lose weight', color: '#A886CD', t: ['wk'] },
-    fat: { label: 'Belly and flank fat', color: '#9CCBEA', t: ['cs'] },
-    tone: { label: 'Muscle tone', color: '#6A388C', t: ['en'] },
-    firm: { label: 'Firmer buttocks', color: '#D9C6EA', t: ['ff'] },
-    energy: { label: 'Energy and recovery', color: '#86D3BE', t: ['iv', 'hb'] },
-    sleep: { label: 'Sleep without snoring', color: '#BFE7DB', t: ['sl'] }
+    weight: { label: 'Lose weight', color: '#D27FD0', t: ['wk'] },
+    fat: { label: 'Belly and flank fat', color: '#5DB3E8', t: ['cs'] },
+    tone: { label: 'Muscle tone', color: '#8B4FC4', t: ['en'] },
+    firm: { label: 'Firmer buttocks', color: '#F07E7E', t: ['ff'] },
+    energy: { label: 'Energy and recovery', color: '#F2B33D', t: ['iv', 'hb'] },
+    sleep: { label: 'Sleep without snoring', color: '#86DCCB', t: ['sl'] }
   };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -67,12 +74,22 @@
   if (stage && window.MIX) {
     const M = window.MIX, LAB = 'assets/img/lab/mix2/';
     const ORDER = ['weight', 'fat', 'tone', 'firm', 'energy', 'sleep'];
-    const EFFECTS = ['swirl', 'fizz', 'shift', 'rise'];
+    /* 8 mix motions x 8 finishing touches = 64 pairs; each of the 63 combinations gets its own */
+    const MIXES = ['swirl', 'fizz', 'shift', 'rise', 'sink', 'sweep', 'bloom', 'glow'];
+    const FINISHES = ['steam', 'halo', 'drop', 'glints', 'column', 'shine', 'motes', 'pulse'];
+    const COMBO = {};
+    Array.from({ length: 63 }, (_, i) => i + 1)
+      .map(m => ORDER.filter((g, b) => m & (1 << b)))
+      .sort((a, b) => a.length - b.length)
+      .forEach((ids, n) => { COMBO[ids.join('-')] = [MIXES[(3 * n) % 8], FINISHES[(5 * n + (n >> 3)) % 8]]; });
     const picked = [];
     let busy = false, run = 0, cancelPour = null;
     const chem = document.getElementById('chem'), hForm = document.getElementById('h-formula');
     const formula = chem.closest('.formula');
     const book = document.getElementById('book-formula'), restart = document.getElementById('restart');
+    const rx = document.getElementById('rx'), rxList = document.getElementById('rx-list');
+    const seeRx = document.getElementById('see-rx'), status = document.getElementById('st-status');
+    const finish = document.getElementById('st-finish');
     const mixBtn = document.getElementById('mix-btn'), mixMsg = document.getElementById('mix-msg');
     const startOver = document.getElementById('start-over');
     const video = document.getElementById('st-video'), liquid = document.getElementById('st-liquid');
@@ -113,6 +130,28 @@
         return `<span class="mini ${cls}"><b>${syms}</b><small>${GOALS[id].label}</small><i>${sh[i]}%</i></span>`;
       }).join('<span class="plus" aria-hidden="true">+</span>');
     };
+    const rxHTML = ids => {
+      const keys = [...new Set(ids.flatMap(id => GOALS[id].t))];
+      return keys.map(k => {
+        const t = T[k], goal = ids.find(id => GOALS[id].t.includes(k));
+        return `<a class="rx-card" href="${t.url}"><span class="mini ${t.cls || ''}"><b>${t.sym}</b></span><span class="rx-text"><span class="rx-for">For ${GOALS[goal].label.toLowerCase()}</span><b class="rx-name">${t.name}</b>${t.desc ? `<span class="rx-desc">${t.desc}</span>` : ''}<span class="rx-time">${t.time}</span></span></a>`;
+      }).join('');
+    };
+    const hsl = hex => {
+      const n = parseInt(hex.slice(1), 16), r = (n >> 16) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+      if (!d) return [0, 0, l];
+      const sat = d / (1 - Math.abs(2 * l - 1));
+      const h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+      return [(h * 60 + 360) % 360, sat, l];
+    };
+    const mixColour = ids => {
+      let x = 0, y = 0, sat = 0, l = 0;
+      ids.forEach(id => { const [h, s2, l2] = hsl(GOALS[id].color); x += Math.cos(h * Math.PI / 180); y += Math.sin(h * Math.PI / 180); sat = Math.max(sat, s2); l += l2; });
+      const h = Math.round((Math.atan2(y, x) * 180 / Math.PI + 360) % 360);
+      return { h, s: Math.round(Math.max(.6, sat) * 100), l: Math.round(l / ids.length * 100) };
+    };
+    const setStatus = txt => { status.textContent = txt; status.classList.toggle('on', !!txt); };
     const refresh = () => {
       const ids = sorted();
       chem.innerHTML = ids.length ? tileHTML(ids) : '<span class="empty">Tap an ingredient on the shelf to add it.</span>';
@@ -122,10 +161,10 @@
       run++;
       if (cancelPour) cancelPour();
       liquid.innerHTML = ''; liquid.style.filter = ''; liquid.style.clipPath = ''; liquid.style.opacity = '';
-      fx.innerHTML = ''; foam.style.opacity = 0; bubbles.innerHTML = '';
+      fx.innerHTML = ''; foam.style.opacity = 0; bubbles.innerHTML = ''; finish.innerHTML = '';
       mixed.classList.remove('on'); video.classList.remove('on'); video.pause();
       formula.classList.remove('ready'); hForm.textContent = 'Your formula';
-      book.hidden = true; restart.hidden = true;
+      rx.hidden = true; seeRx.hidden = true; mixBtn.hidden = false; setStatus('');
       document.body.classList.remove('stage-busy'); busy = false;
     };
 
@@ -182,6 +221,17 @@
       foam.style.cssText = `left:${pct(x0)};top:calc(${pct(y)} - ${h / 2}px);width:${w}px;height:${h}px;opacity:0`;
     };
 
+    const holder = () => { const d = document.createElement('div'); d.className = 'st-clip'; d.style.clipPath = region(1); fx.appendChild(d); return d; };
+    const maskOn = (im, m) => { im.style.webkitMaskImage = m; im.style.maskImage = m; };
+    const lit = (im, p) => { const k = p < 0.7 ? 1 : 1 - (p - 0.7) / 0.3; im.style.filter = `brightness(${(1 + 0.28 * k).toFixed(3)}) saturate(${(1 + 0.4 * k).toFixed(3)})`; };
+    const surf = () => M.curves[40][20][1];
+    const NECK = 0.335;
+    const glass = () => {
+      const pts = [...M.bottom, ...M.right.map(p => [p[0] + 0.008, p[1]]), [0.572, 0.548], [0.572, NECK], [0.428, NECK], [0.428, 0.548], ...M.left.map(p => [p[0] - 0.008, p[1]]).reverse()];
+      return 'polygon(' + pts.map(p => pct(p[0]) + ' ' + pct(p[1])).join(',') + ')';
+    };
+    const add = (parent, cls, css) => { const e = document.createElement('i'); e.className = cls; e.style.cssText = css; parent.appendChild(e); return e; };
+
     const effects = {
       async swirl(src) {
         liquid.style.filter = 'url(#swirl)'; liquid.style.clipPath = region(1);
@@ -219,18 +269,108 @@
       },
       async rise(src) {
         const im = fxLayer(src); im.style.opacity = 1;
-        const set = y => { const m = `linear-gradient(to top,#000 ${y}%,transparent ${y + 18}%)`; im.style.webkitMaskImage = m; im.style.maskImage = m; };
-        set(-20); fizz(22, false);
-        await tween(1700, p => set(lerp(-20, 100, ease(p))));
+        const set = y => maskOn(im, `linear-gradient(to top,#000 ${y}%,transparent ${y + 10}%)`);
+        set(-4); fizz(22, false);
+        await tween(1900, p => { set(lerp(-4, 48, ease(p))); lit(im, p); });
         placeFoam(0.05);
         await tween(1300, p => {
           foam.style.opacity = (Math.sin(p * Math.PI) * 0.85).toFixed(3);
           foam.style.transform = `translateY(${(-10 * Math.sin(p * Math.PI)).toFixed(1)}px) scaleY(${(1 + Math.sin(p * Math.PI)).toFixed(2)})`;
         });
         mixed.classList.add('on');
+      },
+      async sink(src, c) {
+        /* colour drops from the surface in clouds and settles to the bottom */
+        const im = fxLayer(src); im.style.opacity = 1;
+        const set = y => maskOn(im, `linear-gradient(to bottom,#000 ${y}%,transparent ${y + 9}%)`);
+        set(45);
+        const h = holder(), top = surf();
+        for (let i = 0; i < 7; i++) {
+          add(h, 'cloud', `left:${pct(lerp(0.44, 0.54, Math.random()))};top:${pct(top - 0.01)};background:hsla(${c.h},${c.s}%,${Math.min(c.l, 55)}%,.55);animation-delay:${(i * 0.18).toFixed(2)}s;--y:${Math.round((0.86 - top) * stage.clientHeight * (0.6 + Math.random() * 0.4))}px;--x:${Math.round((Math.random() - 0.5) * 50)}px`);
+        }
+        await tween(2300, p => { set(lerp(45, 100, ease(p))); lit(im, p); });
+        mixed.classList.add('on');
+      },
+      async sweep(src) {
+        /* a wave front sloshes across from one side and back */
+        const im = fxLayer(src); im.style.opacity = 1;
+        await tween(2400, p => {
+          const x = lerp(22, 82, ease(p)), a = 90 + 22 * Math.sin(p * Math.PI * 3);
+          maskOn(im, `linear-gradient(${a.toFixed(1)}deg,#000 ${x.toFixed(1)}%,transparent ${(x + 7).toFixed(1)}%)`); lit(im, p);
+        });
+        fizz(14, false);
+        mixed.classList.add('on');
+      },
+      async bloom(src) {
+        /* the colour opens out from the middle of the liquid */
+        const im = fxLayer(src); im.style.opacity = 1;
+        const W = stage.clientWidth;
+        fizz(24, true);
+        await tween(2200, p => {
+          const r = lerp(0, 0.26 * W, ease(p)), wob = 1 + 0.08 * Math.sin(p * Math.PI * 6);
+          maskOn(im, `radial-gradient(${(r * 1.15 * wob).toFixed(1)}px ${(r * wob).toFixed(1)}px at 50% 76%,#000 70%,transparent 100%)`); lit(im, p);
+        });
+        mixed.classList.add('on');
+      },
+      async glow(src, c) {
+        /* the liquid lights up from inside, pulses twice, then settles */
+        const im = fxLayer(src);
+        const h = holder();
+        const core = add(h, 'core', `left:50%;top:76%;background:radial-gradient(circle,hsla(${c.h},100%,92%,.95) 0,hsla(${c.h},${c.s}%,70%,.5) 35%,transparent 70%)`);
+        await tween(2500, p => {
+          im.style.opacity = Math.min(1, p * 3).toFixed(3);
+          const beat = Math.abs(Math.sin(p * Math.PI * 2.5)) * (1 - p);
+          im.style.filter = `brightness(${(1 + 0.5 * beat).toFixed(3)}) saturate(${(1 + 0.6 * beat).toFixed(3)})`;
+          core.style.opacity = (beat * 1.1).toFixed(3);
+          core.style.transform = `translate(-50%,-50%) scale(${(0.6 + beat).toFixed(3)})`;
+        });
+        mixed.classList.add('on');
       }
     };
-    const pickEffect = ids => EFFECTS[[...ids.join('')].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7) % EFFECTS.length];
+
+    /* finishing touches, played once the formula is ready, in the mix colour */
+    const finishes = {
+      steam(c) {
+        for (let i = 0; i < 5; i++) add(finish, 'steam', `left:${pct(0.5 + (i - 2) * 0.018)};top:${pct(NECK - 0.2)};background:radial-gradient(ellipse at 50% 60%,hsla(${c.h},${c.s}%,72%,.95) 0,hsla(${c.h},${c.s}%,85%,.5) 40%,transparent 70%);animation-delay:${(i * 0.32).toFixed(2)}s;--dx:${Math.round((Math.random() - 0.5) * 40)}px`);
+      },
+      halo(c) {
+        add(finish, 'halo', `background:radial-gradient(circle at 50% 66%,hsla(${c.h},${c.s}%,72%,.75) 0,hsla(${c.h},${c.s}%,85%,.35) 22%,transparent 46%)`);
+      },
+      drop(c) {
+        const top = surf(), H = stage.clientHeight;
+        add(finish, 'droplet', `left:50%;top:${pct(NECK - 0.14)};background:hsl(${c.h},${c.s}%,${c.l}%);--y:${Math.round((top - NECK + 0.14) * H)}px`);
+        for (let i = 0; i < 3; i++) add(finish, 'ring', `left:50%;top:${pct(top)};border-color:hsl(${c.h},${c.s}%,${Math.max(c.l - 18, 25)}%);animation-delay:${(0.55 + i * 0.3).toFixed(2)}s`);
+      },
+      glints() {
+        const spots = [[0.43, 0.38], [0.57, 0.46], [0.39, 0.68], [0.63, 0.74], [0.36, 0.86], [0.6, 0.6], [0.47, 0.82]];
+        spots.forEach(([x, y], i) => add(finish, 'glint', `left:${pct(x)};top:${pct(y)};animation-delay:${(i * 0.22).toFixed(2)}s`));
+      },
+      column() {
+        const top = surf(), H = stage.clientHeight;
+        for (let i = 0; i < 26; i++) {
+          const y = 0.88 - Math.random() * 0.04, size = 3 + Math.random() * 5;
+          add(bubbles, '', `left:${pct(0.5 + (Math.random() - 0.5) * 0.025)};top:${pct(y)};width:${size}px;height:${size}px;animation-delay:${(i * 0.09).toFixed(2)}s;--h:-${Math.round((y - top) * H)}px;--d:${(1 + Math.random() * 0.4).toFixed(2)}s`);
+        }
+      },
+      shine(c) {
+        const s = add(finish, 'shine', `clip-path:${glass()};background-image:linear-gradient(105deg,transparent 38%,hsla(${c.h},100%,94%,.0) 42%,rgba(255,255,255,.75) 50%,hsla(${c.h},100%,90%,.35) 55%,transparent 62%)`);
+        s.addEventListener('animationend', () => s.remove());
+      },
+      motes(c) {
+        for (let i = 0; i < 16; i++) {
+          const size = 3 + Math.random() * 4;
+          add(finish, 'mote', `left:${pct(0.47 + Math.random() * 0.06)};top:${pct(NECK + 0.02)};width:${size}px;height:${size}px;background:hsl(${c.h},${c.s}%,${Math.min(c.l + 8, 75)}%);animation-delay:${(i * 0.13).toFixed(2)}s;--dx:${Math.round((Math.random() - 0.5) * 120)}px;--dy:-${Math.round(60 + Math.random() * 70)}px`);
+        }
+      },
+      pulse(c) {
+        /* a heartbeat trace runs across the liquid */
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('preserveAspectRatio', 'none'); svg.setAttribute('class', 'ecg-fin');
+        svg.style.clipPath = region(1);
+        svg.innerHTML = `<path d="M30 77H43L44.5 76 46 77H47.5L48.5 78.5 50 67 51.5 85 52.5 76.5H54L56 77H70" pathLength="1" stroke="hsl(${c.h},${c.s}%,96%)"/>`;
+        finish.appendChild(svg);
+      }
+    };
 
     mixBtn.addEventListener('click', async () => {
       if (busy) return;
@@ -243,6 +383,7 @@
       document.body.classList.add('stage-busy'); refresh();
       hForm.textContent = 'Mixing your formula';
       chem.innerHTML = tileHTML(ids);
+      const [mixFx, finFx] = COMBO[ids.join('-')], colour = mixColour(ids);
       const mixSrc = LAB + (ids.length === 1 ? 'full-' : 'mix-') + ids.join('-') + '.webp';
       new Image().src = mixSrc; mixed.src = mixSrc;
       const n = ids.length, slices = [];
@@ -253,16 +394,22 @@
       for (let i = 0; i < n; i++) {
         if (id !== run) return;
         slices[i].style.clipPath = region(i / n);
+        setStatus(n > 1 ? `Pouring ${GOALS[ids[i]].label.toLowerCase()}, ${i + 1} of ${n}` : `Pouring ${GOALS[ids[i]].label.toLowerCase()}`);
         if (reduce) { slices[i].style.clipPath = region((i + 1) / n); continue; }
         await playPour(ids[i], i % 2 ? 'L' : 'R', i / n, (i + 1) / n, slices[i]);
       }
       if (id !== run) return;
       video.classList.remove('on');
-      if (reduce) mixed.classList.add('on'); else { await effects[pickEffect(ids)](mixSrc); await wait(500); }
+      setStatus('Mixing your formula');
+      stage.dataset.mix = mixFx; stage.dataset.finish = finFx;
+      if (reduce) mixed.classList.add('on'); else { await effects[mixFx](mixSrc, colour); await wait(500); }
       if (id !== run) return;
       liquid.innerHTML = ''; liquid.style.filter = ''; liquid.style.clipPath = ''; fx.innerHTML = ''; foam.style.opacity = 0;
       formula.classList.add('ready'); hForm.textContent = 'Your formula is ready';
-      book.hidden = false; restart.hidden = false; book.dataset.goals = ids.join(',');
+      setStatus('Your formula is ready');
+      if (!reduce) { finishes[finFx](colour); setTimeout(() => { if (id === run) finish.innerHTML = ''; }, 4500); }
+      rxList.innerHTML = rxHTML(ids); rx.hidden = false;
+      mixBtn.hidden = true; seeRx.hidden = false; book.dataset.goals = ids.join(',');
       document.body.classList.remove('stage-busy'); busy = false; refresh();
       (window.dataLayer = window.dataLayer || []).push({ event: 'formula:mixed', goals: ids.join(',') });
     });

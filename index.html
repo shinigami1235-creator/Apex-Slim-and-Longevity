@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=4">
+<link rel="stylesheet" href="assets/css/slim.css?v=5">
 </head>
 <body>
 
@@ -40,6 +40,7 @@
     </div>
 
     <div class="flask-box">
+      <p class="st-status" id="st-status" aria-live="polite"></p>
       <div class="lab-stage" id="stage" role="img" aria-label="Glass flask where the ingredients you pick are poured and mixed">
         <img class="st-still" id="st-empty" src="assets/img/lab/mix2/flask-empty.webp" alt="" width="840" height="840">
         <video class="st-video" id="st-video" muted playsinline preload="none" aria-hidden="true"></video>
@@ -48,6 +49,7 @@
         <img class="st-still st-mixed" id="st-mixed" alt="" width="840" height="840">
         <i class="st-foam" id="st-foam" aria-hidden="true"></i>
         <div class="st-bubbles" id="st-bubbles" aria-hidden="true"></div>
+        <div class="st-finish" id="st-finish" aria-hidden="true"></div>
         <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="swirl" x="0" y="0" width="100%" height="100%"><feTurbulence id="swirl-turb" type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="3"/><feDisplacementMap id="swirl-disp" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
       </div>
     </div>
@@ -60,7 +62,7 @@
       <button class="bottle" type="button" data-goal="firm" aria-pressed="false"><img src="assets/img/lab/bottle-firm.webp?v=5" alt="" width="240" height="300">Firmer buttocks</button>
       <button class="bottle" type="button" data-goal="energy" aria-pressed="false"><img src="assets/img/lab/bottle-energy.webp?v=5" alt="" width="240" height="300">Energy and recovery</button>
       <button class="bottle" type="button" data-goal="sleep" aria-pressed="false"><img src="assets/img/lab/bottle-sleep.webp?v=4" alt="" width="240" height="300">Sleep without snoring</button>
-      <div class="mix-row"><button class="btn" type="button" id="mix-btn">Mix formula</button><button class="btn ghost" type="button" id="start-over" hidden>Start over</button><p class="mix-msg" id="mix-msg" role="status"></p></div>
+      <div class="mix-row"><button class="btn" type="button" id="mix-btn">Mix formula</button><a class="btn" id="see-rx" href="#rx" hidden>See your treatments</a><button class="btn ghost" type="button" id="start-over" hidden>Start over</button><p class="mix-msg" id="mix-msg" role="status"></p></div>
     </div>
   </div>
   <div class="bench-line"></div>
@@ -71,9 +73,16 @@
   <div class="wrap">
     <h2 id="h-formula">Your formula</h2>
     <div class="chem" id="chem" aria-live="polite"></div>
-    <div class="formula-actions">
-      <a class="btn" id="book-formula" href="#consult" hidden>Book a consult with this formula</a>
-      <button class="btn ghost" type="button" id="restart" hidden>Start over</button>
+  </div>
+  <div class="rx" id="rx" hidden>
+    <div class="wrap">
+      <h3 id="h-rx">Treatments for your formula</h3>
+      <p class="rx-intro">These treatments match the goals you picked. At your first visit the doctor reads your body composition scan with you and confirms which of them suit you.</p>
+      <div class="rx-list" id="rx-list"></div>
+      <div class="formula-actions">
+        <a class="btn" id="book-formula" href="#consult">Book a consult with this formula</a>
+        <button class="btn ghost" type="button" id="restart">Start over</button>
+      </div>
     </div>
   </div>
 </section>
@@ -208,6 +217,6 @@
 </footer>
 
 <script src="assets/js/mix-data.js?v=4"></script>
-<script src="assets/js/slim.js?v=4"></script>
+<script src="assets/js/slim.js?v=5"></script>
 </body>
 </html>
