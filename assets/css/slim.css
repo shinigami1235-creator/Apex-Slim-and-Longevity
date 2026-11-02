@@ -2,6 +2,7 @@
 @font-face{font-family:"LINE Seed";src:url(../fonts/LINESeed-Bd-latin.woff2) format("woff2");font-weight:700;font-display:swap}
 
 :root{
+  color-scheme:only light;
   --night:#1F0A30;--night-2:#2A0F40;--plum:#6A388C;--plum-700:#55286F;
   --lilac:#A886CD;--lilac-300:#C9B3DD;--lilac-100:#F1EAF7;--wash:#FBF3FB;
   --ink:#2A1F33;--ink-2:#5A4A66;--on-night:#F6EEFB;--on-night-2:#CDB9DD;
@@ -105,8 +106,8 @@ section{position:relative}
 .bench-line{height:0;border-top:2px solid var(--night);margin-top:-2px;position:relative}
 .bench-under{height:56px;background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(168,134,205,.18) 10px 11px)}
 .flask-box{position:relative;display:flex;flex-direction:column;align-items:center}
-.lab-stage{position:relative;width:min(100%,420px);aspect-ratio:700/840;
-  -webkit-mask-image:radial-gradient(ellipse 52% 50% at 50% 54%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 52% 50% at 50% 54%,#000 62%,transparent 100%)}
+.lab-stage{position:relative;width:min(100%,420px);aspect-ratio:1/1;
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 64%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 52%,#000 64%,transparent 100%)}
 .lab-stage>*{position:absolute;inset:0;width:100%;height:100%}
 .lab-stage .st-still,.lab-stage .st-video,.lab-stage .st-liquid img{object-fit:cover;display:block}
 .lab-stage .st-video{opacity:0;transition:opacity .25s}
@@ -142,7 +143,6 @@ section{position:relative}
 }
 @media (max-width:640px){
   .bench .wrap{grid-template-columns:1fr;grid-template-areas:"intro" "flask" "shelf"}
-  .lab-stage{width:min(62vw,300px)}
   .shelf{gap:6px 6px}
   .bottle img{max-width:72px}
   .bottle{font-size:12px}
@@ -296,3 +296,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 }
 .btn[hidden]{display:none}
 .lab-stage>svg{width:0;height:0}
+.lab-stage .st-fx img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.st-foam{position:absolute;inset:auto;left:0;top:0;width:0;height:0;border-radius:50%;pointer-events:none;opacity:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(255,255,255,.95) 0 40%,rgba(255,255,255,.55) 60%,rgba(255,255,255,0) 72%);filter:blur(.6px)}
+.st-bubbles i.pop{border-width:1px;background:rgba(255,255,255,.35)}
+@media (max-width:640px){.lab-stage{width:min(88vw,360px)}}

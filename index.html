@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="only light">
 <title>Apex Slim and Longevity | Slim science and wellness</title>
 <meta name="description" content="Body fat, muscle tone, energy and sleep treatments at Apex Slim and Longevity, part of the Apex Medical Center group. CoolSculpting, Emsculpt Neo, 1 Week 1 Kilo, FIT FIRM, IV Therapy, HBOT and Snorelase.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css">
+<link rel="stylesheet" href="assets/css/slim.css?v=4">
 </head>
 <body>
 
@@ -40,10 +41,12 @@
 
     <div class="flask-box">
       <div class="lab-stage" id="stage" role="img" aria-label="Glass flask where the ingredients you pick are poured and mixed">
-        <img class="st-still" id="st-empty" src="assets/img/lab/mix/flask-empty.webp" alt="" width="700" height="840">
+        <img class="st-still" id="st-empty" src="assets/img/lab/mix2/flask-empty.webp" alt="" width="840" height="840">
         <video class="st-video" id="st-video" muted playsinline preload="none" aria-hidden="true"></video>
         <div class="st-liquid" id="st-liquid"></div>
-        <img class="st-still st-mixed" id="st-mixed" alt="" width="700" height="840">
+        <div class="st-fx" id="st-fx"></div>
+        <img class="st-still st-mixed" id="st-mixed" alt="" width="840" height="840">
+        <i class="st-foam" id="st-foam" aria-hidden="true"></i>
         <div class="st-bubbles" id="st-bubbles" aria-hidden="true"></div>
         <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="swirl" x="0" y="0" width="100%" height="100%"><feTurbulence id="swirl-turb" type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="3"/><feDisplacementMap id="swirl-disp" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
       </div>
@@ -51,13 +54,13 @@
 
     <div class="shelf" role="group" aria-labelledby="shelf-h">
       <p id="shelf-h">Tap the ingredients you want, then mix them.</p>
-      <button class="bottle" type="button" data-goal="weight" aria-pressed="false"><img src="assets/img/lab/bottle-weight.webp" alt="" width="240" height="300">Lose weight</button>
-      <button class="bottle" type="button" data-goal="fat" aria-pressed="false"><img src="assets/img/lab/bottle-fat.webp" alt="" width="240" height="300">Belly and flank fat</button>
-      <button class="bottle" type="button" data-goal="tone" aria-pressed="false"><img src="assets/img/lab/bottle-tone.webp" alt="" width="240" height="300">Muscle tone</button>
-      <button class="bottle" type="button" data-goal="firm" aria-pressed="false"><img src="assets/img/lab/bottle-firm.webp" alt="" width="240" height="300">Firmer buttocks</button>
-      <button class="bottle" type="button" data-goal="energy" aria-pressed="false"><img src="assets/img/lab/bottle-energy.webp" alt="" width="240" height="300">Energy and recovery</button>
-      <button class="bottle" type="button" data-goal="sleep" aria-pressed="false"><img src="assets/img/lab/bottle-sleep.webp" alt="" width="240" height="300">Sleep without snoring</button>
-      <div class="mix-row"><button class="btn" type="button" id="mix-btn">Mix formula</button><p class="mix-msg" id="mix-msg" role="status"></p></div>
+      <button class="bottle" type="button" data-goal="weight" aria-pressed="false"><img src="assets/img/lab/bottle-weight.webp?v=4" alt="" width="240" height="300">Lose weight</button>
+      <button class="bottle" type="button" data-goal="fat" aria-pressed="false"><img src="assets/img/lab/bottle-fat.webp?v=4" alt="" width="240" height="300">Belly and flank fat</button>
+      <button class="bottle" type="button" data-goal="tone" aria-pressed="false"><img src="assets/img/lab/bottle-tone.webp?v=4" alt="" width="240" height="300">Muscle tone</button>
+      <button class="bottle" type="button" data-goal="firm" aria-pressed="false"><img src="assets/img/lab/bottle-firm.webp?v=4" alt="" width="240" height="300">Firmer buttocks</button>
+      <button class="bottle" type="button" data-goal="energy" aria-pressed="false"><img src="assets/img/lab/bottle-energy.webp?v=4" alt="" width="240" height="300">Energy and recovery</button>
+      <button class="bottle" type="button" data-goal="sleep" aria-pressed="false"><img src="assets/img/lab/bottle-sleep.webp?v=4" alt="" width="240" height="300">Sleep without snoring</button>
+      <div class="mix-row"><button class="btn" type="button" id="mix-btn">Mix formula</button><button class="btn ghost" type="button" id="start-over" hidden>Start over</button><p class="mix-msg" id="mix-msg" role="status"></p></div>
     </div>
   </div>
   <div class="bench-line"></div>
@@ -70,7 +73,7 @@
     <div class="chem" id="chem" aria-live="polite"></div>
     <div class="formula-actions">
       <a class="btn" id="book-formula" href="#consult" hidden>Book a consult with this formula</a>
-      <button class="btn ghost" type="button" id="restart" hidden>Start again</button>
+      <button class="btn ghost" type="button" id="restart" hidden>Start over</button>
     </div>
   </div>
 </section>
@@ -204,7 +207,7 @@
   </div>
 </footer>
 
-<script src="assets/js/mix-data.js"></script>
-<script src="assets/js/slim.js"></script>
+<script src="assets/js/mix-data.js?v=4"></script>
+<script src="assets/js/slim.js?v=4"></script>
 </body>
 </html>
