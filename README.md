@@ -8,8 +8,8 @@ Open `index.html` in a browser to view it. `coolsculpting.html` is the first tre
 
 - Colours are the Apex group tokens from the Apex Surgery site: plum #6A388C, night #1F0A30, lilac #A886CD, pale lilac #F1EAF7 and wash #FBF3FB. Ice blue #9CCBEA marks cold treatments and mint #86D3BE marks longevity.
 - Font is LINE Seed, the same files as the Apex Surgery site.
-- The home page opens on a lab bench. Each goal on the shelf pours a layer into the flask, and the formula bar lists the treatments that match.
-- The flask and bottles are Cycles renders from `blender/slim-glassware.blend` in the local project folder (kept out of this repo). Each goal colour has one flask render per fill level in `assets/img/lab`, and the page stacks slices of them along the curves in `assets/js/flask-curves.js`.
+- The home page opens on a lab bench. Visitors tap the ingredients they want on the shelf, then press Mix formula. Each vial pours into the flask in turn, the layers swirl into one colour, and the formula bar shows each ingredient's share.
+- The flask, vials and pours are Cycles renders from `blender/slim-glassware.blend` in the local project folder (kept out of this repo). `assets/img/lab/mix` holds the empty flask, one full flask per ingredient, one flask for every mix of 2 to 6 ingredients, and one pour clip per ingredient. `assets/js/mix-data.js` holds the fill-level curves the page uses to cut the liquid.
 - Lighting is the Studio Small 08 HDRI from Poly Haven (CC0).
 - Treatments are laid out as a periodic table, with slimming in the top rows and longevity in the block underneath.
 - A tape measure runs down the right edge on desktop and across the top on phones.

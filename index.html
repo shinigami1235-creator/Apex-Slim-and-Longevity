@@ -39,20 +39,25 @@
     </div>
 
     <div class="flask-box">
-      <div class="lab-stage" id="stage" role="img" aria-label="Glass flask that fills with a coloured layer for each goal you pick">
-        <img class="st-img" src="assets/img/lab/flask-base-0.webp" alt="" width="600" height="800">
-        <i class="stream" id="stream"></i>
+      <div class="lab-stage" id="stage" role="img" aria-label="Glass flask where the ingredients you pick are poured and mixed">
+        <img class="st-still" id="st-empty" src="assets/img/lab/mix/flask-empty.webp" alt="" width="700" height="840">
+        <video class="st-video" id="st-video" muted playsinline preload="none" aria-hidden="true"></video>
+        <div class="st-liquid" id="st-liquid"></div>
+        <img class="st-still st-mixed" id="st-mixed" alt="" width="700" height="840">
+        <div class="st-bubbles" id="st-bubbles" aria-hidden="true"></div>
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="swirl" x="0" y="0" width="100%" height="100%"><feTurbulence id="swirl-turb" type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="3"/><feDisplacementMap id="swirl-disp" in="SourceGraphic" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
       </div>
     </div>
 
     <div class="shelf" role="group" aria-labelledby="shelf-h">
-      <p id="shelf-h">Tap the goals you want to add them to the flask.</p>
+      <p id="shelf-h">Tap the ingredients you want, then mix them.</p>
       <button class="bottle" type="button" data-goal="weight" aria-pressed="false"><img src="assets/img/lab/bottle-weight.webp" alt="" width="240" height="300">Lose weight</button>
       <button class="bottle" type="button" data-goal="fat" aria-pressed="false"><img src="assets/img/lab/bottle-fat.webp" alt="" width="240" height="300">Belly and flank fat</button>
       <button class="bottle" type="button" data-goal="tone" aria-pressed="false"><img src="assets/img/lab/bottle-tone.webp" alt="" width="240" height="300">Muscle tone</button>
       <button class="bottle" type="button" data-goal="firm" aria-pressed="false"><img src="assets/img/lab/bottle-firm.webp" alt="" width="240" height="300">Firmer buttocks</button>
       <button class="bottle" type="button" data-goal="energy" aria-pressed="false"><img src="assets/img/lab/bottle-energy.webp" alt="" width="240" height="300">Energy and recovery</button>
       <button class="bottle" type="button" data-goal="sleep" aria-pressed="false"><img src="assets/img/lab/bottle-sleep.webp" alt="" width="240" height="300">Sleep without snoring</button>
+      <div class="mix-row"><button class="btn" type="button" id="mix-btn">Mix formula</button><p class="mix-msg" id="mix-msg" role="status"></p></div>
     </div>
   </div>
   <div class="bench-line"></div>
@@ -63,7 +68,10 @@
   <div class="wrap">
     <h2 id="h-formula">Your formula</h2>
     <div class="chem" id="chem" aria-live="polite"></div>
-    <a class="btn" id="book-formula" href="#consult" hidden>Book a consult with this formula</a>
+    <div class="formula-actions">
+      <a class="btn" id="book-formula" href="#consult" hidden>Book a consult with this formula</a>
+      <button class="btn ghost" type="button" id="restart" hidden>Start again</button>
+    </div>
   </div>
 </section>
 
@@ -196,7 +204,7 @@
   </div>
 </footer>
 
-<script src="assets/js/flask-curves.js"></script>
+<script src="assets/js/mix-data.js"></script>
 <script src="assets/js/slim.js"></script>
 </body>
 </html>

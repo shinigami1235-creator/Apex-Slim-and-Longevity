@@ -62,83 +62,153 @@
   const formChecks = () => [...document.querySelectorAll('#request input[name=goal]')];
   const tickGoals = ids => formChecks().forEach(c => { if (ids.includes(c.value)) c.checked = true; });
 
-  /* flask: stacked Blender renders, one per goal colour and fill level */
+  /* mixing bench: pick ingredients, pour each one, mix to one colour */
   const stage = document.getElementById('stage');
-  if (stage && window.FLASK) {
-    const F = window.FLASK, LAB = 'assets/img/lab/';
-    const COLORS = { weight: '#B470DA', fat: '#4FA6E0', tone: '#5B1F88', firm: '#D39BE8', energy: '#2FB892', sleep: '#7FD8C6' };
-    const order = [];
-    const chem = document.getElementById('chem');
-    const book = document.getElementById('book-formula');
-    const stream = document.getElementById('stream');
-    const src = (c, l) => `${LAB}flask-${c}-${l}.webp`;
+  if (stage && window.MIX) {
+    const M = window.MIX, LAB = 'assets/img/lab/mix/';
+    const ORDER = ['weight', 'fat', 'tone', 'firm', 'energy', 'sleep'];
+    const picked = [];
+    let busy = false;
+    const chem = document.getElementById('chem'), hForm = document.getElementById('h-formula');
+    const formula = chem.closest('.formula');
+    const book = document.getElementById('book-formula'), restart = document.getElementById('restart');
+    const mixBtn = document.getElementById('mix-btn'), mixMsg = document.getElementById('mix-msg');
+    const video = document.getElementById('st-video'), liquid = document.getElementById('st-liquid');
+    const mixed = document.getElementById('st-mixed'), bubbles = document.getElementById('st-bubbles');
+    const disp = document.getElementById('swirl-disp'), turb = document.getElementById('swirl-turb');
+    const canWebm = video.canPlayType('video/webm; codecs="vp9"') !== '';
+
+    const shares = n => { const base = Math.floor(100 / n); return Array.from({ length: n }, (_, i) => i === n - 1 ? 100 - base * (n - 1) : base); };
+    const sorted = () => ORDER.filter(g => picked.includes(g));
     const pct = v => (v * 100).toFixed(2) + '%';
-    const below = i => {
-      const c = F.curves[i];
-      const pts = [[0, c[0][1]], ...c, [1, c[c.length - 1][1]], [1, 1], [0, 1]];
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const at = (arr, f) => { const x = Math.max(0, Math.min(1, f)) * (arr.length - 1), i = Math.floor(x), t = x - i, j = Math.min(i + 1, arr.length - 1); return [arr[i], arr[j], t]; };
+    const curve = f => { const [a, b, t] = at(M.curves, f); return a.map((p, k) => [lerp(p[0], b[k][0], t), lerp(p[1], b[k][1], t)]); };
+    const edge = (arr, f) => { const n = Math.round(Math.max(0, Math.min(1, f)) * (arr.length - 1)); const out = arr.slice(0, n + 1); const [a, b, t] = at(arr, f); out.push([lerp(a[0], b[0], t), lerp(a[1], b[1], t)]); return out; };
+    // liquid region from the flask bottom up to fill level f (0 to 1)
+    const region = f => {
+      if (f <= 0) return 'polygon(0 0,0 0,0 0)';
+      const pts = [...M.bottom, ...edge(M.right, f), ...curve(f).slice().reverse(), ...edge(M.left, f).reverse()];
       return 'polygon(' + pts.map(p => pct(p[0]) + ' ' + pct(p[1])).join(',') + ')';
     };
-    const surfaceY = i => F.curves[i][20][1];
-    const img = (s, clip) => {
-      const el = new Image(); el.className = 'st-img'; el.alt = ''; el.src = s; el.decoding = 'async';
-      if (clip) el.style.clipPath = clip;
-      return el;
-    };
-    const build = () => {
-      const n = order.length, frag = document.createDocumentFragment();
-      frag.append(img(n ? src(order[n - 1], n) : src('base', 0)));
-      for (let k = n - 1; k >= 0; k--) frag.append(img(src(k === 0 ? 'base' : order[k - 1], 6), below(k)));
-      return frag;
-    };
-    const render = (animate, color) => {
-      const n = order.length;
-      const old = [...stage.querySelectorAll('.st-img')];
-      const fresh = build();
-      const layers = [...fresh.children];
-      const top = layers[0];
-      if (animate && !reduce) {
-        const from = surfaceY(n - 1) * 100, to = surfaceY(n) * 100 - 4;
-        top.style.clipPath = `inset(${from}% 0 0 0)`;
-        stage.insertBefore(fresh, stream);
-        const keep = old[0];
-        old.slice(1).forEach(e => e.remove());
-        if (keep) stage.insertBefore(keep, stage.firstChild);
-        stream.style.background = color;
-        stream.style.top = '8%';
-        stream.style.height = (surfaceY(n) * 100 - 8) + '%';
-        stream.style.opacity = 1;
-        const t0 = performance.now(), dur = 1100;
-        const step = now => {
-          const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-          top.style.clipPath = `inset(${(from + (Math.max(0, to) - from) * e).toFixed(2)}% 0 0 0)`;
-          if (p > .55) stream.style.opacity = 0;
-          if (p < 1) requestAnimationFrame(step);
-          else { top.style.clipPath = ''; keep && keep.remove(); }
-        };
-        top.decode ? top.decode().catch(() => {}).then(() => requestAnimationFrame(step)) : requestAnimationFrame(step);
-      } else {
-        stage.insertBefore(fresh, stream);
-        old.forEach(e => e.remove());
-      }
+
+    const tileHTML = (ids, withPct) => {
+      const sh = shares(ids.length);
+      return ids.map((id, i) => {
+        const syms = GOALS[id].t.map(k => T[k].sym).join(' ');
+        const cls = T[GOALS[id].t[0]].cls || '';
+        return `<span class="mini ${cls}"><b>${syms}</b><small>${GOALS[id].label}</small>${withPct ? `<i>${sh[i]}%</i>` : ''}</span>`;
+      }).join('<span class="plus" aria-hidden="true">+</span>');
     };
     const refresh = () => {
-      const keys = [...new Set(order.flatMap(id => GOALS[id].t))];
-      chem.innerHTML = keys.length ? chemHTML(keys) : '<span class="empty">Tap a goal on the shelf to add it to the flask.</span>';
-      book.hidden = !keys.length;
-      book.dataset.goals = order.join(',');
+      const ids = sorted();
+      chem.innerHTML = ids.length ? tileHTML(ids, true) : '<span class="empty">Tap an ingredient on the shelf to add it.</span>';
     };
+    const resetStage = () => {
+      liquid.innerHTML = ''; liquid.style.filter = ''; liquid.style.clipPath = '';
+      mixed.classList.remove('on'); video.classList.remove('on'); video.pause();
+      formula.classList.remove('ready'); hForm.textContent = 'Your formula';
+      book.hidden = true; restart.hidden = true;
+    };
+
     document.querySelectorAll('.bottle').forEach(btn => {
       btn.addEventListener('click', () => {
-        const id = btn.dataset.goal, i = order.indexOf(id);
-        if (i > -1) { order.splice(i, 1); btn.setAttribute('aria-pressed', 'false'); render(false); }
-        else { order.push(id); btn.setAttribute('aria-pressed', 'true'); render(true, COLORS[id]); }
+        if (busy) return;
+        if (formula.classList.contains('ready')) resetStage();
+        const id = btn.dataset.goal, i = picked.indexOf(id);
+        if (i > -1) picked.splice(i, 1); else picked.push(id);
+        btn.setAttribute('aria-pressed', i > -1 ? 'false' : 'true');
+        mixMsg.textContent = '';
         refresh();
       });
     });
+
+    const playPour = (g, from, to, slice) => new Promise(done => {
+      video.src = LAB + 'pour-' + g + (canWebm ? '.webm' : '.mp4');
+      video.playbackRate = picked.length > 3 ? 1.5 : 1.15;
+      const start = 0.72, end = 1.86;           // seconds of the clip where the stream runs
+      let finished = false;
+      const finish = () => { if (finished) return; finished = true; slice.style.clipPath = region(to); done(); };
+      const tick = () => {
+        if (finished) return;
+        const t = video.currentTime, p = Math.max(0, Math.min(1, (t - start) / (end - start)));
+        slice.style.clipPath = region(lerp(from, to, 1 - Math.pow(1 - p, 1.6)));
+        requestAnimationFrame(tick);
+      };
+      video.onended = finish;
+      video.oncanplay = () => { video.oncanplay = null; video.classList.add('on'); video.play().catch(finish); requestAnimationFrame(tick); };
+      video.onerror = finish;
+      video.load();
+    });
+
+    const swirl = () => new Promise(done => {
+      liquid.style.filter = 'url(#swirl)';
+      liquid.style.clipPath = region(1);
+      const t0 = performance.now(), dur = 2200;
+      const step = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        disp.setAttribute('scale', (Math.sin(p * Math.PI) * 22).toFixed(1));
+        turb.setAttribute('baseFrequency', `${(0.012 + p * 0.01).toFixed(4)} ${(0.03 - p * 0.012).toFixed(4)}`);
+        turb.setAttribute('seed', String(3 + Math.floor(p * 24)));
+        if (p > 0.35) mixed.classList.add('on');
+        p < 1 ? requestAnimationFrame(step) : done();
+      };
+      requestAnimationFrame(step);
+    });
+
+    const fizz = () => {
+      const top = M.curves[40][20][1], n = 18;
+      for (let i = 0; i < n; i++) {
+        const b = document.createElement('i');
+        const y = lerp(top + 0.06, 0.86, Math.random());
+        const [l] = at(M.left, 0.5), [r] = at(M.right, 0.5);
+        const x = lerp(l[0] + 0.04, r[0] - 0.04, Math.random());
+        const size = 3 + Math.random() * 6;
+        b.style.cssText = `left:${pct(x)};top:${pct(y)};width:${size}px;height:${size}px;animation-delay:${(i * 0.09).toFixed(2)}s;--h:-${Math.round((y - top) * stage.clientHeight)}px;--d:${(1.1 + Math.random() * 0.8).toFixed(2)}s`;
+        bubbles.appendChild(b);
+        setTimeout(() => b.remove(), 3600);
+      }
+    };
+
+    mixBtn.addEventListener('click', async () => {
+      if (busy) return;
+      const ids = sorted();
+      if (!ids.length) { mixMsg.textContent = 'Pick at least one ingredient.'; return; }
+      busy = true; mixMsg.textContent = '';
+      resetStage();
+      const r = stage.getBoundingClientRect();
+      if (r.top < 70 || r.bottom > innerHeight) stage.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+      document.body.classList.add('stage-busy');
+      hForm.textContent = 'Mixing your formula';
+      chem.innerHTML = tileHTML(ids, true);
+      const mixSrc = LAB + (ids.length === 1 ? 'full-' : 'mix-') + ids.join('-') + '.webp';
+      new Image().src = mixSrc; mixed.src = mixSrc;
+      const n = ids.length, slices = [];
+      for (let i = 0; i < n; i++) {
+        const s = new Image(); s.alt = ''; s.src = LAB + 'full-' + ids[i] + '.webp';
+        s.style.clipPath = region(0);
+        liquid.prepend(s); slices.push(s);       // later pours sit under the earlier ones
+      }
+      for (let i = 0; i < n; i++) {
+        slices[i].style.clipPath = region(i / n);
+        if (reduce) { slices[i].style.clipPath = region((i + 1) / n); continue; }
+        await playPour(ids[i], i / n, (i + 1) / n, slices[i]);
+      }
+      video.classList.remove('on');
+      if (reduce) mixed.classList.add('on'); else { await swirl(); fizz(); }
+      liquid.innerHTML = ''; liquid.style.filter = ''; liquid.style.clipPath = '';
+      formula.classList.add('ready'); hForm.textContent = 'Your formula is ready';
+      book.hidden = false; restart.hidden = false; book.dataset.goals = ids.join(',');
+      document.body.classList.remove('stage-busy'); busy = false;
+      (window.dataLayer = window.dataLayer || []).push({ event: 'formula:mixed', goals: ids.join(',') });
+    });
+    restart.addEventListener('click', () => {
+      resetStage(); picked.length = 0;
+      document.querySelectorAll('.bottle').forEach(b => b.setAttribute('aria-pressed', 'false'));
+      refresh();
+    });
     book.addEventListener('click', () => tickGoals(book.dataset.goals.split(',')));
     refresh();
-    const warm = () => Object.keys(COLORS).forEach(c => { for (let l = 1; l <= 6; l++) new Image().src = src(c, l); });
-    'requestIdleCallback' in window ? requestIdleCallback(warm, { timeout: 3000 }) : setTimeout(warm, 1500);
   }
 
   /* consult form */

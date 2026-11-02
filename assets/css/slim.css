@@ -105,9 +105,27 @@ section{position:relative}
 .bench-line{height:0;border-top:2px solid var(--night);margin-top:-2px;position:relative}
 .bench-under{height:56px;background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(168,134,205,.18) 10px 11px)}
 .flask-box{position:relative;display:flex;flex-direction:column;align-items:center}
-.lab-stage{position:relative;width:min(100%,420px);aspect-ratio:600/800;
+.lab-stage{position:relative;width:min(100%,420px);aspect-ratio:700/840;
   -webkit-mask-image:radial-gradient(ellipse 52% 50% at 50% 54%,#000 62%,transparent 100%);mask-image:radial-gradient(ellipse 52% 50% at 50% 54%,#000 62%,transparent 100%)}
-.lab-stage .st-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lab-stage>*{position:absolute;inset:0;width:100%;height:100%}
+.lab-stage .st-still,.lab-stage .st-video,.lab-stage .st-liquid img{object-fit:cover;display:block}
+.lab-stage .st-video{opacity:0;transition:opacity .25s}
+.lab-stage .st-video.on{opacity:1}
+.lab-stage .st-liquid img{position:absolute;inset:0;width:100%;height:100%}
+.lab-stage .st-mixed{opacity:0;transition:opacity 1.4s ease}
+.lab-stage .st-mixed.on{opacity:1}
+.st-bubbles{pointer-events:none;overflow:hidden}
+.st-bubbles i{position:absolute;border-radius:50%;border:1.2px solid rgba(255,255,255,.9);background:rgba(255,255,255,.18);animation:rise var(--d,1.6s) ease-in forwards}
+@keyframes rise{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1}100%{transform:translateY(var(--h,-120px)) scale(1);opacity:0}}
+.mix-row{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:8px}
+.mix-msg{margin:0;font-size:14px;color:var(--plum-700)}
+.formula-actions{display:flex;flex-wrap:wrap;gap:10px}
+.chem .mini i{font-style:normal;font-weight:700;font-size:12px;color:var(--plum);margin-top:3px}
+.formula.ready{background:var(--lilac-100)}
+.formula.ready h2{color:var(--plum)}
+.bottle[aria-pressed=true] img{transform:translateY(-8px);opacity:1;filter:drop-shadow(0 0 0 transparent)}
+.bottle[aria-pressed=true]::after{content:"";width:28px;height:3px;border-radius:2px;background:var(--plum);margin-top:2px}
+.stage-busy .bottle{pointer-events:none;opacity:.6}
 .stream{position:absolute;left:50%;top:0;width:7px;margin-left:-3.5px;height:0;border-radius:4px;opacity:0;transition:opacity .25s;filter:saturate(1.2)}
 .shelf{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px;align-self:end;padding-bottom:0}
 .shelf p{grid-column:1/-1;margin:0 0 4px;font-size:15px;color:var(--ink-2)}
@@ -116,7 +134,6 @@ section{position:relative}
   -webkit-mask-image:radial-gradient(ellipse 50% 48% at 50% 50%,#000 60%,transparent 100%);mask-image:radial-gradient(ellipse 50% 48% at 50% 50%,#000 60%,transparent 100%)}
 .bottle:hover img{transform:translateY(-4px)}
 .bottle[aria-pressed=true]{color:var(--plum);font-weight:700}
-.bottle[aria-pressed=true] img{transform:rotate(-16deg) translateY(-6px);opacity:.55}
 @media (max-width:999px){
   .bench{padding-top:44px}
   .bench .wrap{grid-template-columns:1fr 1fr;grid-template-areas:"intro intro" "flask shelf"}
@@ -278,3 +295,4 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
 }
 .btn[hidden]{display:none}
+.lab-stage>svg{width:0;height:0}
