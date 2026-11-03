@@ -213,18 +213,19 @@ section{position:relative}
 @media (max-width:899px){.long-grid{grid-template-columns:1fr}}
 
 /* lab notes */
-.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
 .note{position:relative;display:flex;flex-direction:column;min-height:320px;padding:26px 24px 22px 40px;background-color:#fff;color:var(--ink);text-decoration:none;border:1px solid var(--lilac-300);
   background-image:linear-gradient(transparent 27px,rgba(168,134,205,.35) 27px 28px);background-size:100% 28px;background-position:0 12px}
 .note::before{content:"";position:absolute;left:22px;top:0;bottom:0;border-left:1.5px solid rgba(204,51,102,.35)}
-.note:nth-child(2){transform:rotate(.6deg)}
-.note:nth-child(3){transform:rotate(-.5deg)}
+.note:nth-child(4n+2){transform:rotate(.6deg)}
+.note:nth-child(4n+3){transform:rotate(-.5deg)}
 .note:hover{color:var(--ink);border-color:var(--plum)}
 .note .tagline{display:flex;gap:8px;align-items:center;margin-bottom:auto;font-size:13px;color:var(--ink-2)}
 .note .tagline b{display:inline-grid;place-items:center;min-width:32px;height:32px;padding:0 4px;border:var(--line) solid var(--plum);border-radius:4px;background:var(--lilac-100);font-size:14px;color:var(--night)}
 .note h3{margin:28px 0 10px;background:#fff;box-shadow:0 0 0 4px #fff}
 .note p{font-size:15px;color:var(--ink-2);margin:0;background:#fff;box-shadow:0 0 0 4px #fff}
-@media (max-width:899px){.notes{grid-template-columns:1fr}.note{min-height:240px;transform:none!important}}
+@media (max-width:1099px){.notes{grid-template-columns:repeat(2,minmax(0,1fr))}.note{min-height:260px}}
+@media (max-width:599px){.notes{grid-template-columns:1fr}.note{min-height:220px;transform:none!important}}
 
 /* play slot */
 .play{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:center;padding:36px;border:2px dashed var(--lilac);border-radius:24px}
@@ -293,6 +294,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .stage .xtal{stroke:var(--ice-700);stroke-width:1;fill:none}
 .stage .skin{fill:none;stroke:var(--lilac);stroke-width:2}
 @media (max-width:799px){.stages{grid-template-columns:1fr}.tx-top .wrap{grid-template-columns:1fr;gap:28px}.specimen{position:static;max-width:300px}}
+@media (max-width:599px){.tx-top{padding-top:28px}.specimen{max-width:170px}.specimen .el{padding:14px 14px 12px}.specimen .el .sym{font-size:64px}.specimen .el .nm{font-size:16px}.specimen .el .ft,.specimen .temp{display:none}.specimen .el .ic{width:26px;height:26px;top:12px;right:12px}}
 .article{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:56px}
 .prose{max-width:40em}
 .prose h2{font-size:clamp(26px,3vw,34px);margin:48px 0 16px}
@@ -311,6 +313,14 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .faq details[open] summary::after{transform:rotate(45deg)}
 .faq p{color:var(--ink-2);margin:0 0 16px;max-width:44em}
 .note-mark{font-size:13px;color:var(--ink-2);margin-top:28px}
+.tx-top .hook{margin-top:22px}
+.tx-top .hook+.hook{margin-top:14px;font-size:clamp(16px,1.3vw,18px)}
+.prose ol{padding-left:22px;margin:0 0 1em}
+.prose a{color:var(--plum)}
+.prose .refs-h{font-size:20px;margin-top:56px}
+.refs{padding-left:20px;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+.refs li{margin-bottom:8px;overflow-wrap:anywhere}
+.refs a{color:var(--ink-2)}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
