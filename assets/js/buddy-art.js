@@ -3,7 +3,7 @@
 const P = { plumD: '#3A175A', plum: '#6A388C', plumL: '#B58CDD', face: '#F6F0FB', ring: '#C9B3DD', ink: '#2A0F40',
   tape: '#F6E3A6', tapeD: '#C9A24E', metal: '#D9DCE3', blush: '#F59AB5', mint: '#8DF0C6' };
 
-export const EXPRESSIONS = ['happy', 'blink', 'wink', 'excited', 'proud', 'curious', 'thinking', 'surprised', 'shy', 'love', 'sleepy', 'oops'];
+export const EXPRESSIONS = ['happy', 'blink', 'wink', 'excited', 'proud', 'curious', 'thinking', 'surprised', 'shy', 'love', 'sleepy', 'oops', 'giggle', 'dizzy'];
 export const POSES = ['idle', 'wave', 'point', 'measure', 'cheer', 'cover', 'hop', 'think', 'heart', 'shy', 'flask', 'sleep'];
 
 const TILT = { think: -8, curious: 10, sleep: 14, shy: -6 };
@@ -57,13 +57,14 @@ function eyeOpen(x, y, s, sparkle) {
 function eye(expr, cx, side) {
   const x = cx, y = 96;
   switch (expr) {
-    case 'blink': case 'proud': case 'shy':
+    case 'blink': case 'proud': case 'shy': case 'giggle':
       return `<path d="M${x - 9} ${y + 1}q9 ${expr === 'shy' ? 6 : -9} 18 0" fill="none" stroke="${P.ink}" stroke-width="4.5" stroke-linecap="round"/>`;
     case 'wink': return side === 'L' ? `<path d="M${x - 9} ${y + 1}q9 -9 18 0" fill="none" stroke="${P.ink}" stroke-width="4.5" stroke-linecap="round"/>` : eyeOpen(x, y, 1);
     case 'oops': return side === 'L' ? `<path d="M${x - 8} ${y - 6}l12 6-12 6" fill="none" stroke="${P.ink}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>` : eyeOpen(x, y, 1);
     case 'sleepy': return `<path d="M${x - 9} ${y}h18" stroke="${P.ink}" stroke-width="4.5" stroke-linecap="round"/><path d="M${x - 8} ${y + 1}q8 7 16 0" fill="${P.ink}"/>`;
     case 'love': return `<path transform="translate(${x} ${y})" d="M0 9C-14 0-11-11-5-11c3 0 5 2 5 4 0-2 2-4 5-4 6 0 9 11-5 20z" fill="#E8457A"/><circle cx="${x - 4}" cy="${y - 5}" r="2.2" fill="#fff"/>`;
     case 'excited': return eyeOpen(x, y, 1.18, true);
+    case 'dizzy': return `<path d="M${x} ${y}m-2 0a2 2 0 1 1 4 0a4 4 0 1 1 -8 0a6 6 0 1 1 12 0a8 8 0 1 1 -16 0" fill="none" stroke="${P.ink}" stroke-width="2.6" stroke-linecap="round"/>`;
     case 'surprised': return `<circle cx="${x}" cy="${y}" r="11" fill="#fff" stroke="${P.ink}" stroke-width="3"/><circle cx="${x}" cy="${y}" r="5" fill="${P.ink}"/>`;
     case 'thinking': return eyeOpen(x - 2, y - 3, 0.95);
     default: return eyeOpen(x, y, 1);
@@ -83,7 +84,9 @@ function mouthOf(expr) {
     surprised: `<ellipse cx="${mx}" cy="${my + 3}" rx="6" ry="8" fill="${P.ink}"/>`,
     shy: `<path d="M${mx - 7} ${my + 1}q3.5 3 7 0t7 0" fill="none" stroke="${P.ink}" stroke-width="3.5" stroke-linecap="round"/>`,
     love: `<path d="M${mx - 10} ${my - 1}q10 12 20 0z" fill="${P.ink}"/>`,
-    oops: `<path d="M${mx - 11} ${my - 1}h22q-2 10-11 10t-11-10z" fill="${P.ink}"/><path d="M${mx - 9} ${my}h18v3h-18z" fill="#fff"/>`
+    oops: `<path d="M${mx - 11} ${my - 1}h22q-2 10-11 10t-11-10z" fill="${P.ink}"/><path d="M${mx - 9} ${my}h18v3h-18z" fill="#fff"/>`,
+    giggle: `<path d="M${mx - 11} ${my - 2}q11 16 22 0z" fill="${P.ink}"/><path d="M${mx - 6} ${my + 5}q6 4 12 0" fill="#F27A9B"/>`,
+    dizzy: `<path d="M${mx - 9} ${my + 2}q3-4 6 0t6 0t6 0" fill="none" stroke="${P.ink}" stroke-width="3.5" stroke-linecap="round"/>`
   }[expr] || '';
 }
 const EXTRAS = {
@@ -92,9 +95,11 @@ const EXTRAS = {
   excited: `<path transform="translate(40 40)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="${P.mint}"/><path transform="translate(164 56) scale(.7)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="${P.plumL}"/>`,
   love: `<path transform="translate(160 46) scale(.7)" d="M0 9C-14 0-11-11-5-11c3 0 5 2 5 4 0-2 2-4 5-4 6 0 9 11-5 20z" fill="#F59AB5"/>`,
   thinking: `<circle cx="150" cy="54" r="4" fill="${P.ring}"/><circle cx="160" cy="40" r="6" fill="${P.ring}"/>`,
-  surprised: `<path d="M44 52l-8-6M40 64l-10 0M150 52l8-6" stroke="${P.plumL}" stroke-width="3" stroke-linecap="round"/>`
+  surprised: `<path d="M44 52l-8-6M40 64l-10 0M150 52l8-6" stroke="${P.plumL}" stroke-width="3" stroke-linecap="round"/>`,
+  giggle: `<path d="M150 58q8-4 12 2M154 70q8-2 11 4" fill="none" stroke="${P.plumL}" stroke-width="3" stroke-linecap="round"/>`,
+  dizzy: `<path transform="translate(60 40) scale(.55)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="${P.mint}"/><path transform="translate(140 34) scale(.45)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="${P.plumL}"/><path transform="translate(100 26) scale(.4)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="#F6E3A6"/>`
 };
-const BLUSH = { proud: .85, shy: 1, love: .9, excited: .7 };
+const BLUSH = { proud: .85, shy: 1, love: .9, excited: .7, giggle: 1, dizzy: .6 };
 const face = expr => `<g class="bd-eyes">${eye(expr, 82, 'L')}${eye(expr, 118, 'R')}</g>${mouthOf(expr)}`;
 const legs = pose => pose === 'sleep'
   ? `<path d="M80 160l-6 10M118 160l8 8" stroke="${P.plum}" stroke-width="10" stroke-linecap="round"/>`

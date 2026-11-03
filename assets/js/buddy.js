@@ -11,7 +11,7 @@
    - each line is said once per visit; the rest of the time it reacts with a face and a move
    - it never comments on weight, BMI or waist numbers
    - perches sit in empty space beside the content */
-import { createBuddy } from './buddy-art.js?v=2';
+import { createBuddy } from './buddy-art.js?v=3';
 
 const NAME = 'Nong Tape';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -102,8 +102,9 @@ let base = { pose: 'idle', expr: 'happy' };
 let actTimer = 0, sayTimer = 0, lastSay = 0, lastInput = Date.now(), asleep = false, held = false, facing = 1;
 const born = Date.now();
 
-const move = m => { if (reduce || !m) return; body.classList.remove('m-hop', 'm-wiggle', 'm-bob'); void body.offsetWidth; body.classList.add('m-' + m); };
-body.addEventListener('animationend', e => { if (/buddy-(hop|wiggle|bob)/.test(e.animationName)) body.classList.remove('m-hop', 'm-wiggle', 'm-bob'); });
+const MOVES = ['m-hop', 'm-wiggle', 'm-bob', 'm-startle', 'm-giggle', 'm-spin', 'm-boing', 'm-wobble'];
+const move = m => { if (reduce || !m) return; body.classList.remove(...MOVES); void body.offsetWidth; body.classList.add('m-' + m); };
+body.addEventListener('animationend', e => { if (/buddy-(hop|wiggle|bob|startle|giggle|spin|boing|wobble)/.test(e.animationName)) body.classList.remove(...MOVES); });
 const setFace = dir => { if (dir === facing) return; facing = dir; turn.classList.toggle('flip', dir < 0); };
 const rest = () => { if (!held && !asleep && !flying) rig.set(base); };
 
@@ -137,12 +138,28 @@ function done() { held = false; busyUntil = 0; clearTimeout(actTimer); rig.set(b
 
 /* dozes off after 45 seconds with nothing happening */
 function sleep() { asleep = true; rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep'); }
+/* tapped awake: startled jump, then a quick giggle */
+function wakeByTap() {
+  asleep = false; body.classList.remove('m-sleep'); stopFidget(); clearTimeout(actTimer);
+  lastInput = Date.now(); yawned = false;
+  rig.set({ pose: 'cheer', expr: 'surprised', ms: 160 }); move('startle');
+  busyUntil = Date.now() + 1900;
+  actTimer = setTimeout(() => {
+    rig.set({ pose: 'cover', expr: 'giggle', ms: 260 }); move('giggle'); hehe('hehe!');
+    actTimer = setTimeout(() => { busyUntil = 0; rest(); }, 1200);
+  }, 650);
+}
+function hehe(text) {
+  if (reduce) return;
+  const h = document.createElement('span'); h.className = 'buddy-hehe'; h.textContent = text;
+  root.append(h); setTimeout(() => h.remove(), 1200);
+}
 function wake() {
   asleep = false; body.classList.remove('m-sleep');
   rig.set({ pose: 'idle', expr: 'surprised', ms: 300 });
   setTimeout(() => { if (!asleep && !held && rig.expr === 'surprised') rig.set(base); }, 600);
 }
-const poke = () => { lastInput = Date.now(); if (asleep) wake(); };
+const poke = () => { lastInput = Date.now(); };   // a nap only ends with a tap on him or a real event
 ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(t => addEventListener(t, poke, { passive: true }));
 setInterval(() => { if (!asleep && !held && !flying && !fidgeting && Date.now() - lastInput > 45000) sleep(); }, 3000);
 
@@ -199,9 +216,28 @@ if (fine) addEventListener('pointermove', e => {
 
 /* tap: a hop and a wink, five quick taps for a heart */
 let taps = [];
+/* taps: a different little reaction each time; tapping fast makes him dizzy, keep going and he gives a heart */
+const TAPS = [
+  { pose: 'cover', expr: 'giggle', ms: 1100, move: 'giggle', hehe: 'hehe' },
+  { pose: 'hop', expr: 'wink', ms: 700, move: 'hop' },
+  { pose: 'idle', expr: 'excited', ms: 900, move: 'spin' },
+  { pose: 'cheer', expr: 'excited', ms: 900, move: 'boing' },
+  { pose: 'wave', expr: 'happy', ms: 1100, move: 'wiggle' },
+  { pose: 'shy', expr: 'shy', ms: 1100 },
+  { pose: 'idle', expr: 'surprised', ms: 700, move: 'boing' },
+  { pose: 'measure', expr: 'proud', ms: 1100 }
+];
+let lastTap = -1;
 body.addEventListener('click', () => {
-  const t = Date.now(); taps = taps.filter(x => t - x < 2000); taps.push(t);
-  if (taps.length >= 5) { taps = []; act('love'); } else act('tap');
+  if (asleep) { wakeByTap(); return; }
+  const t = Date.now(); taps = taps.filter(x => t - x < 1800); taps.push(t);
+  stopFidget(); clearTimeout(actTimer); lastInput = t;
+  let r;
+  if (taps.length >= 7) { taps = []; act('love'); hehe('♥'); return; }
+  if (taps.length >= 4) r = { pose: 'idle', expr: 'dizzy', ms: 1500, move: 'wobble' };
+  else { let i; do { i = Math.floor(Math.random() * TAPS.length); } while (i === lastTap); lastTap = i; r = TAPS[i]; }
+  rig.set({ pose: r.pose, expr: r.expr }); move(r.move); if (r.hehe) hehe(r.hehe);
+  busyUntil = t + r.ms; actTimer = setTimeout(() => { busyUntil = 0; rest(); }, r.ms);
 });
 
 /* hide and bring back */
