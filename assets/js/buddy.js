@@ -11,7 +11,7 @@
    - each line is said once per visit; the rest of the time it reacts with a face and a move
    - it never comments on weight, BMI or waist numbers
    - perches sit in empty space beside the content */
-import { createBuddy } from './buddy-art.js?v=4';
+import { createBuddy } from './buddy-art.js?v=6';
 
 const NAME = 'Nong Tape';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -89,6 +89,7 @@ function quip(el) {
 const root = document.createElement('div');
 root.className = 'buddy';
 root.innerHTML = `<div class="buddy-turn"><button class="buddy-body" type="button" aria-label="${NAME}, tap to say hi"><span class="buddy-art"></span></button></div>
+  <span class="buddy-nap" aria-hidden="true"><i class="bub"></i><b>z</b><b>z</b><b>Z</b></span>
   <p class="buddy-say" aria-hidden="true"></p>
   <button class="buddy-x" type="button" aria-label="Hide ${NAME}">×</button>`;
 document.body.append(root);
@@ -137,10 +138,10 @@ function done() { held = false; busyUntil = 0; clearTimeout(actTimer); rig.set(b
 (function blink() { setTimeout(() => { if (!held && !asleep && !flying) rig.blink(); blink(); }, 2600 + Math.random() * 3400); })();
 
 /* dozes off after 45 seconds with nothing happening */
-function sleep() { asleep = true; rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep'); }
+function sleep() { asleep = true; root.classList.add('napping'); rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep'); }
 /* tapped awake: startled jump, then a quick giggle */
 function wakeByTap() {
-  asleep = false; body.classList.remove('m-sleep'); stopFidget(); clearTimeout(actTimer);
+  asleep = false; root.classList.remove('napping'); popBubble(); body.classList.remove('m-sleep'); stopFidget(); clearTimeout(actTimer);
   lastInput = Date.now(); yawned = false;
   rig.set({ pose: 'cheer', expr: 'surprised', ms: 160 }); move('startle');
   busyUntil = Date.now() + 1900;
@@ -154,8 +155,9 @@ function hehe(text) {
   const h = document.createElement('span'); h.className = 'buddy-hehe'; h.textContent = text;
   root.append(h); setTimeout(() => h.remove(), 1200);
 }
+function popBubble() { if (reduce) return; root.classList.add('pop'); setTimeout(() => root.classList.remove('pop'), 420); }
 function wake() {
-  asleep = false; body.classList.remove('m-sleep');
+  asleep = false; root.classList.remove('napping'); body.classList.remove('m-sleep');
   rig.set({ pose: 'idle', expr: 'surprised', ms: 300 });
   setTimeout(() => { if (!asleep && !held && rig.expr === 'surprised') rig.set(base); }, 600);
 }
@@ -351,6 +353,7 @@ function land(free) {
 const grab = { id: null, dx: 0, dy: 0, sx: 0, sy: 0, moved: false, lx: 0, lt: 0, vx: 0 };
 let run = null, legT = 0, windT = 0, landT = 0;
 body.style.touchAction = 'none';
+body.addEventListener('pointerup', () => setTimeout(() => body.blur(), 0));
 body.addEventListener('pointerdown', e => {
   if (root.classList.contains('away')) return;
   grab.id = e.pointerId; grab.sx = e.clientX; grab.sy = e.clientY; grab.moved = false;
@@ -361,7 +364,8 @@ addEventListener('pointermove', e => {
   if (!grab.moved && Math.hypot(e.clientX - grab.sx, e.clientY - grab.sy) < 7) return;
   if (!grab.moved) {                     // picked up
     grab.moved = true; mode = 'drag'; run = null; flying = false; body.classList.remove('m-glide', 'm-run', 'm-sleep');
-    asleep = false; stopFidget(); clearTimeout(actTimer); busyUntil = Infinity; root.classList.remove('talking');
+    if (asleep) popBubble();
+    asleep = false; root.classList.remove('napping'); stopFidget(); clearTimeout(actTimer); busyUntil = Infinity; root.classList.remove('talking');
     rig.set({ pose: 'cheer', expr: 'surprised', ms: 200, turn: 0 }); move('startle');
     try { body.setPointerCapture(e.pointerId); } catch (err) {}
     setTimeout(() => { if (mode === 'drag') rig.set({ pose: 'cheer', expr: Math.random() < .5 ? 'excited' : 'giggle' }); }, 900);
@@ -427,7 +431,7 @@ function runStep(dt, tx, floor) {
   const total = Math.abs(tx - run.start) || 1, done = 1 - Math.abs(tx - pos.x) / total;
   if (run.style === 'trip' && done > run.tripAt) {          // trips, laughs it off
     run.tripAt = 2; run.phase = 'trip'; run.until = now + 1300;
-    body.classList.remove('m-run'); move('trip'); rig.set({ pose: 'splat', expr: 'oops', ms: 280, turn: 1 });
+    body.classList.remove('m-run'); move('trip'); rig.set({ pose: 'splat', expr: 'oops', ms: 300, turn: 1 });
     setTimeout(() => { if (mode === 'run') rig.set({ expr: 'dizzy' }); }, 420);
     setTimeout(() => { if (mode === 'run') { rig.set({ pose: 'cover', expr: 'giggle', ms: 360, turn: 0.4 }); move('giggle'); hehe('hehe'); } }, 900);
     run.until = now + 1700;

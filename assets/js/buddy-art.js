@@ -92,7 +92,7 @@ function mouthOf(expr) {
   }[expr] || '';
 }
 const EXTRAS = {
-  sleepy: `<text x="150" y="44" font-family="sans-serif" font-weight="700" font-size="20" fill="${P.plumL}">z</text><text x="164" y="28" font-family="sans-serif" font-weight="700" font-size="14" fill="${P.ring}">z</text>`,
+  sleepy: '',   // the live buddy draws its own z's and nose bubble while napping
   oops: `<path d="M150 70q6 9 0 13-6-4 0-13z" fill="#9CD4F5"/>`,
   excited: `<path transform="translate(40 40)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="${P.mint}"/><path transform="translate(164 56) scale(.7)" d="M0-8 2-2 8 0 2 2 0 8-2 2-8 0-2-2z" fill="${P.plumL}"/>`,
   love: `<path transform="translate(160 46) scale(.7)" d="M0 9C-14 0-11-11-5-11c3 0 5 2 5 4 0-2 2-4 5-4 6 0 9 11-5 20z" fill="#F59AB5"/>`,
@@ -150,6 +150,7 @@ function markup(id, size, s) {
     <circle cx="100" cy="104" r="45" fill="none" stroke="${P.ring}" stroke-width="3"/>
     <g data-k="blush" opacity="${BLUSH[s.expr] ?? .5}"><ellipse cx="74" cy="112" rx="9" ry="5.5" fill="${P.blush}"/><ellipse cx="126" cy="112" rx="9" ry="5.5" fill="${P.blush}"/></g>
     <g data-k="look"><g data-k="face">${face(s.expr)}</g></g>
+    <g data-k="back" opacity="${s.pose === 'splat' ? 1 : 0}"><circle cx="100" cy="104" r="53" fill="url(#${id}c)"/><circle cx="100" cy="104" r="21" fill="${P.plumD}" opacity=".55"/><circle cx="100" cy="104" r="7" fill="url(#${id}m)" stroke="#8E929C" stroke-width="1"/><path d="M62 82a46 46 0 0 1 40-26" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="5" stroke-linecap="round"/></g>
     <circle data-k="hand" cx="${hand[0]}" cy="${hand[1]}" r="7.5" fill="${P.plumL}"/>
     <rect data-k="hook" x="${tEnd[0] - 5}" y="${tEnd[1] - 8}" width="10" height="16" rx="3" fill="url(#${id}m)" stroke="#8E929C" stroke-width="1.2"/>
     <g data-k="flask" opacity="${s.pose === 'flask' ? 1 : 0}">${FLASK}</g>
@@ -172,9 +173,9 @@ export function createBuddy(el, size) {
   el.innerHTML = markup(id, size, { expr: 'happy', pose: 'idle' });
   const q = k => el.querySelector(`[data-k=${k}]`);
   const k = { shadow: q('shadow'), tilt: q('tilt'), legs: q('legs'), legL: q('legL'), legR: q('legR'), footL: q('footL'), footR: q('footR'), left: q('left'), t: [q('t1'), q('t2'), q('t3')], blush: q('blush'),
-    look: q('look'), face: q('face'), hand: q('hand'), hook: q('hook'), flask: q('flask'), extras: q('extras') };
+    look: q('look'), face: q('face'), back: q('back'), hand: q('hand'), hook: q('hook'), flask: q('flask'), extras: q('extras') };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const num = (p, turn) => ({ tilt: TILT[p] || 0, lift: LIFT[p] || 0, sh: p === 'hop' ? 34 : p === 'splat' ? 58 : 44, flask: p === 'flask' ? 1 : 0, legs: legsOf(p), turn });
+  const num = (p, turn) => ({ tilt: TILT[p] || 0, lift: LIFT[p] || 0, sh: p === 'hop' ? 34 : p === 'splat' ? 58 : 44, flask: p === 'flask' ? 1 : 0, legs: legsOf(p), turn, back: p === 'splat' ? 1 : 0 });
   let cur = { pose: 'idle', expr: 'happy', turn: 0, pts: cubes('idle'), n: num('idle', 0) };
   let from = null, to = null, t0 = 0, dur = 420, raf = 0;
   let look = [0, 0], lookT = [0, 0];
@@ -193,6 +194,7 @@ export function createBuddy(el, size) {
     k.flask.setAttribute('opacity', Math.max(0, Math.min(1, n.flask)).toFixed(2));
     // turn 0 faces the viewer, 1 is a three-quarter view toward its right (the wrapper mirrors it for left)
     const tn = n.turn || 0;
+    k.back.setAttribute('opacity', (n.back || 0).toFixed(2));          // face down: we see the back of the case
     k.look.setAttribute('transform', `translate(${(look[0] * 4 + tn * 17 + 100).toFixed(2)} ${(look[1] * 3).toFixed(2)}) scale(${(1 - tn * 0.12).toFixed(3)} 1) translate(-100 0)`);
     k.blush.setAttribute('transform', `translate(${(tn * 12).toFixed(2)} 0)`);
     const d = legPaths(n.legs.map((v, i) => i % 3 === 2 ? v : v + tn * 6));
@@ -205,7 +207,7 @@ export function createBuddy(el, size) {
       cur.pts = { tape: lerpPts(from.pts.tape, to.pts.tape, e), left: lerpPts(from.pts.left, to.pts.left, e) };
       const s1 = Math.min(1, x * 1.15);            // legs and turn settle without overshoot
       cur.n = { tilt: lerp(from.n.tilt, to.n.tilt, e), lift: lerp(from.n.lift, to.n.lift, e), sh: lerp(from.n.sh, to.n.sh, e), flask: lerp(from.n.flask, to.n.flask, Math.min(1, x * 1.6)),
-        legs: from.n.legs.map((v, i) => lerp(v, to.n.legs[i], s1)), turn: lerp(from.n.turn, to.n.turn, s1) };
+        legs: from.n.legs.map((v, i) => lerp(v, to.n.legs[i], s1)), turn: lerp(from.n.turn, to.n.turn, s1), back: lerp(from.n.back || 0, to.n.back, Math.min(1, x * 2.2)) };
       if (x >= 1) { cur.pts = to.pts; cur.n = to.n; to = null; } else busy = true;
     }
     const dx = lookT[0] - look[0], dy = lookT[1] - look[1];
