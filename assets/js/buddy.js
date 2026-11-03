@@ -318,7 +318,7 @@ function choose(vh) {
 /* ---------- motion: a damped spring toward the perch, every frame ---------- */
 const pos = { x: 8, y: 0 }, vel = { x: 0, y: 0 };
 let flying = false, lean = 0, first = true, lastT = performance.now(), arrivedAt = null;
-let mode = 'follow', lastTY = 0;            // follow, drag, fall, run
+let mode = 'follow', lastTY = 0, lastTX = 0;            // follow, drag, fall, run
 const draw = () => { root.style.transform = `translate3d(${pos.x.toFixed(1)}px,${pos.y.toFixed(1)}px,0) rotate(${lean.toFixed(2)}deg)`; };
 function frame(now) {
   requestAnimationFrame(frame);
@@ -329,7 +329,7 @@ function frame(now) {
   const c = typing && !fine ? null : choose(vh);
   perch = c ? c.p : null; perchEl = c ? c.el : null;
   const tx = c ? c.s.x : 8, ty = c ? c.s.y : vh - H() - 16;
-  lastTY = ty;
+  lastTY = ty; lastTX = tx;
   if (mode !== 'follow') { physics(dt, tx, ty); return; }
   if (first || reduce) { pos.x = tx; pos.y = ty; vel.x = vel.y = 0; first = false; }
   else {
@@ -411,11 +411,15 @@ function physics(dt, tx, ty) {
     lean += (swing - lean) * Math.min(1, dt * 10); grab.vx *= Math.pow(0.02, dt);
   } else if (mode === 'fall') {
     vel.y += 2600 * dt; vel.x *= Math.pow(0.4, dt);
-    pos.x += vel.x * dt; pos.y += vel.y * dt; lean += (0 - lean) * Math.min(1, dt * 6);
+    pos.x += vel.x * dt; pos.y += vel.y * dt; lean += (0 - lean) * Math.min(1, dt * 14);
     if (pos.y >= floor) {                // landed on the perch's level
-      pos.y = floor; const hard = vel.y > 900; vel.x = vel.y = 0; lean = 0;
-      move('boing'); rig.set({ pose: 'idle', expr: hard ? 'dizzy' : 'oops', ms: 160, turn: 0 });
-      mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 900 : 550), style: pickRun() };
+      pos.y = floor; const hard = vel.y > 700; vel.x = vel.y = 0; lean = 0;
+      mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 1900 : 550), style: pickRun() };
+      if (hard) {                        // a big drop: flat on his face, dizzy, then up giggling
+        setFace(lastTX >= pos.x ? 1 : -1); move('trip');
+        rig.set({ pose: 'splat', expr: 'dizzy', ms: 200, turn: 1 });
+        setTimeout(() => { if (mode === 'run' && run && run.phase === 'shake') { rig.set({ pose: 'cover', expr: 'giggle', ms: 360, turn: 0.4 }); move('giggle'); hehe('hehe'); } }, 1100);
+      } else { move('boing'); rig.set({ pose: 'idle', expr: 'oops', ms: 160, turn: 0 }); }
     } else if (pos.y < floor - 400 && vel.y < 0) pos.y = floor - 400;
   } else if (mode === 'run') runStep(dt, tx, floor);
   else if (mode === 'float') {                // drifting around inside the bubble, near his spot
