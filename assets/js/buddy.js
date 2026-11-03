@@ -13,6 +13,9 @@ const NAME = 'Nong Tape';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(pointer: fine)').matches;
 const phone = () => innerWidth < 760;
+/* on touch screens it floats in the viewport (position fixed) so scrolling never leaves it behind;
+   with a mouse it stands on the page next to its spot */
+const floating = () => !fine;
 const store = (k, v) => { try { return v === undefined ? localStorage.getItem(k) : localStorage.setItem(k, v); } catch (e) { return null; } };
 const said = new Set((() => { try { return JSON.parse(sessionStorage.getItem('buddy-said') || '[]'); } catch (e) { return []; } })());
 const remember = k => { said.add(k); try { sessionStorage.setItem('buddy-said', JSON.stringify([...said])); } catch (e) {} };
@@ -88,13 +91,24 @@ function say(key, text) {
 }
 function done() { held = false; clearTimeout(actTimer); rig.set(base); rise(400); }
 /* in the corner it rests low with only its face showing, and stands up when something happens */
-function rise(ms) { clearTimeout(upTimer); root.classList.add('up'); if (ms) upTimer = setTimeout(() => root.classList.remove('up'), ms); }
+const restXY = mode => ({ x: 6, y: innerHeight - (mode === 'up' ? H() + 8 : mode === 'low' ? H() * 0.25 : H() * 0.55) });
+let typing = false;
+function floatRest(mode, ms) { const p = restXY(typing ? 'low' : mode); place(p.x, p.y, ms); }
+function rise(ms) {
+  clearTimeout(upTimer);
+  if (floating()) {
+    if (spot) return;
+    floatRest('up', 320); if (ms) upTimer = setTimeout(() => { if (!spot) floatRest('rest', 450); }, ms);
+    return;
+  }
+  root.classList.add('up'); if (ms) upTimer = setTimeout(() => root.classList.remove('up'), ms);
+}
 
 /* blink by closing the eyes, every few seconds */
 (function blink() { setTimeout(() => { if (!held && !asleep) rig.blink(); blink(); }, 2600 + Math.random() * 3400); })();
 
 /* dozes off after 45 seconds with nothing happening */
-function sleep() { asleep = true; root.classList.remove('up'); rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep'); }
+function sleep() { asleep = true; root.classList.remove('up'); if (floating() && !spot) floatRest('rest', 500); rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep'); }
 function wake() {
   asleep = false; body.classList.remove('m-sleep');
   rig.set({ pose: 'idle', expr: 'surprised', ms: 300 });
@@ -161,10 +175,27 @@ function pick() {
     const t = target(s);
     if (t && t.onScreen && t.visible > 0.5 && (!bt || t.visible > bt.visible)) { best = s; bt = t; }
   }
-  if (best && best === spot) return;
+  if (best && best === spot) {
+    if (floating() && !gliding && Math.hypot(bt.x - scrollX - pos.x, bt.y - scrollY - pos.y) > 4) go(best, bt);
+    return;
+  }
   if (best) go(best, bt); else if (spot) toCorner();
 }
+let arrivedAt = null;
 function go(s, t) {
+  if (floating()) {
+    const r = root.getBoundingClientRect(), tx = t.x - scrollX, ty = t.y - scrollY;
+    root.classList.remove('corner', 'up', 'tucked'); root.classList.add('float');
+    place(r.left, r.top, 0); void root.offsetWidth;
+    const dist = Math.hypot(tx - r.left, ty - r.top), ms = reduce ? 0 : Math.max(420, Math.min(1000, dist * 1.1));
+    spot = s; gliding = true; clearTimeout(glideEnd); clearTimeout(upTimer);
+    if (Math.abs(tx - r.left) > 8) setFace(tx >= r.left ? 1 : -1);
+    if (!held && !asleep && ms && dist > 40) { rig.set({ pose: 'hop', expr: 'happy', ms: 260 }); body.classList.add('m-glide'); }
+    if (ms) root.classList.remove('talking');
+    place(tx, ty, ms);
+    glideEnd = setTimeout(() => arrive(s), ms + 30);
+    return;
+  }
   const r = root.getBoundingClientRect();
   const wasCorner = root.classList.contains('corner');
   const seen = r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth && !wasCorner;
@@ -187,12 +218,23 @@ function arrive(s) {
   gliding = false; body.classList.remove('m-glide'); sideOfBubble();
   setFace(s.face === 'left' ? -1 : 1);
   if (held || asleep) return;
+  const fresh = arrivedAt !== s; arrivedAt = s;
+  if (!fresh) { if (!held && !asleep && rig.pose === 'hop') rig.set({ pose: 'idle', expr: base.expr, ms: 380 }); return; }
   if (s.arrive && Date.now() - born > 2500) {
     const a = s.arrive; rig.set({ pose: a.pose, expr: a.expr }); clearTimeout(actTimer); actTimer = setTimeout(rest, a.ms);
   } else rig.set({ pose: 'idle', expr: base.expr, ms: 380 });
 }
 function toCorner(instant) {
-  spot = null; gliding = false; clearTimeout(glideEnd); body.classList.remove('m-glide');
+  spot = null; arrivedAt = null; gliding = false; clearTimeout(glideEnd); body.classList.remove('m-glide');
+  if (floating()) {
+    root.classList.remove('corner', 'spot'); root.classList.add('float');
+    const r = root.getBoundingClientRect();
+    if (!instant && !reduce && Math.abs(r.left - restXY('rest').x) > 8) setFace(-1);
+    floatRest('rest', instant || reduce ? 0 : 700);
+    setTimeout(() => { if (!spot) setFace(1); }, instant ? 0 : 720);
+    if (!held && !asleep) rig.set(base);
+    return;
+  }
   const wasSpot = root.classList.contains('spot');
   root.classList.remove('spot'); root.classList.add('corner');
   root.style.transition = ''; root.style.transform = '';
@@ -203,6 +245,7 @@ function toCorner(instant) {
 }
 /* when it's on a spot, keep it there as the layout shifts */
 function settle() {
+  if (floating()) { if (!spot && !gliding) floatRest('rest', 0); return; }
   if (!spot || gliding) return;
   const t = target(spot); if (t) place(t.x, t.y, 0);
 }
@@ -213,19 +256,28 @@ addEventListener('scroll', () => {
     root.classList.add('tucked'); clearTimeout(scrollT);
     scrollT = setTimeout(() => root.classList.remove('tucked'), 900);
   }
-  clearTimeout(pickT); pickT = setTimeout(pick, 320);
+  clearTimeout(pickT); pickT = setTimeout(pick, floating() ? 220 : 320);
 }, { passive: true });
 addEventListener('resize', () => {
   clearTimeout(pickT);
   pickT = setTimeout(() => { const n = SIZE(); if (n !== rigSize) { rigSize = n; rig = createBuddy(root.querySelector('.buddy-art'), n); } settle(); pick(); }, 250);
 });
 new ResizeObserver(settle).observe(document.body);
-document.addEventListener('focusin', e => { if (root.classList.contains('corner') && e.target.matches('input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea,select')) root.classList.add('typing'); });
-document.addEventListener('focusout', () => root.classList.remove('typing'));
+const field = 'input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea,select';
+document.addEventListener('focusin', e => {
+  if (!e.target.matches(field)) return;
+  if (floating()) { typing = true; if (!spot) floatRest('rest', 300); }
+  else if (root.classList.contains('corner')) root.classList.add('typing');
+});
+document.addEventListener('focusout', () => {
+  root.classList.remove('typing');
+  if (typing) { typing = false; if (floating() && !spot) floatRest('rest', 300); }
+});
 
 /* events from the rest of the site */
 document.addEventListener('buddy', e => { e.detail === 'done' ? done() : act(e.detail); });
 
+if (floating()) { root.classList.remove('corner'); root.classList.add('float'); floatRest('rest', 0); }
 if (store('buddy-away')) { root.classList.add('away'); peek.classList.add('on'); }
 else {
   setTimeout(pick, 400);
