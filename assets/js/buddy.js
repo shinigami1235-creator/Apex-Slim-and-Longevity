@@ -64,7 +64,7 @@ const QUIPS = {
   play: ['Wanna play?', 'This part is fun!', 'Come try the lab!'],
   consult: ["You're almost there!", 'Big step, nice!', "We'd love to meet you!"],
   'body-check': ['No judging here!', "You're doing great!", 'Every body is welcome.'],
-  'goal-photo': ["I won't peek!", 'Dream big!', 'Goals are good!'],
+  'goal-photo': [{ t: "I won't peek!", pose: 'cover', expr: 'shy', ms: 2600 }, 'Dream big!', 'Goals are good!'],
   meals: ['Yum!', 'Hungry yet?', 'Eat well, feel well.'],
   how: ['Brr, chilly!', 'Cool stuff!', 'Ooh, science!']
 };
@@ -78,7 +78,11 @@ function quip(el) {
   if (quipped[key] && t - quipped[key] < QUIP_AGAIN) return;
   let n = 0; try { n = +(localStorage.getItem('buddy-q-' + key) || 0); } catch (e) {}
   quipped[key] = t; try { sessionStorage.setItem('buddy-quipped', JSON.stringify(quipped)); localStorage.setItem('buddy-q-' + key, n + 1); } catch (e) {}
-  speak(list[n % list.length]);
+  const q = list[n % list.length];
+  if (typeof q === 'string') { speak(q); return; }
+  // a quip with a move, like covering its eyes for "I won't peek!"
+  clearTimeout(actTimer); rig.set({ pose: q.pose, expr: q.expr }); speak(q.t);
+  busyUntil = Date.now() + q.ms; actTimer = setTimeout(() => { busyUntil = 0; rest(); }, q.ms);
 }
 
 /* ---------- build ---------- */
