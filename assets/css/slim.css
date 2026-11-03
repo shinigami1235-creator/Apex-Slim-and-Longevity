@@ -513,13 +513,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .lab-jump span{border-style:dashed;color:var(--ink-2);font-weight:400}
 
 /* Nong Tape buddy */
-.buddy{position:absolute;left:0;top:0;z-index:40;pointer-events:none;will-change:transform}
+.buddy{position:fixed;left:0;top:0;z-index:40;pointer-events:none;will-change:transform;transform-origin:50% 100%}
 .buddy>*{pointer-events:auto}
-.buddy.float{position:fixed;left:0;top:0}
-.buddy.corner{position:fixed;left:14px;top:auto;bottom:10px;transform:translateY(46%);transition:transform .5s var(--ease),opacity .3s}
-.buddy.corner.up,.buddy.corner:hover,.buddy.corner:focus-within{transform:none}
-.buddy.corner.tucked,.buddy.corner.typing{transform:translateY(80%)}
-.buddy.corner.enter{transform:translateY(130%);transition:none}
 .buddy-turn{transition:transform .35s var(--ease);transform-origin:50% 100%}
 .buddy-turn.flip{transform:scaleX(-1)}
 .buddy-body{display:block;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 90%;-webkit-tap-highlight-color:transparent}
@@ -542,16 +537,13 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .buddy.talking .buddy-say{opacity:1;transform:none}
 .buddy-x{position:absolute;left:-6px;top:-4px;width:24px;height:24px;border-radius:50%;border:var(--line) solid var(--lilac-300);background:#fff;color:var(--plum);font:700 15px/1 var(--font);cursor:pointer;opacity:0;transition:opacity .2s}
 .buddy:hover .buddy-x,.buddy-x:focus-visible{opacity:1}
-.buddy.away{opacity:0;visibility:hidden;pointer-events:none}
-.buddy.corner.away{transform:translateY(130%)}
-.buddy.tucked .buddy-say,.buddy.typing .buddy-say,.buddy.tucked .buddy-x,.buddy.typing .buddy-x{opacity:0;pointer-events:none}
+.buddy.away{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,visibility .3s}
 .buddy-peek{position:fixed;left:18px;bottom:0;z-index:40;width:44px;height:20px;border:var(--line) solid var(--lilac-300);border-bottom:0;border-radius:22px 22px 0 0;background:linear-gradient(135deg,#B58CDD,#6A388C);cursor:pointer;transform:translateY(100%);transition:transform .35s var(--ease)}
 .buddy-peek.on{transform:none}
 @media (max-width:759px){
-  .buddy.corner{left:6px;bottom:6px}
   .buddy-say{left:58px;max-width:180px;font-size:13px}
   .buddy.say-left .buddy-say{right:52px}
   .buddy-x{opacity:1;width:22px;height:22px;font-size:14px}
 }
-@media (prefers-reduced-motion:reduce){.buddy-body,.buddy-body[class*=m-]{animation:none!important}.buddy,.buddy.corner,.buddy-turn{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.buddy-body,.buddy-body[class*=m-]{animation:none!important}.buddy-turn{transition:none!important}}
 @media print{.buddy,.buddy-peek{display:none}}
