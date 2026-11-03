@@ -6,16 +6,18 @@ const P = { plumD: '#3A175A', plum: '#6A388C', plumL: '#B58CDD', face: '#F6F0FB'
 export const EXPRESSIONS = ['happy', 'blink', 'wink', 'excited', 'proud', 'curious', 'thinking', 'surprised', 'shy', 'love', 'sleepy', 'oops', 'giggle', 'dizzy'];
 export const POSES = ['idle', 'wave', 'point', 'measure', 'cheer', 'cover', 'hop', 'think', 'heart', 'shy', 'flask', 'sleep'];
 
-const TILT = { think: -8, curious: 10, sleep: 14, shy: -6 };
+const TILT = { think: -8, curious: 10, sleep: 14, shy: -6, runA: 7, runB: 4, splat: 84 };
 const TAPES = {
   idle: 'M160 104c18 2 26 16 22 32', wave: 'M160 104c18-6 22-26 16-44', point: 'M160 104h56', measure: 'M160 104h120',
   cheer: 'M160 100c16-10 20-30 14-48', cover: 'M160 100c-6-20-34-14-44-4', hop: 'M160 104c18 2 24 18 18 34',
   think: 'M160 106c14 14 2 30-22 24', heart: 'M160 104c20-6 36-30 20-38c-12-6-18 6-18 12c0-6-6-18-18-12',
+  runA: 'M160 106c14 4 22 12 26 24', runB: 'M160 104c12 10 6 26-6 32', splat: 'M160 98c10-18 12-40 6-60',
   sleep: 'M160 108c16 6 18 22 6 32', shy: 'M160 104c12 8 8 26-8 30', curious: 'M160 104c18 0 26 12 22 28', flask: 'M160 104c16 4 20 18 14 30'
 };
 const LEFTS = {
   idle: 'M40 108q-14 10-12 26', wave: 'M40 108q-14 10-12 26', point: 'M40 108q-14 10-12 26', measure: 'M40 104q-24 0-28 4',
   cheer: 'M40 100q-16-16-12-40', cover: 'M42 100q8-20 34-12', hop: 'M40 106q-16 2-20 16', think: 'M40 108q-14 10-12 26',
+  runA: 'M40 108q-18 4-24 16', runB: 'M40 108q-4 14 6 24', splat: 'M42 100q-6-24 2-52',
   heart: 'M40 108q-14 10-12 26', sleep: 'M40 112q-12 10-8 22', shy: 'M42 108q12 18 34 18', curious: 'M40 108q-14 10-12 26', flask: 'M40 110q-6 18 14 26'
 };
 
@@ -101,11 +103,21 @@ const EXTRAS = {
 };
 const BLUSH = { proud: .85, shy: 1, love: .9, excited: .7, giggle: 1, dizzy: .6 };
 const face = expr => `<g class="bd-eyes">${eye(expr, 82, 'L')}${eye(expr, 118, 'R')}</g>${mouthOf(expr)}`;
-const legs = pose => pose === 'sleep'
-  ? `<path d="M80 160l-6 10M118 160l8 8" stroke="${P.plum}" stroke-width="10" stroke-linecap="round"/>`
-  : pose === 'hop'
-    ? `<path d="M84 160l-8 12M116 160l8 12" stroke="${P.plum}" stroke-width="10" stroke-linecap="round"/>`
-    : `<path d="M86 160l-2 18M114 160l2 18" stroke="${P.plum}" stroke-width="10" stroke-linecap="round"/><path d="M76 180h14M110 180h14" stroke="${P.plumD}" stroke-width="8" stroke-linecap="round"/>`;
+/* legs are numbers (hip x, foot x, foot y for each leg) so they blend between poses and never vanish */
+const LEGS = {
+  idle: [86, 84, 178, 114, 116, 178], hop: [84, 77, 171, 116, 123, 171], sleep: [80, 74, 170, 118, 126, 168],
+  runA: [92, 108, 172, 110, 96, 179], runB: [92, 80, 179, 110, 124, 171], splat: [86, 84, 180, 114, 116, 180]
+};
+const legsOf = p => LEGS[p] || LEGS.idle;
+const legPaths = L => {
+  const f = n => n.toFixed(1);
+  return [`M${f(L[0])} 160L${f(L[1])} ${f(L[2])}`, `M${f(L[3])} 160L${f(L[4])} ${f(L[5])}`,
+    `M${f(L[1] - 8)} ${f(L[2] + 2)}h14`, `M${f(L[4] - 6)} ${f(L[5] + 2)}h14`];
+};
+const legs = pose => { const d = legPaths(legsOf(pose));
+  return `<path data-k="legL" d="${d[0]}" stroke="${P.plum}" stroke-width="10" stroke-linecap="round"/><path data-k="legR" d="${d[1]}" stroke="${P.plum}" stroke-width="10" stroke-linecap="round"/>`
+    + `<path data-k="footL" d="${d[2]}" stroke="${P.plumD}" stroke-width="8" stroke-linecap="round"/><path data-k="footR" d="${d[3]}" stroke="${P.plumD}" stroke-width="8" stroke-linecap="round"/>`; };
+const LIFT = { hop: -14, splat: 14, runA: -5, runB: 0 };
 const FLASK = `<g transform="translate(40 128)"><path d="M-6-22h12v10l12 22q3 7-5 8h-26q-8-1-5-8l12-22z" fill="#fff" fill-opacity=".55" stroke="${P.ring}" stroke-width="2.5"/><path d="M-13 4h26l4 7q2 5-4 6h-26q-6-1-4-6z" fill="#B58CDD"/></g>`;
 const ticks = Array.from({ length: 60 }, (_, i) => { const a = i / 60 * Math.PI * 2, r1 = 52, r2 = i % 5 ? 49.5 : 47.5; return `<path d="M${(100 + r1 * Math.cos(a)).toFixed(1)} ${(104 + r1 * Math.sin(a)).toFixed(1)}L${(100 + r2 * Math.cos(a)).toFixed(1)} ${(104 + r2 * Math.sin(a)).toFixed(1)}"/>`; }).join('');
 
@@ -114,6 +126,7 @@ let uid = 0;
 function markup(id, size, s) {
   const c = cubes(s.pose), tp = pathOf(c.tape), lp = pathOf(c.left), hand = c.left[9], tEnd = c.tape[9];
   const hop = s.pose === 'hop';
+  const lift = LIFT[s.pose] || 0;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-15 0 230 200" width="${size}" height="${size * 200 / 230}" class="buddy-svg" overflow="visible">
   <defs>
     <linearGradient id="${id}c" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${P.plumL}"/><stop offset=".5" stop-color="${P.plum}"/><stop offset="1" stop-color="${P.plumD}"/></linearGradient>
@@ -121,7 +134,7 @@ function markup(id, size, s) {
     <linearGradient id="${id}m" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#F4F5F8"/><stop offset="1" stop-color="#A9ADB8"/></linearGradient>
   </defs>
   <ellipse data-k="shadow" cx="100" cy="188" rx="${hop ? 34 : 44}" ry="7" fill="${P.ink}" opacity="${hop ? .08 : .14}"/>
-  <g data-k="tilt" transform="translate(0 ${hop ? -14 : 0}) rotate(${TILT[s.pose] || 0} 100 110)">
+  <g data-k="tilt" transform="translate(0 ${lift}) rotate(${TILT[s.pose] || 0} 100 110)">
     <g data-k="legs">${legs(s.pose)}</g>
     <path data-k="left" d="${lp}" fill="none" stroke="${P.plum}" stroke-width="9" stroke-linecap="round"/>
     <path data-k="t1" d="${tp}" fill="none" stroke="${P.tapeD}" stroke-width="15" stroke-linecap="round"/>
@@ -158,11 +171,11 @@ export function createBuddy(el, size) {
   const id = 'b' + (++uid);
   el.innerHTML = markup(id, size, { expr: 'happy', pose: 'idle' });
   const q = k => el.querySelector(`[data-k=${k}]`);
-  const k = { shadow: q('shadow'), tilt: q('tilt'), legs: q('legs'), left: q('left'), t: [q('t1'), q('t2'), q('t3')], blush: q('blush'),
+  const k = { shadow: q('shadow'), tilt: q('tilt'), legs: q('legs'), legL: q('legL'), legR: q('legR'), footL: q('footL'), footR: q('footR'), left: q('left'), t: [q('t1'), q('t2'), q('t3')], blush: q('blush'),
     look: q('look'), face: q('face'), hand: q('hand'), hook: q('hook'), flask: q('flask'), extras: q('extras') };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const num = p => ({ tilt: TILT[p] || 0, lift: p === 'hop' ? -14 : 0, sh: p === 'hop' ? 34 : 44, flask: p === 'flask' ? 1 : 0 });
-  let cur = { pose: 'idle', expr: 'happy', pts: cubes('idle'), n: num('idle') };
+  const num = (p, turn) => ({ tilt: TILT[p] || 0, lift: LIFT[p] || 0, sh: p === 'hop' ? 34 : p === 'splat' ? 58 : 44, flask: p === 'flask' ? 1 : 0, legs: legsOf(p), turn });
+  let cur = { pose: 'idle', expr: 'happy', turn: 0, pts: cubes('idle'), n: num('idle', 0) };
   let from = null, to = null, t0 = 0, dur = 420, raf = 0;
   let look = [0, 0], lookT = [0, 0];
   const ease = x => { const c = 1.25; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };   // soft overshoot
@@ -178,14 +191,21 @@ export function createBuddy(el, size) {
     k.tilt.setAttribute('transform', `translate(0 ${n.lift.toFixed(1)}) rotate(${n.tilt.toFixed(1)} 100 110)`);
     k.shadow.setAttribute('rx', n.sh.toFixed(1));
     k.flask.setAttribute('opacity', Math.max(0, Math.min(1, n.flask)).toFixed(2));
-    k.look.setAttribute('transform', `translate(${(look[0] * 4).toFixed(2)} ${(look[1] * 3).toFixed(2)})`);
+    // turn 0 faces the viewer, 1 is a three-quarter view toward its right (the wrapper mirrors it for left)
+    const tn = n.turn || 0;
+    k.look.setAttribute('transform', `translate(${(look[0] * 4 + tn * 17 + 100).toFixed(2)} ${(look[1] * 3).toFixed(2)}) scale(${(1 - tn * 0.12).toFixed(3)} 1) translate(-100 0)`);
+    k.blush.setAttribute('transform', `translate(${(tn * 12).toFixed(2)} 0)`);
+    const d = legPaths(n.legs.map((v, i) => i % 3 === 2 ? v : v + tn * 6));
+    k.legL.setAttribute('d', d[0]); k.legR.setAttribute('d', d[1]); k.footL.setAttribute('d', d[2]); k.footR.setAttribute('d', d[3]);
   }
   function frame(now) {
     raf = 0; let busy = false;
     if (to) {
       const x = Math.min(1, (now - t0) / dur), e = ease(x);
       cur.pts = { tape: lerpPts(from.pts.tape, to.pts.tape, e), left: lerpPts(from.pts.left, to.pts.left, e) };
-      cur.n = { tilt: lerp(from.n.tilt, to.n.tilt, e), lift: lerp(from.n.lift, to.n.lift, e), sh: lerp(from.n.sh, to.n.sh, e), flask: lerp(from.n.flask, to.n.flask, Math.min(1, x * 1.6)) };
+      const s1 = Math.min(1, x * 1.15);            // legs and turn settle without overshoot
+      cur.n = { tilt: lerp(from.n.tilt, to.n.tilt, e), lift: lerp(from.n.lift, to.n.lift, e), sh: lerp(from.n.sh, to.n.sh, e), flask: lerp(from.n.flask, to.n.flask, Math.min(1, x * 1.6)),
+        legs: from.n.legs.map((v, i) => lerp(v, to.n.legs[i], s1)), turn: lerp(from.n.turn, to.n.turn, s1) };
       if (x >= 1) { cur.pts = to.pts; cur.n = to.n; to = null; } else busy = true;
     }
     const dx = lookT[0] - look[0], dy = lookT[1] - look[1];
@@ -209,19 +229,15 @@ export function createBuddy(el, size) {
     const ex = k.extras; ex.style.transition = 'opacity .16s ease'; ex.style.opacity = 0;
     setTimeout(() => { ex.innerHTML = EXTRAS[expr] || ''; ex.style.opacity = 1; }, 160);
   }
-  function setPose(pose, ms) {
-    if (pose === cur.pose && !to) return;
-    const legsChange = (pose === 'sleep' || pose === 'hop') !== (cur.pose === 'sleep' || cur.pose === 'hop') || (pose === 'sleep') !== (cur.pose === 'sleep');
-    cur.pose = pose;
-    from = { pts: cur.pts, n: cur.n }; to = { pts: cubes(pose), n: num(pose) };
+  function setPose(pose, ms, turn) {
+    const tn = turn ?? cur.turn;
+    if (pose === cur.pose && tn === cur.turn && !to) return;
+    cur.pose = pose; cur.turn = tn;
+    from = { pts: cur.pts, n: cur.n }; to = { pts: cubes(pose), n: num(pose, tn) };
     dur = reduce ? 1 : (ms || 420); t0 = performance.now(); kick();
-    if (legsChange) {
-      k.legs.style.transition = 'opacity .12s ease'; k.legs.style.opacity = 0;
-      setTimeout(() => { k.legs.innerHTML = legs(pose); k.legs.style.opacity = 1; }, 120);
-    }
   }
   return {
-    set({ expr, pose, ms } = {}) { if (expr) setFace(expr); if (pose) setPose(pose, ms); },
+    set({ expr, pose, ms, turn } = {}) { if (expr) setFace(expr); if (pose || turn !== undefined) setPose(pose || cur.pose, ms, turn); },
     look(x, y) { lookT = [x, y]; if (reduce) look = lookT; kick(); },
     blink() {
       const eyes = k.face.querySelector('.bd-eyes'); if (!eyes || cur.expr !== 'happy') return;
@@ -229,6 +245,6 @@ export function createBuddy(el, size) {
       eyes.style.transform = 'scaleY(.12)';
       setTimeout(() => { eyes.style.transition = 'transform .11s ease-out'; eyes.style.transform = ''; }, 90);
     },
-    get pose() { return cur.pose; }, get expr() { return cur.expr; }
+    get pose() { return cur.pose; }, get expr() { return cur.expr; }, get turn() { return cur.turn; }
   };
 }

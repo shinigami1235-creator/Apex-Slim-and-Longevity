@@ -11,7 +11,7 @@
    - each line is said once per visit; the rest of the time it reacts with a face and a move
    - it never comments on weight, BMI or waist numbers
    - perches sit in empty space beside the content */
-import { createBuddy } from './buddy-art.js?v=3';
+import { createBuddy } from './buddy-art.js?v=4';
 
 const NAME = 'Nong Tape';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -98,7 +98,7 @@ let rigSize = SIZE(), rig = createBuddy(root.querySelector('.buddy-art'), rigSiz
 const W = () => SIZE(), H = () => SIZE() * 200 / 230;
 const viewH = () => window.visualViewport ? visualViewport.height : innerHeight;
 
-let base = { pose: 'idle', expr: 'happy' };
+let base = { pose: 'idle', expr: 'happy', turn: 0 };
 let actTimer = 0, sayTimer = 0, lastSay = 0, lastInput = Date.now(), asleep = false, held = false, facing = 1;
 const born = Date.now();
 
@@ -328,7 +328,7 @@ function frame(now) {
   const free = !held && !asleep && Date.now() > busyUntil;
   if (!flying && speed > 140 && Math.hypot(tx - pos.x, ty - pos.y) > 30) {
     flying = true; root.classList.remove('talking'); stopFidget();
-    if (free) { rig.set({ pose: 'hop', expr: 'happy', ms: 240 }); body.classList.add('m-glide'); }
+    if (free) { rig.set({ pose: 'hop', expr: 'happy', ms: 240, turn: 1 }); body.classList.add('m-glide'); }
   }
   if (flying && Math.abs(vel.x) > 60) setFace(vel.x > 0 ? 1 : -1);
   if (flying && speed < 30) {
@@ -342,9 +342,9 @@ function land(free) {
   if (!free) return;
   if (fresh) setTimeout(() => { if (!flying && perchEl === arrivedAt) quip(perchEl); }, 500);
   if (fresh && perch && perch.arrive && Date.now() - born > 2500) {
-    const a = perch.arrive; rig.set({ pose: a.pose, expr: a.expr }); clearTimeout(actTimer);
+    const a = perch.arrive; rig.set({ pose: a.pose, expr: a.expr, turn: 0 }); clearTimeout(actTimer);
     busyUntil = Date.now() + a.ms; actTimer = setTimeout(() => { busyUntil = 0; rest(); }, a.ms);
-  } else rig.set({ pose: 'idle', expr: base.expr, ms: 380 });
+  } else rig.set({ pose: 'idle', expr: base.expr, ms: 380, turn: 0 });
 }
 
 /* ---------- picking him up: drag, drop, fall to his perch's level, then run back ---------- */
@@ -362,7 +362,7 @@ addEventListener('pointermove', e => {
   if (!grab.moved) {                     // picked up
     grab.moved = true; mode = 'drag'; run = null; flying = false; body.classList.remove('m-glide', 'm-run', 'm-sleep');
     asleep = false; stopFidget(); clearTimeout(actTimer); busyUntil = Infinity; root.classList.remove('talking');
-    rig.set({ pose: 'cheer', expr: 'surprised', ms: 200 }); move('startle');
+    rig.set({ pose: 'cheer', expr: 'surprised', ms: 200, turn: 0 }); move('startle');
     try { body.setPointerCapture(e.pointerId); } catch (err) {}
     setTimeout(() => { if (mode === 'drag') rig.set({ pose: 'cheer', expr: Math.random() < .5 ? 'excited' : 'giggle' }); }, 900);
   }
@@ -392,7 +392,7 @@ function physics(dt, tx, ty) {
     pos.x += vel.x * dt; pos.y += vel.y * dt; lean += (0 - lean) * Math.min(1, dt * 6);
     if (pos.y >= floor) {                // landed on the perch's level
       pos.y = floor; const hard = vel.y > 900; vel.x = vel.y = 0; lean = 0;
-      move('boing'); rig.set({ pose: 'idle', expr: hard ? 'dizzy' : 'oops', ms: 160 });
+      move('boing'); rig.set({ pose: 'idle', expr: hard ? 'dizzy' : 'oops', ms: 160, turn: 0 });
       mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 900 : 550), style: pickRun() };
     } else if (pos.y < floor - 400 && vel.y < 0) pos.y = floor - 400;
   } else if (mode === 'run') runStep(dt, tx, floor);
@@ -405,36 +405,39 @@ function runStep(dt, tx, floor) {
   if (run.phase === 'shake') {
     if (now < run.until) return;
     run.phase = 'go'; run.start = pos.x; setFace(tx >= pos.x ? 1 : -1);
-    rig.set({ pose: 'hop', expr: run.style === 'dash' ? 'excited' : 'happy', ms: 160 });
+    rig.set({ pose: 'runA', expr: run.style === 'dash' ? 'excited' : 'happy', ms: 220, turn: 1 });
     body.classList.add(run.style === 'dash' ? 'm-dash' : 'm-run');
     if (run.style === 'trip') run.tripAt = Math.abs(tx - pos.x) > 120 ? 0.45 + Math.random() * 0.2 : 2;
   }
   if (run.phase === 'trip') {
     if (now < run.until) return;
-    run.phase = 'go'; rig.set({ pose: 'hop', expr: 'happy', ms: 160 }); body.classList.add('m-run');
+    run.phase = 'go'; rig.set({ pose: 'runA', expr: 'happy', ms: 220, turn: 1 }); body.classList.add('m-run');
   }
   if (run.phase !== 'go') return;
   const dx = tx - pos.x, dir = Math.sign(dx) || 1;
   const speed = run.style === 'dash' ? 760 : 300;
   setFace(dir);
-  lean += (dir * (run.style === 'dash' ? 16 : 8) - lean) * Math.min(1, dt * 8);
+  lean += (dir * (run.style === 'dash' ? 10 : 3) - lean) * Math.min(1, dt * 8);
   // legs: alternate two poses for a little run cycle
-  legT += dt; if (legT > 0.14) { legT = 0; rig.set({ pose: rig.pose === 'hop' ? 'idle' : 'hop', ms: 110 }); }
+  const stride = run.style === 'dash' ? 0.1 : 0.16;
+  legT += dt; if (legT > stride) { legT = 0; rig.set({ pose: rig.pose === 'runA' ? 'runB' : 'runA', ms: stride * 1000 - 10 }); }
   if (run.style === 'dash') { windT += dt; if (windT > 0.06) { windT = 0; wind(dir); } }
   const step = Math.min(Math.abs(dx), speed * dt);
   pos.x += dir * step;
   const total = Math.abs(tx - run.start) || 1, done = 1 - Math.abs(tx - pos.x) / total;
   if (run.style === 'trip' && done > run.tripAt) {          // trips, laughs it off
     run.tripAt = 2; run.phase = 'trip'; run.until = now + 1300;
-    body.classList.remove('m-run'); move('trip'); rig.set({ pose: 'shy', expr: 'oops', ms: 150 });
-    setTimeout(() => { if (mode === 'run') { rig.set({ pose: 'cover', expr: 'giggle', ms: 200 }); move('giggle'); hehe('hehe'); } }, 650);
+    body.classList.remove('m-run'); move('trip'); rig.set({ pose: 'splat', expr: 'oops', ms: 280, turn: 1 });
+    setTimeout(() => { if (mode === 'run') rig.set({ expr: 'dizzy' }); }, 420);
+    setTimeout(() => { if (mode === 'run') { rig.set({ pose: 'cover', expr: 'giggle', ms: 360, turn: 0.4 }); move('giggle'); hehe('hehe'); } }, 900);
+    run.until = now + 1700;
     return;
   }
   if (Math.abs(tx - pos.x) < 3) {                          // home
     body.classList.remove('m-run', 'm-dash'); mode = 'follow'; run = null; vel.x = vel.y = 0; lean = 0;
     busyUntil = 0; arrivedAt = null; flying = false;
     setFace(perch && perch.face === 'left' ? -1 : 1);
-    rig.set({ pose: 'cheer', expr: 'proud', ms: 260 }); move('hop');
+    rig.set({ pose: 'cheer', expr: 'proud', ms: 300, turn: 0 }); move('hop');
     clearTimeout(actTimer); actTimer = setTimeout(rest, 700);
   }
 }
