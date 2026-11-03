@@ -427,7 +427,7 @@
   /* consult form */
   const form = document.getElementById('request');
   if (form) {
-    const pre = form.dataset.goals;
+    const pre = form.dataset.goals || new URLSearchParams(location.search).get('goals');
     if (pre) tickGoals(pre.split(','));
     form.addEventListener('submit', e => {
       e.preventDefault();

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="only light">
+<title>Slim Wellness Lab | Apex Slim and Longevity</title>
+<meta name="description" content="Check your BMI and waist on the Thai scale, see a 3D body built from your numbers and find programs to ask the Apex Slim doctor about.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/slim.css?v=6">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#6A388C"/><path d="M18 48 32 16l14 32" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 38h16" stroke="#C9B3DD" stroke-width="4" stroke-linecap="round"/></svg>
+      <span>Apex Slim<small>and Longevity</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Menu"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="index.html#treatments">Treatments</a>
+      <a href="index.html#longevity">Longevity</a>
+      <a href="index.html#results">Results</a>
+      <a href="index.html#notes">Lab Notes</a>
+      <a href="lab.html" aria-current="page">Wellness Lab</a>
+      <a class="btn" href="index.html#consult">Book a consult</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="lab-top" aria-labelledby="h-lab">
+  <div class="wrap">
+    <p class="crumbs"><a href="index.html">Apex Slim and Longevity</a> / Slim Wellness Lab</p>
+    <h1 id="h-lab">Slim Wellness Lab</h1>
+    <p class="lede">Tools to try before your first visit. Start with the body check, then book a consult with what it suggests.</p>
+    <nav class="lab-jump" aria-label="Lab tools"><a href="#body-check">Body check</a><a href="#goal-photo">Goal photo</a><a href="#meals">Today's meals</a><span>Games coming soon</span></nav>
+  </div>
+</section>
+
+<section class="sec bc" id="body-check" aria-labelledby="h-bc" style="padding-top:40px">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-bc">Body check</h2>
+      <p>Enter your height, weight and waist to see your BMI on the Thai scale and a 3D body built from your numbers. It lists programs to ask the doctor about, since only the doctor can say which suit you.</p>
+    </div>
+    <div class="bc-grid">
+      <form class="form bc-form" id="bc-form" novalidate>
+        <div class="form-head"><b>Your numbers</b><span>For adults 18 and over</span></div>
+        <div class="form-body">
+          <fieldset class="field">
+            <legend>Body</legend>
+            <div class="checks">
+              <label><input type="radio" name="sex" value="female" checked><span>Female</span></label>
+              <label><input type="radio" name="sex" value="male"><span>Male</span></label>
+            </div>
+          </fieldset>
+          <div class="row3">
+            <div class="field"><label for="bc-h">Height (cm)</label><input id="bc-h" name="h" type="number" inputmode="decimal" min="120" max="220" value="160"></div>
+            <div class="field"><label for="bc-w">Weight (kg)</label><input id="bc-w" name="w" type="number" inputmode="decimal" min="30" max="250" value="62"></div>
+            <div class="field"><label for="bc-waist">Waist (cm)</label><input id="bc-waist" name="waist" type="number" inputmode="decimal" min="40" max="200" value="82"></div>
+          </div>
+          <p class="bc-hint">Measure your waist around your belly button in the morning, before you eat.</p>
+          <p class="form-msg" id="bc-msg" role="status"></p>
+        </div>
+      </form>
+
+      <div class="bc-scan" aria-labelledby="h-bc">
+        <div class="bc-view">
+          <canvas id="bc-canvas" aria-label="3D body built from your numbers" role="img"></canvas>
+          <div class="bc-tabs" role="group" aria-label="Body shown">
+            <button type="button" class="on" data-view="now" aria-pressed="true">Now</button>
+            <button type="button" data-view="goal" aria-pressed="false">Goal</button>
+          </div>
+          <p class="bc-drag">Drag to turn</p>
+        </div>
+        <div class="bc-read">
+          <div><span>BMI</span><b id="bc-bmi">24.2</b><i id="bc-cat">Overweight</i></div>
+          <div><span>Waist</span><b id="bc-wv">82 cm</b><i id="bc-wcat">Over half your height</i></div>
+        </div>
+        <p class="bc-note" id="bc-note"></p>
+        <div class="bc-goal" id="bc-goal">
+          <label for="bc-gw">Goal weight <b id="bc-gwv">59 kg</b></label>
+          <input id="bc-gw" type="range" min="40" max="62" step="0.5" value="59">
+          <p id="bc-gnote"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bc-rx" aria-labelledby="h-bcrx">
+      <h3 id="h-bcrx">Programs to ask the doctor about</h3>
+      <div class="rx-list" id="bc-list"></div>
+      <p class="bc-small">Every plan at Apex Slim starts with a body composition scan and a doctor consultation. This check is a guide, not a diagnosis.</p>
+      <a class="btn" id="bc-book" href="index.html#consult">Book a consult with these</a>
+    </div>
+  </div>
+</section>
+
+<section class="sec gp" id="goal-photo" style="padding-top:0" aria-labelledby="h-gp">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-gp">Goal photo</h2>
+      <p>Pick a front photo of your face or body and set how slim you'd like to be. Your photo stays on this device and nothing is uploaded or saved.</p>
+    </div>
+    <div class="gp-grid">
+      <div class="gp-ctrl">
+        <div class="bc-tabs gp-mode" role="group" aria-label="Photo type">
+          <button type="button" class="on" data-mode="face" aria-pressed="true">Face</button>
+          <button type="button" data-mode="body" aria-pressed="false">Body</button>
+        </div>
+        <p class="gp-tip" id="gp-tip">Use a front photo with your whole face showing, looking straight at the camera.</p>
+        <label class="btn gp-pick">Choose a photo<input type="file" id="gp-file" accept="image/*" hidden></label>
+        <div class="gp-amount">
+          <label for="gp-amt">Slimming <b id="gp-amtv">60%</b></label>
+          <input type="range" id="gp-amt" min="0" max="100" step="5" value="60" disabled>
+        </div>
+        <div class="gp-acts">
+          <button class="btn ghost" type="button" id="gp-hold" disabled>Hold to see before</button>
+          <button class="btn ghost" type="button" id="gp-save" disabled>Save image</button>
+        </div>
+        <p class="gp-disc">This is a goal you set, not a predicted result. Your doctor will tell you what's realistic for you.</p>
+      </div>
+      <div class="gp-view">
+        <canvas id="gp-canvas" width="900" height="1100" role="img" aria-label="Your goal photo"></canvas>
+        <p class="gp-status" id="gp-status" role="status">Your goal photo shows here.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec ml" id="meals" style="padding-top:0" aria-labelledby="h-ml">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-ml">Today's meals</h2>
+      <p>A healthy Thai breakfast, lunch, dinner and snack for each day, built on the 2:1:1 plate: two parts vegetables, one part rice or noodles and one part protein.</p>
+    </div>
+    <div class="ml-top">
+      <p class="ml-date" id="ml-date"></p>
+      <button class="btn ghost" type="button" id="ml-next">Show another day</button>
+    </div>
+    <div class="ml-grid" id="ml-grid"></div>
+    <div class="ml-plate">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="#fff" stroke="#C9B3DD" stroke-width="3"/><path d="M60 60V8A52 52 0 0 0 60 112Z" fill="#86D3BE"/><path d="M60 60V112A52 52 0 0 0 112 60Z" fill="#F2E2A6"/><path d="M60 60H112A52 52 0 0 0 60 8Z" fill="#F07E7E"/></svg>
+      <p><b>The 2:1:1 plate</b>Half the plate vegetables, a quarter rice or noodles, a quarter fish, chicken, egg or tofu. Ask for less sugar, oil and sauce when you order.</p>
+    </div>
+    <p class="bc-small">Sample menu. Apex's nutritionist checks the list before the site goes live.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div><b>Apex Slim and Longevity</b><br>Part of the Apex Medical Center group.<br>Results may vary from person to person.</div>
+    <nav aria-label="Social">
+      <a href="https://lin.ee/z7vQnrT" target="_blank" rel="noopener">LINE</a>
+      <a href="https://www.instagram.com/apex_hospital_slim_wellness/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.facebook.com/apexlifecenter3/" target="_blank" rel="noopener">Facebook</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/js/slim.js?v=6"></script>
+<script type="module" src="assets/js/bodycheck.js?v=1"></script>
+<script type="module" src="assets/js/goalphoto.js?v=1"></script>
+<script src="assets/js/meals.js?v=1"></script>
+</body>
+</html>

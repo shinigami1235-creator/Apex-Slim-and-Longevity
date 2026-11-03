@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=5">
+<link rel="stylesheet" href="assets/css/slim.css?v=6">
 </head>
 <body>
 
@@ -23,8 +23,9 @@
     <nav class="nav" id="nav" aria-label="Main">
       <a href="#treatments">Treatments</a>
       <a href="#longevity">Longevity</a>
+      <a href="#results">Results</a>
       <a href="#notes">Lab Notes</a>
-      <a href="#play">Play</a>
+      <a href="lab.html">Wellness Lab</a>
       <a class="btn" href="#consult">Book a consult</a>
     </nav>
   </div>
@@ -141,6 +142,58 @@
   </div>
 </section>
 
+<section class="sec rx-sec" id="results" aria-labelledby="h-results">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-results">Results</h2>
+      <p>Pick a case and the pod runs it, then sends the before and after to the terminal. These are sample cases from Apex Surgery Hospital until Apex Slim's own cases are in.</p>
+    </div>
+    <div class="rx-picker" id="rx-picker" role="group" aria-label="Pick a case"></div>
+    <div class="rx-frame" id="rx-frame">
+      <div class="rx-stage" id="rx-stage" data-step="idle">
+        <img class="rx-layer rx-pod-off" src="assets/img/results/podview-off.webp" alt="The results pod and terminal" width="1920" height="1200">
+        <img class="rx-layer rx-pod-on" src="assets/img/results/podview-on.webp" alt="" width="1920" height="1200" loading="lazy">
+        <video class="rx-layer rx-fog" id="rx-fog" muted playsinline preload="none" aria-hidden="true">
+          <source src="assets/video/results-fog.webm" type="video/webm"><source src="assets/video/results-fog.mp4" type="video/mp4">
+        </video>
+        <div class="rx-map rx-photo" id="rx-photo"><img id="rx-photo-img" alt=""></div>
+        <div class="rx-map rx-crown" id="rx-crown"><span id="rx-crown-text">Pick a case</span></div>
+        <i class="rx-dial" id="rx-dial" aria-hidden="true"></i>
+        <svg class="rx-layer rx-path" id="rx-path" viewBox="0 0 1000 625" preserveAspectRatio="none" aria-hidden="true"><path id="rx-path-line"/><circle r="5"/><circle r="5"/><circle r="5"/></svg>
+        <video class="rx-layer rx-pan" id="rx-pan" muted playsinline preload="none" aria-hidden="true">
+          <source src="assets/video/results-pan.webm" type="video/webm"><source src="assets/video/results-pan.mp4" type="video/mp4">
+        </video>
+        <img class="rx-layer rx-term" src="assets/img/results/terminal-end.webp" alt="" width="1920" height="1200" loading="lazy">
+        <div class="rx-hud">
+          <button class="rx-btn" type="button" id="rx-again" hidden>Run again</button>
+        </div>
+      </div>
+      <div class="rx-panels" id="rx-panels" hidden>
+        <div class="rx-panel rx-pl" data-w="366" data-h="500">
+          <p class="rx-kick">Apex Surgery Hospital</p>
+          <h3>Treatments</h3>
+          <div class="rx-tx" id="rx-tx"></div>
+          <h3>Cases</h3>
+          <div class="rx-cases" id="rx-cases"></div>
+        </div>
+        <div class="rx-panel rx-pc" data-w="683" data-h="500">
+          <div class="rx-pc-head"><h3 id="rx-title"></h3><span>Sample case</span></div>
+          <div class="rx-ba">
+            <figure><img id="rx-before" alt=""><figcaption><b>Before</b><span id="rx-bdate"></span></figcaption></figure>
+            <figure><img id="rx-after" alt=""><figcaption><b>After</b><span id="rx-adate"></span></figcaption></figure>
+          </div>
+        </div>
+        <div class="rx-panel rx-pr" data-w="366" data-h="500">
+          <h3>Patient video</h3>
+          <div class="rx-vid" id="rx-vid"></div>
+          <dl class="rx-facts" id="rx-facts"></dl>
+          <p class="rx-vary">Results vary from person to person.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="notes" aria-labelledby="h-notes">
   <div class="wrap">
     <div class="sec-head">
@@ -159,8 +212,9 @@
   <div class="wrap">
     <div class="play">
       <div>
-        <h2 id="h-play">Play</h2>
-        <p class="lede" style="margin-top:16px;margin-bottom:0">Games are being made for this space.</p>
+        <h2 id="h-play">Slim Wellness Lab</h2>
+        <p class="lede" style="margin-top:16px">Check your BMI and waist on the Thai scale and see a 3D body built from your numbers. Games and more tools are being added to the lab.</p>
+        <a class="btn" href="lab.html">Open the lab</a>
       </div>
       <svg class="dish" viewBox="0 0 180 180" aria-hidden="true"><circle cx="90" cy="90" r="84"/><circle cx="90" cy="90" r="74"/><circle cx="62" cy="70" r="9" fill="#C9B3DD" stroke="none"/><circle cx="108" cy="58" r="5" fill="#86D3BE" stroke="none"/><circle cx="118" cy="110" r="12" fill="#9CCBEA" stroke="none"/><circle cx="72" cy="118" r="6" fill="#A886CD" stroke="none"/><circle cx="96" cy="86" r="3" fill="#6A388C" stroke="none"/></svg>
     </div>
@@ -217,6 +271,8 @@
 </footer>
 
 <script src="assets/js/mix-data.js?v=4"></script>
-<script src="assets/js/slim.js?v=5"></script>
+<script src="assets/js/slim.js?v=6"></script>
+<script src="assets/js/results-map.js?v=1"></script>
+<script src="assets/js/results.js?v=1"></script>
 </body>
 </html>
