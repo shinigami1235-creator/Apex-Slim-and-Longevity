@@ -2,6 +2,7 @@
    programs to ask the doctor about. The body is the MakeHuman CC0 base mesh with thin,
    average and heavy shapes for each sex plus a belly shape (tools/slimbody builds it). */
 import * as THREE from '../vendor/three/three.module.js';
+const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
 
 const $ = id => document.getElementById(id);
 const form = $('bc-form'), canvas = $('bc-canvas');
@@ -98,7 +99,7 @@ async function init() {
   /* ---------- inputs ---------- */
   const num = id => parseFloat($(id).value);
   const gw = $('bc-gw');
-  let mode = 'now', goalTouched = false;
+  let mode = 'now', goalTouched = false, measured = false;
   const read = () => ({ sex: form.elements.sex.value, h: num('bc-h'), w: num('bc-w'), waist: num('bc-waist') });
   const valid = d => {
     if (!(d.h >= 120 && d.h <= 220)) return 'Enter a height between 120 and 220 cm.';
@@ -110,6 +111,7 @@ async function init() {
     const d = read(), err = valid(d);
     $('bc-msg').textContent = err;
     if (err) return;
+    if (!measured) { measured = true; buddy('measure'); }
     const m = d.h / 100, bmi = d.w / (m * m), whtr = d.waist / d.h, half = d.h / 2;
     const [cat, tone] = category(bmi);
     $('bc-bmi').textContent = bmi.toFixed(1); $('bc-cat').textContent = cat; $('bc-cat').className = tone;
@@ -135,6 +137,7 @@ async function init() {
     $('bc-book').href = 'index.html?goals=' + goals.join(',') + '#consult';
   };
   form.addEventListener('input', e => { if (e.target === gw) goalTouched = true; update(); });
+  gw.addEventListener('change', () => buddy('goal'));
   gw.addEventListener('input', () => { goalTouched = true; if (mode !== 'goal') setMode('goal'); update(); });
   const setMode = m => {
     mode = m;

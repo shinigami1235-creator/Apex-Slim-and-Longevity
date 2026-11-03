@@ -1,4 +1,5 @@
 (() => {
+  const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
   const T = {
     wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'index.html#treatments', time: 'Once a week for 4 weeks',
       desc: 'A weekly program prescribed by the doctor that works on the hunger that rises when you eat less.' },
@@ -163,7 +164,7 @@
       liquid.innerHTML = ''; liquid.style.filter = ''; liquid.style.clipPath = ''; liquid.style.opacity = '';
       fx.innerHTML = ''; foam.style.opacity = 0; bubbles.innerHTML = ''; finish.innerHTML = '';
       mixed.classList.remove('on'); video.classList.remove('on'); video.pause();
-      formula.classList.remove('ready'); hForm.textContent = 'Your formula';
+      formula.classList.remove('ready'); hForm.textContent = 'Your formula'; buddy('done');
       rx.hidden = true; seeRx.hidden = true; mixBtn.hidden = false; setStatus('');
       document.body.classList.remove('stage-busy'); busy = false;
     };
@@ -391,6 +392,7 @@
         const sl = new Image(); sl.alt = ''; sl.src = LAB + 'full-' + ids[i] + '.webp';
         sl.style.clipPath = region(0); liquid.prepend(sl); slices.push(sl);
       }
+      buddy('mixing');
       for (let i = 0; i < n; i++) {
         if (id !== run) return;
         slices[i].style.clipPath = region(i / n);
@@ -406,7 +408,7 @@
       if (id !== run) return;
       liquid.innerHTML = ''; liquid.style.filter = ''; liquid.style.clipPath = ''; fx.innerHTML = ''; foam.style.opacity = 0;
       formula.classList.add('ready'); hForm.textContent = 'Your formula is ready';
-      setStatus('Your formula is ready');
+      setStatus('Your formula is ready'); buddy('formula');
       if (!reduce) { finishes[finFx](colour); setTimeout(() => { if (id === run) finish.innerHTML = ''; }, 4500); }
       rxList.innerHTML = rxHTML(ids); rx.hidden = false;
       mixBtn.hidden = true; seeRx.hidden = false; book.dataset.goals = ids.join(',');
@@ -433,9 +435,9 @@
       e.preventDefault();
       const msg = form.querySelector('.form-msg');
       const name = form.elements.name.value.trim(), contact = form.elements.contact.value.trim();
-      if (!name || !contact) { msg.textContent = 'Add your name and a phone number or LINE ID.'; return; }
+      if (!name || !contact) { msg.textContent = 'Add your name and a phone number or LINE ID.'; buddy('oops'); return; }
       if (!form.elements.consent.checked) { msg.textContent = 'Tick the consent box to send the request.'; return; }
-      msg.textContent = 'The form connects to Apex Slim in the build stage.';
+      msg.textContent = 'The form connects to Apex Slim in the build stage.'; buddy('sent');
       (window.dataLayer = window.dataLayer || []).push({ event: 'consult:submit' });
     });
   }

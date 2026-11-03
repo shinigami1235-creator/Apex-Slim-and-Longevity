@@ -1,4 +1,5 @@
 (() => {
+  const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
   const stage = document.getElementById('rx-stage');
   if (!stage || !window.RX_MAP) return;
   const MAP = window.RX_MAP;
@@ -112,7 +113,7 @@
     pan.preload = 'auto'; pan.load();
     await wait(1600); if (id !== run) return;
     // 2. fog fills, the after shows as it clears
-    crownText.textContent = 'Processing';
+    crownText.textContent = 'Processing'; buddy('scanning');
     let swapped = false;
     const ok = await playClip(fog, t => {
       if (t < 1.4) { const k = ease((t - 0.15) / 1.0); photoImg.style.opacity = 1 - k; photoImg.style.filter = `blur(${k * 6}px)`; }
@@ -121,7 +122,7 @@
     });
     if (!ok) photoImg.src = IMG + c.after;
     if (id !== run) return;
-    photoImg.style.opacity = 1; photoImg.style.filter = '';
+    photoImg.style.opacity = 1; photoImg.style.filter = ''; buddy('reveal');
     // 3. data goes to the terminal
     step('sending'); crownText.textContent = 'Sending';
     await sendPulses(); if (id !== run) return;

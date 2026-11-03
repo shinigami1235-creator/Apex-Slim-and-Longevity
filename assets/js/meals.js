@@ -51,6 +51,6 @@
       return `<article class="ml-card"><span class="ml-meal">${meal}</span><h3>${en}</h3><p class="ml-th" lang="th">${th}</p><p>${tip}</p></article>`;
     }).join('');
   };
-  document.getElementById('ml-next').addEventListener('click', () => { shift++; show(); });
+  document.getElementById('ml-next').addEventListener('click', () => { shift++; show(); document.dispatchEvent(new CustomEvent('buddy', { detail: 'meals' })); });
   show();
 })();

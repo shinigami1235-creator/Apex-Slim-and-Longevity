@@ -3,6 +3,7 @@
    outline and MediaPipe Pose finds the body and its outline mask; both models load from
    this site (assets/vendor/README.md). The label is drawn into the image itself so
    saved copies and screenshots carry it. */
+const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
 const $ = id => document.getElementById(id);
 const canvas = $('gp-canvas');
 if (canvas) init();
@@ -57,14 +58,14 @@ function init() {
 
   async function analyse() {
     if (!src) return;
-    busy = true; enable(false); plan = null;
+    busy = true; enable(false); plan = null; buddy('scanning');
     say(mode === 'face' ? 'Finding your face.' : 'Finding your body. The first photo takes a few seconds while the model loads.');
     try {
       plan = mode === 'face' ? await facePlan(src) : await bodyPlan(src);
-    } catch (e) { plan = null; say('The photo tool could not start on this browser.'); busy = false; return; }
+    } catch (e) { plan = null; say('The photo tool could not start on this browser.'); busy = false; buddy('oops'); return; }
     busy = false;
-    if (!plan) { canvas.classList.remove('on'); say(mode === 'face' ? 'No face found. Use a front photo with your whole face showing.' : 'No full body found. Use a front photo from head to knees.'); return; }
-    say(''); enable(true); draw();
+    if (!plan) { buddy('oops'); canvas.classList.remove('on'); say(mode === 'face' ? 'No face found. Use a front photo with your whole face showing.' : 'No full body found. Use a front photo from head to knees.'); return; }
+    say(''); enable(true); draw(); buddy('photo');
   }
 
   /* ---------- face: pull the cheeks and jaw toward the middle ---------- */
