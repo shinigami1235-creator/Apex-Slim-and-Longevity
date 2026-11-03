@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=10">
+<link rel="stylesheet" href="assets/css/slim.css?v=11">
 </head>
 <body>
 
@@ -151,19 +151,13 @@
     <div class="rx-picker" id="rx-picker" role="group" aria-label="Pick a case"></div>
     <div class="rx-frame" id="rx-frame">
       <div class="rx-stage" id="rx-stage" data-step="idle">
-        <img class="rx-layer rx-pod-off" src="assets/img/results/podview-off.webp" alt="The results pod and terminal" width="1920" height="1200">
-        <img class="rx-layer rx-pod-on" src="assets/img/results/podview-on.webp" alt="" width="1920" height="1200" loading="lazy">
-        <video class="rx-layer rx-fog" id="rx-fog" muted playsinline preload="none" aria-hidden="true">
-          <source src="assets/video/results-fog.webm" type="video/webm"><source src="assets/video/results-fog.mp4" type="video/mp4">
+        <img class="rx-layer rx-start" src="assets/img/results/run-start.webp" alt="The results pod" width="1600" height="1000">
+        <video class="rx-layer rx-run" id="rx-run" muted playsinline preload="none" aria-hidden="true">
+          <source src="assets/video/results-run.webm" type="video/webm"><source src="assets/video/results-run.mp4" type="video/mp4">
         </video>
         <div class="rx-map rx-photo" id="rx-photo"><img id="rx-photo-img" alt=""></div>
         <div class="rx-map rx-crown" id="rx-crown"><span id="rx-crown-text">Pick a case</span></div>
-        <i class="rx-dial" id="rx-dial" aria-hidden="true"></i>
-        <svg class="rx-layer rx-path" id="rx-path" viewBox="0 0 1000 625" preserveAspectRatio="none" aria-hidden="true"><path id="rx-path-line"/><circle r="5"/><circle r="5"/><circle r="5"/></svg>
-        <video class="rx-layer rx-pan" id="rx-pan" muted playsinline preload="none" aria-hidden="true">
-          <source src="assets/video/results-pan.webm" type="video/webm"><source src="assets/video/results-pan.mp4" type="video/mp4">
-        </video>
-        <img class="rx-layer rx-term" src="assets/img/results/terminal-end.webp" alt="" width="1920" height="1200" loading="lazy">
+        <img class="rx-layer rx-term" src="assets/img/results/terminal-end.webp" alt="" width="1600" height="1000" loading="lazy">
         <div class="rx-hud">
           <button class="rx-btn" type="button" id="rx-again" hidden>Run again</button>
         </div>
@@ -176,7 +170,7 @@
           <h3>Cases</h3>
           <div class="rx-cases" id="rx-cases"></div>
         </div>
-        <div class="rx-panel rx-pc" data-w="683" data-h="500">
+        <div class="rx-panel rx-pc" data-w="600" data-h="510">
           <div class="rx-pc-head"><h3 id="rx-title"></h3><span>Sample case</span></div>
           <div class="rx-ba">
             <figure><img id="rx-before" alt=""><figcaption><b>Before</b><span id="rx-bdate"></span></figcaption></figure>
@@ -272,8 +266,8 @@
 
 <script src="assets/js/mix-data.js?v=4"></script>
 <script src="assets/js/slim.js?v=7"></script>
-<script src="assets/js/results-map.js?v=1"></script>
-<script src="assets/js/results.js?v=2"></script>
+<script src="assets/js/results-map.js?v=2"></script>
+<script src="assets/js/results.js?v=3"></script>
 <script type="module" src="assets/js/buddy.js?v=8"></script>
 </body>
 </html>

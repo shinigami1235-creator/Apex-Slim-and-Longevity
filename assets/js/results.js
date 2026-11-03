@@ -15,10 +15,9 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wide = matchMedia('(min-width: 760px)');
   const $ = id => document.getElementById(id);
-  const frame = $('rx-frame'), panels = $('rx-panels'), picker = $('rx-picker'), again = $('rx-again');
+  const panels = $('rx-panels'), picker = $('rx-picker'), again = $('rx-again');
   const photo = $('rx-photo'), photoImg = $('rx-photo-img'), crown = $('rx-crown'), crownText = $('rx-crown-text');
-  const fog = $('rx-fog'), pan = $('rx-pan'), dial = $('rx-dial');
-  const pathEl = $('rx-path-line'), pulses = [...stage.querySelectorAll('.rx-path circle')];
+  const film = $('rx-run');
   let current = CASES[0], run = 0, busy = false;
 
   /* map a w x h element onto four points (tl, tr, br, bl in px) with a matrix3d */
@@ -38,7 +37,6 @@
     const r = stage.getBoundingClientRect(), W = r.width, H = r.height;
     place(photo, 200, 300, quad(MAP.podPhoto, W, H));
     place(crown, 240, 48, quad(MAP.crown, W, H));
-    dial.style.left = MAP.podDial[0]*100 + '%'; dial.style.top = MAP.podDial[1]*100 + '%';
     const isWide = wide.matches;
     panels.querySelectorAll('.rx-panel').forEach((el, i) => {
       if (!isWide) { el.style.transform = ''; return; }
@@ -46,7 +44,6 @@
       place(el, +el.dataset.w, +el.dataset.h, quad(q, W, H));
     });
   };
-  pathEl.setAttribute('d', 'M' + MAP.path.map(p => (p[0]*1000).toFixed(1) + ' ' + (p[1]*625).toFixed(1)).join(' L'));
 
   /* panel content */
   const fill = c => {
@@ -71,76 +68,73 @@
   const ready = v => new Promise(res => {
     if (v.readyState >= 3) return res(true);
     const done = ok => { v.oncanplaythrough = v.onerror = null; clearTimeout(to); res(ok); };
-    const to = setTimeout(() => done(v.readyState >= 2), 6000);
+    const to = setTimeout(() => done(v.readyState >= 2), 8000);
     v.oncanplaythrough = () => done(true); v.onerror = () => done(false);
-    if (v.preload === 'none') { v.preload = 'auto'; v.load(); }
+    if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
   });
-  const playClip = (v, onTime) => new Promise(async res => {
-    const id = run;
-    if (!(await ready(v)) || id !== run) return res(false);
-    v.currentTime = 0;
-    const tick = () => { if (id !== run) return; if (onTime) onTime(v.currentTime); if (!v.ended) requestAnimationFrame(tick); };
-    v.onended = () => { v.onended = null; res(true); };
-    v.play().then(() => requestAnimationFrame(tick)).catch(() => res(false));
-  });
-  const sendPulses = () => new Promise(res => {
-    const id = run, len = pathEl.getTotalLength(), t0 = performance.now(), dur = 1500;
-    const frameFn = now => {
-      if (id !== run) return res();
-      const p = (now - t0) / dur;
-      pulses.forEach((c, i) => {
-        const q = p * 1.35 - i * 0.18;
-        if (q < 0 || q > 1) { c.style.opacity = 0; return; }
-        const pt = pathEl.getPointAtLength(q * len);
-        c.setAttribute('cx', pt.x); c.setAttribute('cy', pt.y); c.style.opacity = 1;
-      });
-      p < 1 ? requestAnimationFrame(frameFn) : (pulses.forEach(c => c.style.opacity = 0), res());
-    };
-    requestAnimationFrame(frameFn);
-  });
-  const setPhoto = (src, on) => { photoImg.style.filter = ''; photoImg.style.opacity = ''; photoImg.src = src; photo.classList.toggle('on', on); };
   const lock = on => { busy = on; picker.querySelectorAll('.rx-chip').forEach(b => b.disabled = on); again.hidden = on || stage.dataset.step !== 'terminal'; };
+
+  /* the doors: the photo is cut to the gap between the two door edges, frame by frame */
+  const pl = MAP.podPhoto[3][0], pr = MAP.podPhoto[2][0];
+  function clipToDoors(f) {
+    const g = MAP.gap[f];
+    if (!g) { photo.style.clipPath = f > 30 && f < 118 ? 'inset(0 50% 0 50%)' : ''; return; }
+    const l = g[0] == null ? 0 : Math.max(0, Math.min(1, (g[0] - pl) / (pr - pl)));
+    const r = g[1] == null ? 1 : Math.max(0, Math.min(1, (g[1] - pl) / (pr - pl)));
+    photo.style.clipPath = r <= l ? 'inset(0 50% 0 50%)' : `inset(0 ${((1 - r) * 100).toFixed(2)}% 0 ${(l * 100).toFixed(2)}%)`;
+  }
+
+  /* one film, frame 1 to 292: doors close 1-24, scan 25-120, doors open with fog 121-208, the camera follows the data 209-292 */
+  function sync(c, f, st) {
+    clipToDoors(f);
+    if (f <= 24) crownText.textContent = c.tx.map(t => t.name).join(' + ');
+    else if (f <= 120) {
+      crownText.textContent = `Processing ${Math.min(100, Math.round((f - 25) / 95 * 100))}%`;
+      if (!st.swapped && f > 40) { st.swapped = true; photoImg.src = IMG + c.after; }
+    } else if (f <= 200) crownText.textContent = 'Done';
+    else crownText.textContent = 'Sending';
+    // the after shows only as the fog thins, then leaves as light when the data goes
+    let o = 1, blur = 0, glow = 1;
+    if (f > 120 && f < 196) { const k = ease((f - 150) / 45); o = k; blur = (1 - k) * 8; }
+    if (f >= 200) { const k = ease((f - 200) / 9); o = 1 - k; glow = 1 + k * 1.6; blur = k * 3; }
+    photoImg.style.opacity = o.toFixed(3);
+    photoImg.style.filter = `blur(${blur.toFixed(1)}px) brightness(${glow.toFixed(2)})`;
+    if (f >= 196 && !st.revealed) { st.revealed = true; buddy('reveal'); }
+    if (f >= 25 && !st.scanning) { st.scanning = true; buddy('scanning'); }
+    stage.classList.toggle('rx-moving', f >= 209);
+  }
 
   /* the sequence */
   const start = async c => {
     run++; const id = run; current = c; fill(c); lock(true);
-    panels.classList.remove('on'); panels.hidden = true; fog.pause(); pan.pause();
+    panels.classList.remove('on'); panels.hidden = true; film.pause();
     if (reduce) { step('terminal'); panels.hidden = false; layout(); panels.classList.add('on'); lock(false); return; }
-    // 1. photo in, treatment dialled in
-    step('loaded'); crownText.textContent = c.tx.map(t => t.name).join(' + ');
-    setPhoto(IMG + c.before, false); await wait(60); photo.classList.add('on');
-    dial.classList.remove('on'); void dial.offsetWidth; dial.classList.add('on');
-    pan.preload = 'auto'; pan.load();
-    await wait(1600); if (id !== run) return;
-    // 2. fog fills, the after shows as it clears
-    crownText.textContent = 'Processing'; buddy('scanning');
-    let swapped = false;
-    const ok = await playClip(fog, t => {
-      if (t < 1.4) { const k = ease((t - 0.15) / 1.0); photoImg.style.opacity = 1 - k; photoImg.style.filter = `blur(${k * 6}px)`; }
-      else if (!swapped) { swapped = true; photoImg.src = IMG + c.after; photoImg.style.opacity = 0; }
-      if (t > 2.4) { const k = ease((t - 2.4) / 1.5); photoImg.style.opacity = k; photoImg.style.filter = `blur(${(1 - k) * 8}px)`; }
-    });
-    if (!ok) photoImg.src = IMG + c.after;
-    if (id !== run) return;
-    photoImg.style.opacity = 1; photoImg.style.filter = ''; buddy('reveal');
-    // 3. data goes to the terminal
-    step('sending'); crownText.textContent = 'Sending';
-    await sendPulses(); if (id !== run) return;
-    step('awake'); crownText.textContent = 'Done';
+    step('loaded'); stage.classList.remove('rx-moving');
+    photoImg.style.opacity = ''; photoImg.style.filter = ''; photo.style.clipPath = '';
+    photoImg.src = IMG + c.before; photo.classList.add('on');
+    crownText.textContent = c.tx.map(t => t.name).join(' + ');
+    const ok = await ready(film); if (id !== run) return;
     await wait(900); if (id !== run) return;
-    // 4. the photo leaves as light and the camera moves to the terminal
-    photoImg.style.transition = 'opacity .45s ease, filter .45s ease'; photoImg.style.filter = 'brightness(2.4) blur(3px)'; photoImg.style.opacity = 0;
-    await wait(450); if (id !== run) return;
-    photoImg.style.transition = '';
-    const panned = await playClip(pan);
+    const st = {};
+    if (ok) {
+      film.currentTime = 0;
+      await new Promise(res => {
+        const tick = () => {
+          if (id !== run) return res();
+          sync(c, Math.min(MAP.frames, Math.floor(film.currentTime * MAP.fps) + 1), st);
+          if (film.ended) return res();
+          requestAnimationFrame(tick);
+        };
+        film.onended = () => { film.onended = null; res(); };
+        film.play().then(() => { step('run'); requestAnimationFrame(tick); }).catch(() => res());
+      });
+    }
     if (id !== run) return;
-    // 5. terminal
+    buddy('done'); photo.classList.remove('on');
     step('terminal'); panels.hidden = false; layout();
-    await wait(panned ? 250 : 0); panels.classList.add('on');
+    await wait(250); panels.classList.add('on');
     lock(false);
   };
-  // playClip resolves after playback, so show the clip layer as soon as it starts
-  [fog, pan].forEach(v => v.addEventListener('playing', () => step(v === fog ? 'fog' : 'pan')));
 
   picker.addEventListener('click', e => { const b = e.target.closest('.rx-chip'); if (b && !busy) start(CASES.find(c => c.id === b.dataset.id)); });
   again.addEventListener('click', () => { if (!busy) start(current); });
@@ -163,8 +157,8 @@
   zoom.addEventListener('click', e => { if (e.target === zoom || e.target.closest('button')) zoom.hidden = true; });
   addEventListener('keydown', e => { if (e.key === 'Escape') zoom.hidden = true; });
 
-  /* load the fog clip once the section is near */
-  new IntersectionObserver((en, ob) => { if (en[0].isIntersecting) { fog.preload = 'auto'; fog.load(); ob.disconnect(); } }, { rootMargin: '400px' }).observe(stage);
+  /* load the film once the section is near */
+  new IntersectionObserver((en, ob) => { if (en[0].isIntersecting) { film.preload = 'auto'; film.load(); ob.disconnect(); } }, { rootMargin: '400px' }).observe(stage);
   addEventListener('resize', layout);
   wide.addEventListener('change', layout);
   fill(current); picker.querySelectorAll('.rx-chip').forEach(b => b.setAttribute('aria-pressed', 'false'));
