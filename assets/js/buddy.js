@@ -56,17 +56,17 @@ const PERCHES = [
 /* quips: one when it lands in a section, at most once per section per visit (or again after 4 minutes),
    never within 25 seconds of another line. The next visit starts from the next quip in the list. */
 const QUIPS = {
-  bench: ['Tap a bottle to add it to your flask!', 'Pick your goals, then press Mix formula.', 'Every mix comes out a different colour, so try a few!'],
-  treatments: ['Tap a tile to see how long a session takes.', 'Mint tiles are longevity treatments and purple tiles are slimming ones.', 'Not sure which one? The first visit starts with a body scan.'],
-  longevity: ['Each of these can run alongside a slimming plan.', 'Ask the doctor which one suits your recovery and sleep.'],
-  results: ['Pick a case and watch the pod run!', 'Tap the before and after to see them big.', 'Want to watch it again? Press Run again.'],
-  notes: ['Tap a note to read the whole thing.', 'Each note takes 5 to 7 minutes to read.', 'Start with how cold removes fat cells.'],
-  play: ['Want a 3D body built from your numbers? Open the lab!', "The lab has today's meals too."],
-  consult: ['Send the form and the team will contact you to set a time.', 'Prefer LINE? Tap Chat on LINE.'],
-  'body-check': ['Measure your waist at your belly button in the morning.', 'Drag the body to turn it around!', 'Switch to Goal to see the body at your goal weight.'],
-  'goal-photo': ['Use a front photo in good light.', 'Hold the button to see your before again.', "I won't peek. No photo uploaded."],
-  meals: ['Tap Show another day for a new menu!', 'Half the plate is vegetables.', 'Everyone gets the same menu today and a new one tomorrow.'],
-  how: ['Each area takes about 35 minutes.', 'Fat cells freeze at a higher temperature than skin.', 'Scroll down to Questions for the common ones.']
+  bench: ["You've got this!", "Let's mix something!", 'Hi again!'],
+  treatments: ['Take your time.', 'One step at a time.', 'So many options!'],
+  longevity: ['Rest counts too.', 'Sleep is self-care!', 'Be kind to yourself.'],
+  results: ['Ooh, look!', 'So exciting!', 'Look at that change!'],
+  notes: ['Nice, a reader!', 'Learning is fun!', 'Smart move.'],
+  play: ['Wanna play?', 'This part is fun!', 'Come try the lab!'],
+  consult: ["You're almost there!", 'Big step, nice!', "We'd love to meet you!"],
+  'body-check': ['No judging here!', "You're doing great!", 'Every body is welcome.'],
+  'goal-photo': ["I won't peek!", 'Dream big!', 'Goals are good!'],
+  meals: ['Yum!', 'Hungry yet?', 'Eat well, feel well.'],
+  how: ['Brr, chilly!', 'Cool stuff!', 'Ooh, science!']
 };
 const QUIP_GAP = 25000, QUIP_AGAIN = 240000;
 const quipped = (() => { try { return JSON.parse(sessionStorage.getItem('buddy-quipped') || '{}'); } catch (e) { return {}; } })();
