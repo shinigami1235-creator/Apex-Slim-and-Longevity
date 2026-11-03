@@ -32,7 +32,7 @@ const EVENTS = {
   goal:     { pose: 'idle', expr: 'proud', ms: 1400 },
   scanning: { pose: 'think', expr: 'thinking', ms: 0 },
   reveal:   { pose: 'cheer', expr: 'surprised', ms: 1800, move: 'hop' },
-  photo:    { pose: 'cover', expr: 'shy', ms: 2600, line: "I'm not looking. Your photo never leaves this device." },
+  photo:    { pose: 'cover', expr: 'shy', ms: 2600, line: "I won't peek. No photo uploaded." },
   oops:     { pose: 'idle', expr: 'oops', ms: 2200 },
   meals:    { pose: 'hop', expr: 'happy', ms: 600, move: 'hop' },
   sent:     { pose: 'heart', expr: 'love', ms: 3200, move: 'bob', line: 'See you at Apex Slim.' }
@@ -52,6 +52,34 @@ const PERCHES = [
   { sel: '#ml-next', at: 'out-l', dx: -14, dy: 8, face: 'right', desk: true, arrive: { pose: 'point', expr: 'happy', ms: 1400 } },
   { sel: 'main section h2', at: 'text', dx: 14, dy: 2, face: 'left', all: true }
 ];
+
+/* quips: one when it lands in a section, at most once per section per visit (or again after 4 minutes),
+   never within 25 seconds of another line. The next visit starts from the next quip in the list. */
+const QUIPS = {
+  bench: ['Tap a bottle to add it to your flask!', 'Pick your goals, then press Mix formula.', 'Every mix comes out a different colour, so try a few!'],
+  treatments: ['Tap a tile to see how long a session takes.', 'Mint tiles are longevity treatments and purple tiles are slimming ones.', 'Not sure which one? The first visit starts with a body scan.'],
+  longevity: ['Each of these can run alongside a slimming plan.', 'Ask the doctor which one suits your recovery and sleep.'],
+  results: ['Pick a case and watch the pod run!', 'Tap the before and after to see them big.', 'Want to watch it again? Press Run again.'],
+  notes: ['Tap a note to read the whole thing.', 'Each note takes 5 to 7 minutes to read.', 'Start with how cold removes fat cells.'],
+  play: ['Want a 3D body built from your numbers? Open the lab!', "The lab has today's meals too."],
+  consult: ['Send the form and the team will contact you to set a time.', 'Prefer LINE? Tap Chat on LINE.'],
+  'body-check': ['Measure your waist at your belly button in the morning.', 'Drag the body to turn it around!', 'Switch to Goal to see the body at your goal weight.'],
+  'goal-photo': ['Use a front photo in good light.', 'Hold the button to see your before again.', "I won't peek. No photo uploaded."],
+  meals: ['Tap Show another day for a new menu!', 'Half the plate is vegetables.', 'Everyone gets the same menu today and a new one tomorrow.'],
+  how: ['Each area takes about 35 minutes.', 'Fat cells freeze at a higher temperature than skin.', 'Scroll down to Questions for the common ones.']
+};
+const QUIP_GAP = 25000, QUIP_AGAIN = 240000;
+const quipped = (() => { try { return JSON.parse(sessionStorage.getItem('buddy-quipped') || '{}'); } catch (e) { return {}; } })();
+function quip(el) {
+  const sec = el && el.closest('section[id], .bench'); if (!sec) return;
+  const key = sec.id || 'bench', list = QUIPS[key]; if (!list) return;
+  const t = Date.now();
+  if (t - born < 6000 || t - lastSay < QUIP_GAP || root.classList.contains('talking')) return;
+  if (quipped[key] && t - quipped[key] < QUIP_AGAIN) return;
+  let n = 0; try { n = +(localStorage.getItem('buddy-q-' + key) || 0); } catch (e) {}
+  quipped[key] = t; try { sessionStorage.setItem('buddy-quipped', JSON.stringify(quipped)); localStorage.setItem('buddy-q-' + key, n + 1); } catch (e) {}
+  speak(list[n % list.length]);
+}
 
 /* ---------- build ---------- */
 const root = document.createElement('div');
@@ -89,10 +117,13 @@ const sideOfBubble = () => root.classList.toggle('say-left', pos.x + W() + 230 >
 function say(key, text) {
   const t = Date.now();
   if (said.has(key) || t - born < 2900 || t - lastSay < 15000) return;
-  remember(key); lastSay = t;
+  remember(key); speak(text);
+}
+function speak(text) {
+  lastSay = Date.now();
   bubble.textContent = text; sideOfBubble();
   root.classList.add('talking');
-  clearTimeout(sayTimer); sayTimer = setTimeout(() => root.classList.remove('talking'), 3800);
+  clearTimeout(sayTimer); sayTimer = setTimeout(() => root.classList.remove('talking'), Math.min(5500, 2600 + text.length * 45));
 }
 function done() { held = false; busyUntil = 0; clearTimeout(actTimer); rig.set(base); }
 
@@ -215,11 +246,12 @@ function frame(now) {
     flying = false; body.classList.remove('m-glide'); sideOfBubble();
     setFace(perch && perch.face === 'left' ? -1 : 1);
     land(free);
-  }
+  } else if (!flying && speed < 30 && perchEl && perchEl !== arrivedAt) land(free);   // drifted onto a new perch slowly
 }
 function land(free) {
   const fresh = perchEl !== arrivedAt; arrivedAt = perchEl;
   if (!free) return;
+  if (fresh) setTimeout(() => { if (!flying && perchEl === arrivedAt) quip(perchEl); }, 500);
   if (fresh && perch && perch.arrive && Date.now() - born > 2500) {
     const a = perch.arrive; rig.set({ pose: a.pose, expr: a.expr }); clearTimeout(actTimer);
     busyUntil = Date.now() + a.ms; actTimer = setTimeout(() => { busyUntil = 0; rest(); }, a.ms);
