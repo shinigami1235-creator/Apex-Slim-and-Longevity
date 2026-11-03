@@ -91,7 +91,9 @@ function say(key, text) {
 }
 function done() { held = false; clearTimeout(actTimer); rig.set(base); rise(400); }
 /* in the corner it rests low with only its face showing, and stands up when something happens */
-const restXY = mode => ({ x: 6, y: innerHeight - (mode === 'up' ? H() + 8 : mode === 'low' ? H() * 0.25 : H() * 0.55) });
+/* on touch screens it stands fully in view above the bottom edge; on desktop the corner rest peeks (CSS) */
+const viewH = () => window.visualViewport ? visualViewport.height + visualViewport.offsetTop : innerHeight;
+const restXY = mode => ({ x: 8, y: viewH() - (mode === 'up' ? H() + 26 : mode === 'low' ? H() * 0.3 : H() + 16) });
 let typing = false;
 function floatRest(mode, ms) { const p = restXY(typing ? 'low' : mode); place(p.x, p.y, ms); }
 function rise(ms) {
@@ -278,6 +280,7 @@ document.addEventListener('focusout', () => {
 document.addEventListener('buddy', e => { e.detail === 'done' ? done() : act(e.detail); });
 
 if (floating()) { root.classList.remove('corner'); root.classList.add('float'); floatRest('rest', 0); }
+if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (floating() && !spot && !gliding) floatRest('rest', 0); });
 if (store('buddy-away')) { root.classList.add('away'); peek.classList.add('on'); }
 else {
   setTimeout(pick, 400);
