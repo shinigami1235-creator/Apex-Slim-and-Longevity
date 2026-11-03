@@ -103,13 +103,14 @@ let actTimer = 0, sayTimer = 0, lastSay = 0, lastInput = Date.now(), asleep = fa
 const born = Date.now();
 
 const move = m => { if (reduce || !m) return; body.classList.remove('m-hop', 'm-wiggle', 'm-bob'); void body.offsetWidth; body.classList.add('m-' + m); };
+body.addEventListener('animationend', e => { if (/buddy-(hop|wiggle|bob)/.test(e.animationName)) body.classList.remove('m-hop', 'm-wiggle', 'm-bob'); });
 const setFace = dir => { if (dir === facing) return; facing = dir; turn.classList.toggle('flip', dir < 0); };
 const rest = () => { if (!held && !asleep && !flying) rig.set(base); };
 
 function act(name) {
   const e = EVENTS[name]; if (!e || root.classList.contains('away')) return;
   if (asleep) wake();
-  clearTimeout(actTimer);
+  stopFidget(); clearTimeout(actTimer);
   rig.set({ pose: e.pose, expr: e.expr }); move(e.move);
   held = e.ms === 0;                       // 0 means hold this until another event or 'done'
   if (!held) actTimer = setTimeout(() => { busyUntil = 0; rest(); }, e.ms);
@@ -143,11 +144,54 @@ function wake() {
 }
 const poke = () => { lastInput = Date.now(); if (asleep) wake(); };
 ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(t => addEventListener(t, poke, { passive: true }));
-setInterval(() => { if (!asleep && !held && !flying && Date.now() - lastInput > 45000) sleep(); }, 3000);
+setInterval(() => { if (!asleep && !held && !flying && !fidgeting && Date.now() - lastInput > 45000) sleep(); }, 3000);
+
+/* idle play: every 7 to 14 seconds of resting it does one small thing on its own.
+   A yawn after 25 seconds with no input comes before the nap at 45. */
+const FIDGETS = [
+  [{ pose: 'idle', expr: 'curious', look: [-1, 0], ms: 900 }, { pose: 'idle', expr: 'curious', look: [1, 0], ms: 900 }, { pose: 'idle', expr: 'happy', look: [0, 0], ms: 300 }],
+  [{ pose: 'cheer', expr: 'excited', ms: 650, move: 'hop' }, { pose: 'idle', expr: 'happy', ms: 300 }],
+  [{ pose: 'measure', expr: 'thinking', ms: 1100 }, { pose: 'idle', expr: 'proud', ms: 700 }],
+  [{ pose: 'wave', expr: 'happy', ms: 1300, move: 'wiggle' }],
+  [{ pose: 'hop', expr: 'wink', ms: 500, move: 'hop' }, { pose: 'hop', expr: 'happy', ms: 500, move: 'hop' }],
+  [{ pose: 'think', expr: 'thinking', ms: 1400 }, { pose: 'idle', expr: 'surprised', ms: 400 }, { pose: 'idle', expr: 'happy', ms: 300 }],
+  [{ pose: 'shy', expr: 'shy', ms: 1200 }, { pose: 'idle', expr: 'happy', ms: 300 }],
+  [{ pose: 'heart', expr: 'love', ms: 1300, move: 'bob' }]
+];
+const YAWN = [{ pose: 'idle', expr: 'sleepy', ms: 1300, move: 'bob' }, { pose: 'idle', expr: 'happy', ms: 300 }];
+let fidgeting = false, fidgetTimers = [], lastFidget = -1, yawned = false;
+function stopFidget() { fidgetTimers.forEach(clearTimeout); fidgetTimers = []; if (fidgeting) { fidgeting = false; rig.look(0, 0); } }
+function playFidget(seq) {
+  fidgeting = true; let t = 0;
+  seq.forEach(st => {
+    fidgetTimers.push(setTimeout(() => {
+      rig.set({ pose: st.pose, expr: st.expr }); move(st.move);
+      if (st.look) rig.look(st.look[0] * facing, st.look[1]);
+    }, t));
+    t += st.ms;
+  });
+  fidgetTimers.push(setTimeout(() => { fidgeting = false; rig.set(base); }, t));
+}
+(function idlePlay() {
+  setTimeout(() => {
+    const quiet = Date.now() - lastInput;
+    const free = !reduce && !held && !asleep && !flying && !fidgeting && Date.now() > busyUntil
+      && !root.classList.contains('talking') && !root.classList.contains('away') && !document.hidden;
+    if (free) {
+      if (quiet > 25000 && !yawned) { yawned = true; playFidget(YAWN); }
+      else if (quiet < 25000 || Math.random() < 0.5) {
+        let i; do { i = Math.floor(Math.random() * FIDGETS.length); } while (i === lastFidget);
+        lastFidget = i; playFidget(FIDGETS[i]);
+      }
+    }
+    if (quiet < 25000) yawned = false;
+    idlePlay();
+  }, 7000 + Math.random() * 7000);
+})();
 
 /* eyes follow the mouse on desktop, smoothly */
 if (fine) addEventListener('pointermove', e => {
-  lastInput = Date.now(); if (asleep) return;
+  lastInput = Date.now(); if (asleep || fidgeting) return;
   const dx = e.clientX - (pos.x + W() / 2), dy = e.clientY - (pos.y + H() / 2);
   const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 260);
   rig.look(dx / d * k * facing, dy / d * k);
@@ -242,7 +286,7 @@ function frame(now) {
   // travelling: a hop pose and facing the way it goes; landing: the perch's own move
   const free = !held && !asleep && Date.now() > busyUntil;
   if (!flying && speed > 140 && Math.hypot(tx - pos.x, ty - pos.y) > 30) {
-    flying = true; root.classList.remove('talking');
+    flying = true; root.classList.remove('talking'); stopFidget();
     if (free) { rig.set({ pose: 'hop', expr: 'happy', ms: 240 }); body.classList.add('m-glide'); }
   }
   if (flying && Math.abs(vel.x) > 60) setFace(vel.x > 0 ? 1 : -1);

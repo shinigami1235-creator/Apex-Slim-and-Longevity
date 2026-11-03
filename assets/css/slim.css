@@ -511,13 +511,13 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .buddy-body{display:block;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 90%;-webkit-tap-highlight-color:transparent}
 .buddy-art,.buddy-art svg{display:block;overflow:visible}
 .buddy-body:focus-visible{outline:2px solid var(--plum);outline-offset:2px;border-radius:50%}
-.buddy-body:not(.m-sleep){animation:buddy-breathe 3.4s ease-in-out infinite}
+.buddy-body:not(.m-sleep){animation:buddy-sway 4.6s ease-in-out infinite}
 .buddy-body.m-hop{animation:buddy-hop .62s cubic-bezier(.3,.7,.4,1)}
 .buddy-body.m-wiggle{animation:buddy-wiggle .7s ease-in-out 3}
 .buddy-body.m-bob{animation:buddy-bob .9s ease-in-out 2}
 .buddy-body.m-glide{animation:buddy-glide .5s ease-in-out infinite}
 .buddy-body.m-sleep{animation:buddy-doze 4.5s ease-in-out infinite}
-@keyframes buddy-breathe{50%{transform:translateY(-3px) scale(1.01,.99)}}
+@keyframes buddy-sway{0%,100%{transform:rotate(-2.5deg)}25%{transform:translateY(-3px) rotate(0deg) scale(1.01,.99)}50%{transform:rotate(2.5deg)}75%{transform:translateY(-3px) rotate(0deg) scale(1.01,.99)}}
 @keyframes buddy-hop{0%{transform:none}28%{transform:translateY(-15px) scale(.97,1.04)}60%{transform:translateY(0) scale(1.05,.95)}80%{transform:translateY(-2px) scale(.99,1.01)}100%{transform:none}}
 @keyframes buddy-wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
 @keyframes buddy-bob{0%,100%{transform:none}50%{transform:translateY(-8px) scale(1.03)}}
