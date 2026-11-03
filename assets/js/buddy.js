@@ -102,14 +102,14 @@ let base = { pose: 'idle', expr: 'happy' };
 let actTimer = 0, sayTimer = 0, lastSay = 0, lastInput = Date.now(), asleep = false, held = false, facing = 1;
 const born = Date.now();
 
-const MOVES = ['m-hop', 'm-wiggle', 'm-bob', 'm-startle', 'm-giggle', 'm-spin', 'm-boing', 'm-wobble'];
+const MOVES = ['m-hop', 'm-wiggle', 'm-bob', 'm-startle', 'm-giggle', 'm-spin', 'm-boing', 'm-wobble', 'm-trip'];
 const move = m => { if (reduce || !m) return; body.classList.remove(...MOVES); void body.offsetWidth; body.classList.add('m-' + m); };
-body.addEventListener('animationend', e => { if (/buddy-(hop|wiggle|bob|startle|giggle|spin|boing|wobble)/.test(e.animationName)) body.classList.remove(...MOVES); });
+body.addEventListener('animationend', e => { if (/buddy-(hop|wiggle|bob|startle|giggle|spin|boing|wobble|trip)/.test(e.animationName)) body.classList.remove(...MOVES); });
 const setFace = dir => { if (dir === facing) return; facing = dir; turn.classList.toggle('flip', dir < 0); };
 const rest = () => { if (!held && !asleep && !flying) rig.set(base); };
 
 function act(name) {
-  const e = EVENTS[name]; if (!e || root.classList.contains('away')) return;
+  const e = EVENTS[name]; if (!e || root.classList.contains('away') || mode !== 'follow') return;
   if (asleep) wake();
   stopFidget(); clearTimeout(actTimer);
   rig.set({ pose: e.pose, expr: e.expr }); move(e.move);
@@ -192,7 +192,7 @@ function playFidget(seq) {
 (function idlePlay() {
   setTimeout(() => {
     const quiet = Date.now() - lastInput;
-    const free = !reduce && !held && !asleep && !flying && !fidgeting && Date.now() > busyUntil
+    const free = mode === 'follow' && !reduce && !held && !asleep && !flying && !fidgeting && Date.now() > busyUntil
       && !root.classList.contains('talking') && !root.classList.contains('away') && !document.hidden;
     if (free) {
       if (quiet > 25000 && !yawned) { yawned = true; playFidget(YAWN); }
@@ -229,6 +229,7 @@ const TAPS = [
 ];
 let lastTap = -1;
 body.addEventListener('click', () => {
+  if (grab.moved || mode !== 'follow') { grab.moved = false; return; }
   if (asleep) { wakeByTap(); return; }
   const t = Date.now(); taps = taps.filter(x => t - x < 1800); taps.push(t);
   stopFidget(); clearTimeout(actTimer); lastInput = t;
@@ -299,6 +300,8 @@ function choose(vh) {
 /* ---------- motion: a damped spring toward the perch, every frame ---------- */
 const pos = { x: 8, y: 0 }, vel = { x: 0, y: 0 };
 let flying = false, lean = 0, first = true, lastT = performance.now(), arrivedAt = null;
+let mode = 'follow', lastTY = 0;            // follow, drag, fall, run
+const draw = () => { root.style.transform = `translate3d(${pos.x.toFixed(1)}px,${pos.y.toFixed(1)}px,0) rotate(${lean.toFixed(2)}deg)`; };
 function frame(now) {
   requestAnimationFrame(frame);
   if (document.hidden || root.classList.contains('away')) { lastT = now; return; }
@@ -308,6 +311,8 @@ function frame(now) {
   const c = typing && !fine ? null : choose(vh);
   perch = c ? c.p : null; perchEl = c ? c.el : null;
   const tx = c ? c.s.x : 8, ty = c ? c.s.y : vh - H() - 16;
+  lastTY = ty;
+  if (mode !== 'follow') { physics(dt, tx, ty); return; }
   if (first || reduce) { pos.x = tx; pos.y = ty; vel.x = vel.y = 0; first = false; }
   else {
     const k = 5.5;                                   // same spring as the CSA butterfly
@@ -340,6 +345,108 @@ function land(free) {
     const a = perch.arrive; rig.set({ pose: a.pose, expr: a.expr }); clearTimeout(actTimer);
     busyUntil = Date.now() + a.ms; actTimer = setTimeout(() => { busyUntil = 0; rest(); }, a.ms);
   } else rig.set({ pose: 'idle', expr: base.expr, ms: 380 });
+}
+
+/* ---------- picking him up: drag, drop, fall to his perch's level, then run back ---------- */
+const grab = { id: null, dx: 0, dy: 0, sx: 0, sy: 0, moved: false, lx: 0, lt: 0, vx: 0 };
+let run = null, legT = 0, windT = 0, landT = 0;
+body.style.touchAction = 'none';
+body.addEventListener('pointerdown', e => {
+  if (root.classList.contains('away')) return;
+  grab.id = e.pointerId; grab.sx = e.clientX; grab.sy = e.clientY; grab.moved = false;
+  grab.dx = e.clientX - pos.x; grab.dy = e.clientY - pos.y; grab.lx = e.clientX; grab.lt = performance.now(); grab.vx = 0;
+});
+addEventListener('pointermove', e => {
+  if (grab.id !== e.pointerId) return;
+  if (!grab.moved && Math.hypot(e.clientX - grab.sx, e.clientY - grab.sy) < 7) return;
+  if (!grab.moved) {                     // picked up
+    grab.moved = true; mode = 'drag'; run = null; flying = false; body.classList.remove('m-glide', 'm-run', 'm-sleep');
+    asleep = false; stopFidget(); clearTimeout(actTimer); busyUntil = Infinity; root.classList.remove('talking');
+    rig.set({ pose: 'cheer', expr: 'surprised', ms: 200 }); move('startle');
+    try { body.setPointerCapture(e.pointerId); } catch (err) {}
+    setTimeout(() => { if (mode === 'drag') rig.set({ pose: 'cheer', expr: Math.random() < .5 ? 'excited' : 'giggle' }); }, 900);
+  }
+  const t = performance.now(), dt = Math.max(1, t - grab.lt);
+  grab.vx = grab.vx * 0.7 + ((e.clientX - grab.lx) / dt * 1000) * 0.3; grab.lx = e.clientX; grab.lt = t;
+  pos.x = e.clientX - grab.dx; pos.y = e.clientY - grab.dy;
+}, { passive: true });
+const drop = e => {
+  if (grab.id !== e.pointerId) return;
+  grab.id = null;
+  if (!grab.moved) return;
+  vel.x = grab.vx * 0.25; vel.y = 0;
+  if (pos.y > Math.min(lastTY, viewH() - H() - 6) + 4) {   // dropped below his level: he hops back up instead of falling
+    mode = 'follow'; busyUntil = 0; rig.set({ pose: 'hop', expr: 'happy', ms: 200 }); return;
+  }
+  mode = 'fall'; rig.set({ pose: 'hop', expr: 'surprised', ms: 200 });
+};
+addEventListener('pointerup', drop); addEventListener('pointercancel', drop);
+
+function physics(dt, tx, ty) {
+  const h = H(), floor = Math.min(ty, viewH() - h - 6);
+  if (mode === 'drag') {
+    const swing = Math.max(-28, Math.min(28, -grab.vx * 0.03));
+    lean += (swing - lean) * Math.min(1, dt * 10); grab.vx *= Math.pow(0.02, dt);
+  } else if (mode === 'fall') {
+    vel.y += 2600 * dt; vel.x *= Math.pow(0.4, dt);
+    pos.x += vel.x * dt; pos.y += vel.y * dt; lean += (0 - lean) * Math.min(1, dt * 6);
+    if (pos.y >= floor) {                // landed on the perch's level
+      pos.y = floor; const hard = vel.y > 900; vel.x = vel.y = 0; lean = 0;
+      move('boing'); rig.set({ pose: 'idle', expr: hard ? 'dizzy' : 'oops', ms: 160 });
+      mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 900 : 550), style: pickRun() };
+    } else if (pos.y < floor - 400 && vel.y < 0) pos.y = floor - 400;
+  } else if (mode === 'run') runStep(dt, tx, floor);
+  draw();
+}
+function pickRun() { const r = Math.random(); return r < 0.3 ? 'dash' : r < 0.55 ? 'trip' : 'jog'; }
+function runStep(dt, tx, floor) {
+  const now = performance.now();
+  pos.y += (floor - pos.y) * Math.min(1, dt * 10);           // stay on the line if the page scrolls
+  if (run.phase === 'shake') {
+    if (now < run.until) return;
+    run.phase = 'go'; run.start = pos.x; setFace(tx >= pos.x ? 1 : -1);
+    rig.set({ pose: 'hop', expr: run.style === 'dash' ? 'excited' : 'happy', ms: 160 });
+    body.classList.add(run.style === 'dash' ? 'm-dash' : 'm-run');
+    if (run.style === 'trip') run.tripAt = Math.abs(tx - pos.x) > 120 ? 0.45 + Math.random() * 0.2 : 2;
+  }
+  if (run.phase === 'trip') {
+    if (now < run.until) return;
+    run.phase = 'go'; rig.set({ pose: 'hop', expr: 'happy', ms: 160 }); body.classList.add('m-run');
+  }
+  if (run.phase !== 'go') return;
+  const dx = tx - pos.x, dir = Math.sign(dx) || 1;
+  const speed = run.style === 'dash' ? 760 : 300;
+  setFace(dir);
+  lean += (dir * (run.style === 'dash' ? 16 : 8) - lean) * Math.min(1, dt * 8);
+  // legs: alternate two poses for a little run cycle
+  legT += dt; if (legT > 0.14) { legT = 0; rig.set({ pose: rig.pose === 'hop' ? 'idle' : 'hop', ms: 110 }); }
+  if (run.style === 'dash') { windT += dt; if (windT > 0.06) { windT = 0; wind(dir); } }
+  const step = Math.min(Math.abs(dx), speed * dt);
+  pos.x += dir * step;
+  const total = Math.abs(tx - run.start) || 1, done = 1 - Math.abs(tx - pos.x) / total;
+  if (run.style === 'trip' && done > run.tripAt) {          // trips, laughs it off
+    run.tripAt = 2; run.phase = 'trip'; run.until = now + 1300;
+    body.classList.remove('m-run'); move('trip'); rig.set({ pose: 'shy', expr: 'oops', ms: 150 });
+    setTimeout(() => { if (mode === 'run') { rig.set({ pose: 'cover', expr: 'giggle', ms: 200 }); move('giggle'); hehe('hehe'); } }, 650);
+    return;
+  }
+  if (Math.abs(tx - pos.x) < 3) {                          // home
+    body.classList.remove('m-run', 'm-dash'); mode = 'follow'; run = null; vel.x = vel.y = 0; lean = 0;
+    busyUntil = 0; arrivedAt = null; flying = false;
+    setFace(perch && perch.face === 'left' ? -1 : 1);
+    rig.set({ pose: 'cheer', expr: 'proud', ms: 260 }); move('hop');
+    clearTimeout(actTimer); actTimer = setTimeout(rest, 700);
+  }
+}
+/* swirly wind puffs behind him on a dash */
+function wind(dir) {
+  if (reduce) return;
+  const w = document.createElement('span'); w.className = 'buddy-wind';
+  const x = pos.x + (dir > 0 ? -10 : W() - 18) + (Math.random() * 10 - 5), y = pos.y + H() * (0.35 + Math.random() * 0.4);
+  w.style.left = x + 'px'; w.style.top = y + 'px'; w.style.setProperty('--d', -dir);
+  w.innerHTML = '<svg viewBox="0 0 40 20" width="34" height="17"><path d="M2 12c8 0 12-9 20-9 6 0 8 5 4 7-3 2-6-1-4-3M6 17h16" fill="none" stroke="#B58CDD" stroke-width="2.4" stroke-linecap="round"/></svg>';
+  if (dir < 0) w.firstChild.style.transform = 'scaleX(-1)';
+  document.body.append(w); setTimeout(() => w.remove(), 600);
 }
 
 /* events from the rest of the site */

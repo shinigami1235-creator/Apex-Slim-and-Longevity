@@ -527,6 +527,16 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 @keyframes buddy-spin{0%{transform:none}50%{transform:translateY(-10px) scaleX(-1)}100%{transform:none}}
 @keyframes buddy-boing{0%{transform:none}20%{transform:scale(1.18,.78)}45%{transform:scale(.86,1.16) translateY(-10px)}70%{transform:scale(1.05,.95)}100%{transform:none}}
 @keyframes buddy-wobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-9deg) translateX(-3px)}75%{transform:rotate(9deg) translateX(3px)}}
+.buddy-body.m-run{animation:buddy-run .28s ease-in-out infinite}
+.buddy-body.m-dash{animation:buddy-dash .18s ease-in-out infinite}
+.buddy-body.m-trip{animation:buddy-trip 1.1s cubic-bezier(.3,.7,.4,1)}
+@keyframes buddy-run{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px) scale(.98,1.02)}}
+@keyframes buddy-dash{0%,100%{transform:translateY(-4px) scale(1.06,.95)}50%{transform:translateY(-7px) scale(1.08,.93)}}
+@keyframes buddy-trip{0%{transform:none}18%{transform:translateY(-6px) rotate(18deg)}38%{transform:translateY(10px) rotate(78deg)}62%{transform:translateY(10px) rotate(78deg)}100%{transform:none}}
+.buddy-wind{position:fixed;z-index:39;pointer-events:none;animation:buddy-wind .6s ease-out forwards}
+@keyframes buddy-wind{0%{opacity:.9;transform:translateX(0) scale(.7)}100%{opacity:0;transform:translateX(calc(var(--d) * 26px)) scale(1.15)}}
+.buddy-body{touch-action:none;cursor:grab}
+.buddy-body:active{cursor:grabbing}
 .buddy-hehe{position:absolute;left:62%;top:-6px;font:700 15px/1 var(--font);color:var(--plum);pointer-events:none;animation:buddy-hehe 1.1s ease-out forwards}
 @keyframes buddy-hehe{0%{opacity:0;transform:translateY(6px) scale(.8)}20%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-24px) rotate(-8deg)}}
 @keyframes buddy-sway{0%,100%{transform:rotate(-2.5deg)}25%{transform:translateY(-3px) rotate(0deg) scale(1.01,.99)}50%{transform:rotate(2.5deg)}75%{transform:translateY(-3px) rotate(0deg) scale(1.01,.99)}}
