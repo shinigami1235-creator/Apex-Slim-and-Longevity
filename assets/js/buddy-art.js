@@ -140,6 +140,7 @@ function markup(id, size, s) {
     <path data-k="t1" d="${tp}" fill="none" stroke="${P.tapeD}" stroke-width="15" stroke-linecap="round"/>
     <path data-k="t2" d="${tp}" fill="none" stroke="${P.tape}" stroke-width="12" stroke-linecap="round"/>
     <path data-k="t3" d="${tp}" fill="none" stroke="${P.tapeD}" stroke-width="5" stroke-dasharray="1.6 5"/>
+    <g data-k="rim"><circle cx="100" cy="104" r="62" fill="${P.plumD}"/><circle cx="100" cy="104" r="61" fill="none" stroke="${P.plum}" stroke-width="2" opacity=".6"/></g>
     <g data-k="case">
     <circle cx="100" cy="104" r="62" fill="url(#${id}c)"/>
     <path d="M58 72a52 52 0 0 1 60-26" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="6" stroke-linecap="round"/>
@@ -175,7 +176,7 @@ export function createBuddy(el, size) {
   el.innerHTML = markup(id, size, { expr: 'happy', pose: 'idle' });
   const q = k => el.querySelector(`[data-k=${k}]`);
   const k = { shadow: q('shadow'), tilt: q('tilt'), legs: q('legs'), legL: q('legL'), legR: q('legR'), footL: q('footL'), footR: q('footR'), left: q('left'), t: [q('t1'), q('t2'), q('t3')], blush: q('blush'),
-    look: q('look'), face: q('face'), back: q('back'), case: q('case'), hand: q('hand'), hook: q('hook'), flask: q('flask'), extras: q('extras') };
+    look: q('look'), face: q('face'), back: q('back'), case: q('case'), rim: q('rim'), hand: q('hand'), hook: q('hook'), flask: q('flask'), extras: q('extras') };
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const num = (p, turn) => ({ tilt: TILT[p] || 0, lift: LIFT[p] || 0, sh: p === 'hop' ? 34 : p === 'splat' ? 58 : 44, flask: p === 'flask' ? 1 : 0, legs: legsOf(p), turn, back: p === 'splat' ? 1 : 0, flat: p === 'splat' ? 1 : 0 });
   let cur = { pose: 'idle', expr: 'happy', turn: 0, pts: cubes('idle'), n: num('idle', 0) };
@@ -197,8 +198,11 @@ export function createBuddy(el, size) {
     // turn 0 faces the viewer, 1 is a three-quarter view toward its right (the wrapper mirrors it for left)
     const tn = n.turn || 0;
     k.back.setAttribute('opacity', (n.back || 0).toFixed(2));          // face down: we see the back of the case
-    const fl = 1 - (n.flat || 0) * 0.66;                                 // lying flat: the case squashes onto the floor
-    k.case.setAttribute('transform', fl === 1 ? '' : `translate(0 166) scale(1 ${fl.toFixed(3)}) translate(0 -166)`);
+    // depth: the case is a thick disc, so turning shows its side and lying flat shows its edge under it
+    const flat = n.flat || 0, fl = 1 - flat * 0.5, sx = 1 - tn * 0.07;
+    const sq = `translate(100 166) scale(${sx.toFixed(3)} ${fl.toFixed(3)}) translate(-100 -166)`;
+    k.case.setAttribute('transform', sq);
+    k.rim.setAttribute('transform', `translate(${(-tn * 13).toFixed(2)} ${(flat * 13).toFixed(2)}) ` + sq);
     k.look.setAttribute('transform', `translate(${(look[0] * 4 + tn * 17 + 100).toFixed(2)} ${(look[1] * 3).toFixed(2)}) scale(${(1 - tn * 0.12).toFixed(3)} 1) translate(-100 0)`);
     k.blush.setAttribute('transform', `translate(${(tn * 12).toFixed(2)} 0)`);
     const d = legPaths(n.legs.map((v, i) => i % 3 === 2 ? v : v + tn * 6));

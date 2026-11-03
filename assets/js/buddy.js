@@ -11,7 +11,7 @@
    - each line is said once per visit; the rest of the time it reacts with a face and a move
    - it never comments on weight, BMI or waist numbers
    - perches sit in empty space beside the content */
-import { createBuddy } from './buddy-art.js?v=7';
+import { createBuddy } from './buddy-art.js?v=8';
 
 const NAME = 'Nong Tape';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -107,7 +107,17 @@ const born = Date.now();
 const MOVES = ['m-hop', 'm-wiggle', 'm-bob', 'm-startle', 'm-giggle', 'm-spin', 'm-boing', 'm-wobble', 'm-trip'];
 const move = m => { if (reduce || !m) return; body.classList.remove(...MOVES); void body.offsetWidth; body.classList.add('m-' + m); };
 body.addEventListener('animationend', e => { if (/buddy-(hop|wiggle|bob|startle|giggle|spin|boing|wobble|trip)/.test(e.animationName)) body.classList.remove(...MOVES); });
-const setFace = dir => { if (dir === facing) return; facing = dir; turn.classList.toggle('flip', dir < 0); };
+/* turning round goes through the front view so he never goes paper thin */
+let faceT = 0;
+const setFace = dir => {
+  if (dir === facing) return; facing = dir;
+  const tn = rig.turn || 0;
+  clearTimeout(faceT);
+  if (tn > 0.05 && !reduce) {
+    rig.set({ turn: 0, ms: 110 });
+    faceT = setTimeout(() => { turn.classList.toggle('flip', facing < 0); rig.set({ turn: tn, ms: 170 }); }, 110);
+  } else turn.classList.toggle('flip', dir < 0);
+};
 const rest = () => { if (!held && !asleep && !flying) rig.set(base); };
 
 function act(name) {
@@ -237,7 +247,7 @@ let taps = [];
 const TAPS = [
   { pose: 'cover', expr: 'giggle', ms: 1100, move: 'giggle', hehe: 'hehe' },
   { pose: 'hop', expr: 'wink', ms: 700, move: 'hop' },
-  { pose: 'idle', expr: 'excited', ms: 900, move: 'spin' },
+  { pose: 'idle', expr: 'excited', ms: 900, spin: true },
   { pose: 'cheer', expr: 'excited', ms: 900, move: 'boing' },
   { pose: 'wave', expr: 'happy', ms: 1100, move: 'wiggle' },
   { pose: 'shy', expr: 'shy', ms: 1100 },
@@ -256,6 +266,12 @@ body.addEventListener('click', () => {
   if (taps.length >= 4) r = { pose: 'idle', expr: 'dizzy', ms: 1500, move: 'wobble' };
   else { let i; do { i = Math.floor(Math.random() * TAPS.length); } while (i === lastTap); lastTap = i; r = TAPS[i]; }
   rig.set({ pose: r.pose, expr: r.expr }); move(r.move); if (r.hehe) hehe(r.hehe);
+  if (r.spin && !reduce) {                 // a little twirl: side, other side, front
+    move('hop'); rig.set({ turn: 1, ms: 160 });
+    setTimeout(() => setFace(-facing), 170);
+    setTimeout(() => { setFace(-facing); }, 520);
+    setTimeout(() => rig.set({ turn: 0, ms: 200 }), 820);
+  }
   busyUntil = t + r.ms; actTimer = setTimeout(() => { busyUntil = 0; rest(); }, r.ms);
 });
 
@@ -413,13 +429,9 @@ function physics(dt, tx, ty) {
     vel.y += 2600 * dt; vel.x *= Math.pow(0.4, dt);
     pos.x += vel.x * dt; pos.y += vel.y * dt; lean += (0 - lean) * Math.min(1, dt * 14);
     if (pos.y >= floor) {                // landed on the perch's level
-      pos.y = floor; const hard = vel.y > 700; vel.x = vel.y = 0; lean = 0;
-      mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 1900 : 550), style: pickRun() };
-      if (hard) {                        // a big drop: flat on his face, dizzy, then up giggling
-        setFace(lastTX >= pos.x ? 1 : -1); move('trip');
-        rig.set({ pose: 'splat', expr: 'dizzy', ms: 200, turn: 1 });
-        setTimeout(() => { if (mode === 'run' && run && run.phase === 'shake') { rig.set({ pose: 'cover', expr: 'giggle', ms: 360, turn: 0.4 }); move('giggle'); hehe('hehe'); } }, 1100);
-      } else { move('boing'); rig.set({ pose: 'idle', expr: 'oops', ms: 160, turn: 0 }); }
+      pos.y = floor; const hard = vel.y > 900; vel.x = vel.y = 0; lean = 0;
+      mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 900 : 550), style: pickRun() };
+      move('boing'); rig.set({ pose: 'idle', expr: hard ? 'dizzy' : 'oops', ms: 160, turn: 0 });
     } else if (pos.y < floor - 400 && vel.y < 0) pos.y = floor - 400;
   } else if (mode === 'run') runStep(dt, tx, floor);
   else if (mode === 'float') {                // drifting around inside the bubble, near his spot

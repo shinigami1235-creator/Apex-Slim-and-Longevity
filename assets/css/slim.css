@@ -528,7 +528,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 /* Nong Tape buddy */
 .buddy{position:fixed;left:0;top:0;z-index:40;pointer-events:none;will-change:transform;transform-origin:50% 100%}
 .buddy>*{pointer-events:auto}
-.buddy-turn{transition:transform .35s var(--ease);transform-origin:50% 100%}
+.buddy-turn{transform-origin:50% 100%}
 .buddy-turn.flip{transform:scaleX(-1)}
 .buddy-body{display:block;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 90%;-webkit-tap-highlight-color:transparent}
 .buddy-art,.buddy-art svg{display:block;overflow:visible}
