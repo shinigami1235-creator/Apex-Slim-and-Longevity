@@ -11,7 +11,7 @@
    - each line is said once per visit; the rest of the time it reacts with a face and a move
    - it never comments on weight, BMI or waist numbers
    - perches sit in empty space beside the content */
-import { createBuddy } from './buddy-art.js?v=6';
+import { createBuddy } from './buddy-art.js?v=7';
 
 const NAME = 'Nong Tape';
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -89,6 +89,7 @@ function quip(el) {
 const root = document.createElement('div');
 root.className = 'buddy';
 root.innerHTML = `<div class="buddy-turn"><button class="buddy-body" type="button" aria-label="${NAME}, tap to say hi"><span class="buddy-art"></span></button></div>
+  <span class="buddy-float" aria-hidden="true"></span>
   <span class="buddy-nap" aria-hidden="true"><i class="bub"></i><b>z</b><b>z</b><b>Z</b></span>
   <p class="buddy-say" aria-hidden="true"></p>
   <button class="buddy-x" type="button" aria-label="Hide ${NAME}">×</button>`;
@@ -138,9 +139,23 @@ function done() { held = false; busyUntil = 0; clearTimeout(actTimer); rig.set(b
 (function blink() { setTimeout(() => { if (!held && !asleep && !flying) rig.blink(); blink(); }, 2600 + Math.random() * 3400); })();
 
 /* dozes off after 45 seconds with nothing happening */
-function sleep() { asleep = true; root.classList.add('napping'); rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep'); }
+function sleep() {
+  asleep = true; root.classList.add('napping'); rig.set({ pose: 'sleep', expr: 'sleepy', ms: 900 }); body.classList.add('m-sleep');
+  // after a few breaths the nose bubble grows around him and he floats off in it
+  clearTimeout(bubbleT);
+  if (!reduce) bubbleT = setTimeout(() => { if (asleep && mode === 'follow') { root.classList.add('bubbled'); mode = 'float'; floatT0 = performance.now(); } }, 6500);
+}
+let bubbleT = 0, floatT0 = 0;
+/* tapped or grabbed while floating: the bubble pops and he drops back to his level */
+function popFloat() {
+  clearTimeout(bubbleT); popBubble();
+  asleep = false; root.classList.remove('napping', 'bubbled'); body.classList.remove('m-sleep');
+  mode = 'fall'; vel.x = 0; vel.y = -120; stopFidget(); clearTimeout(actTimer); busyUntil = Infinity; lastInput = Date.now();
+  rig.set({ pose: 'cheer', expr: 'surprised', ms: 160, turn: 0 }); move('startle');
+}
 /* tapped awake: startled jump, then a quick giggle */
 function wakeByTap() {
+  clearTimeout(bubbleT);
   asleep = false; root.classList.remove('napping'); popBubble(); body.classList.remove('m-sleep'); stopFidget(); clearTimeout(actTimer);
   lastInput = Date.now(); yawned = false;
   rig.set({ pose: 'cheer', expr: 'surprised', ms: 160 }); move('startle');
@@ -163,7 +178,7 @@ function wake() {
 }
 const poke = () => { lastInput = Date.now(); };   // a nap only ends with a tap on him or a real event
 ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(t => addEventListener(t, poke, { passive: true }));
-setInterval(() => { if (!asleep && !held && !flying && !fidgeting && Date.now() - lastInput > 45000) sleep(); }, 3000);
+setInterval(() => { if (mode === 'follow' && !asleep && !held && !flying && !fidgeting && Date.now() - lastInput > 45000) sleep(); }, 3000);
 
 /* idle play: every 7 to 14 seconds of resting it does one small thing on its own.
    A yawn after 25 seconds with no input comes before the nap at 45. */
@@ -231,6 +246,7 @@ const TAPS = [
 ];
 let lastTap = -1;
 body.addEventListener('click', () => {
+  if (mode === 'float' && !grab.moved) { popFloat(); return; }
   if (grab.moved || mode !== 'follow') { grab.moved = false; return; }
   if (asleep) { wakeByTap(); return; }
   const t = Date.now(); taps = taps.filter(x => t - x < 1800); taps.push(t);
@@ -354,6 +370,7 @@ const grab = { id: null, dx: 0, dy: 0, sx: 0, sy: 0, moved: false, lx: 0, lt: 0,
 let run = null, legT = 0, windT = 0, landT = 0;
 body.style.touchAction = 'none';
 body.addEventListener('pointerup', () => setTimeout(() => body.blur(), 0));
+root.querySelector('.buddy-float').addEventListener('click', () => { if (mode === 'float') popFloat(); });
 body.addEventListener('pointerdown', e => {
   if (root.classList.contains('away')) return;
   grab.id = e.pointerId; grab.sx = e.clientX; grab.sy = e.clientY; grab.moved = false;
@@ -365,6 +382,7 @@ addEventListener('pointermove', e => {
   if (!grab.moved) {                     // picked up
     grab.moved = true; mode = 'drag'; run = null; flying = false; body.classList.remove('m-glide', 'm-run', 'm-sleep');
     if (asleep) popBubble();
+    clearTimeout(bubbleT); root.classList.remove('bubbled');
     asleep = false; root.classList.remove('napping'); stopFidget(); clearTimeout(actTimer); busyUntil = Infinity; root.classList.remove('talking');
     rig.set({ pose: 'cheer', expr: 'surprised', ms: 200, turn: 0 }); move('startle');
     try { body.setPointerCapture(e.pointerId); } catch (err) {}
@@ -400,6 +418,15 @@ function physics(dt, tx, ty) {
       mode = 'run'; run = { phase: 'shake', until: performance.now() + (hard ? 900 : 550), style: pickRun() };
     } else if (pos.y < floor - 400 && vel.y < 0) pos.y = floor - 400;
   } else if (mode === 'run') runStep(dt, tx, floor);
+  else if (mode === 'float') {                // drifting around inside the bubble, near his spot
+    const t = (performance.now() - floatT0) / 1000, w = W(), vh = viewH();
+    const fx = Math.max(10, Math.min(innerWidth - w - 40, tx + Math.sin(t * 0.21) * 150 + Math.sin(t * 0.07) * 60));
+    const fy = Math.max(84, Math.min(vh - h - 40, ty - 80 + Math.sin(t * 0.33) * 34));
+    const k = 1.4;
+    vel.x += ((fx - pos.x) * k * k - vel.x * 2 * k) * dt; vel.y += ((fy - pos.y) * k * k - vel.y * 2 * k) * dt;
+    pos.x += vel.x * dt; pos.y += vel.y * dt;
+    lean += (Math.sin(t * 0.9) * 6 + vel.x * 0.02 - lean) * Math.min(1, dt * 3);
+  }
   draw();
 }
 function pickRun() { const r = Math.random(); return r < 0.3 ? 'dash' : r < 0.55 ? 'trip' : 'jog'; }

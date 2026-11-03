@@ -545,6 +545,15 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .buddy-nap b:nth-of-type(2){animation-delay:1s;font-size:12px}
 .buddy-nap b:nth-of-type(3){animation-delay:2s;font-size:19px}
 @keyframes buddy-z{0%{opacity:0;transform:translate(0,6px) rotate(-10deg)}25%{opacity:1}100%{opacity:0;transform:translate(18px,-30px) rotate(12deg)}}
+.buddy-float{position:absolute;left:50%;top:48%;width:150%;aspect-ratio:1;margin:-75% 0 0 -75%;border-radius:50%;pointer-events:none;opacity:0;transform:scale(.15);transform-origin:50% 60%;
+  background:radial-gradient(circle at 30% 26%,rgba(255,255,255,.95) 0 6%,rgba(255,255,255,0) 14%),radial-gradient(circle at 70% 78%,rgba(255,255,255,.5) 0 3%,rgba(255,255,255,0) 8%),
+    radial-gradient(circle,rgba(255,255,255,0) 56%,rgba(201,179,221,.28) 72%,rgba(141,240,198,.3) 86%,rgba(181,140,221,.55) 100%);
+  box-shadow:inset 0 0 0 1.5px rgba(181,140,221,.6),0 6px 18px rgba(58,23,90,.12);transition:transform 1.4s cubic-bezier(.3,1.3,.5,1),opacity .6s}
+.buddy.bubbled .buddy-float{opacity:1;transform:scale(1);pointer-events:auto;cursor:pointer;animation:buddy-floatwob 3.2s ease-in-out 1.4s infinite}
+.buddy.bubbled .buddy-nap .bub{opacity:0}
+.buddy.bubbled [data-k=shadow]{opacity:0;transition:opacity .6s}
+@keyframes buddy-floatwob{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.97)}}
+.buddy.pop .buddy-float{opacity:0;transform:scale(1.35);transition:transform .35s ease-out,opacity .35s ease-out;animation:none}
 .buddy.pop .buddy-nap{opacity:1}
 .buddy.pop .buddy-nap .bub{animation:buddy-pop .4s ease-out forwards}
 .buddy.pop .buddy-nap b{display:none}
