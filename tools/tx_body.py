@@ -73,7 +73,7 @@ hook=[
 ],
 body="""
 <h2>Results from studies</h2>
-<p>A 2015 review in Plastic and Reconstructive Surgery looked at 19 studies on fat freezing. The fat layer in the treated area was 14.7 to 28.5 percent thinner when measured with calipers and 10.3 to 25.5 percent thinner on ultrasound. Most of the results came to around a fifth of the fat in the area.</p>
+<p>A 2015 review in Plastic and Reconstructive Surgery looked at 19 studies on fat freezing. The fat layer in the treated area was 14.7 to 28.5 percent thinner when measured with calipers and 10.3 to 25.5 percent thinner on ultrasound. Most of the results came to around a fifth of the fat in the area. Allergan, the maker of CoolSculpting, gives an average of 24 to 27 percent.</p>
 <p>Your body clears the dead fat cells over the following weeks, so the change shows slowly and is easiest to see at 3 months.</p>
 
 <h2>Before the session</h2>
@@ -82,10 +82,11 @@ body="""
 
 <h2>During the session</h2>
 <p>A gel pad goes on your skin to protect it and the applicator goes on top. It sucks the fold of fat in and starts to cool it. It feels very cold and tight for the first 5 to 10 minutes, then the area goes numb.</p>
-<p>You can read or use your phone for the rest of the session. When the applicator comes off, the area looks firm and pale for a few minutes. The nurse massages it for about 2 minutes to help break up the frozen cells.</p>
+<p>Apex uses CoolSculpting Elite, which cools the fat to between -11 and -13 °C. A sensor system called Freeze Detect watches the skin and protects it from cold injury.</p>
+<p>You can read or use your phone for the rest of the session. When the applicator comes off, the area looks firm and pale for a few minutes. The nurse massages it for about 2 minutes to help break up the frozen cells. It can hurt a little, and Apex's leaflet says the massage adds up to 68 percent to the result.</p>
 
 <h2>After the session</h2>
-<p>You can go back to work, drive and exercise on the same day. The area can be red, swollen, numb or tingly for a few days up to 2 weeks, and some people bruise where the applicator pulled on the skin.</p>
+<p>You can go back to work, drive and exercise on the same day. Right after, the area can feel tight and look red, bruised or a little swollen. Over the next 1 to 2 weeks it can itch, give sharp pains or feel numb, and the numbness can last a few weeks. After treatment under the chin, the back of your throat can feel full. Most of this goes away within 1 to 2 weeks.</p>
 <p>A rare side effect is paradoxical adipose hyperplasia, where the treated fat gets bigger and firmer a few months after the session instead of shrinking. A 2014 report put it at about 1 in 20,000 treatments and later reports have put it higher.</p>
 
 <h2>Who it's for</h2>
@@ -97,7 +98,7 @@ body="""
 """,
 faq=[
 ("Does it hurt?", "It feels very cold and tight for the first 5 to 10 minutes until the area goes numb. The massage afterwards can sting for about a minute."),
-("How many sessions do I need?", "One session is often enough for an area. Some areas need 2 or 3, and the doctor decides after measuring the fat at your first visit."),
+("How many sessions do I need?", "One session is often enough for an area. Apex suggests a second one 8 to 12 weeks later for a clearer result, and the doctor decides after measuring the fat at your first visit."),
 ("Will the fat come back?", "The fat cells that were treated are gone for good. The ones left in the area can still get bigger if you gain weight."),
 ("Will I weigh less?", "Only a little since the fat in one area doesn't weigh much. You'll notice it more in how your clothes fit and in the photos at 3 months."),
 ("Can I exercise after?", "Yes, on the same day."),
@@ -116,7 +117,7 @@ hook=[
 ],
 body="""
 <h2>How it works</h2>
-<p>Radiofrequency (RF) heats the fat layer until the fat cells are damaged, and your body clears them over the next few weeks. The magnetic pulses, called HIFEM, act directly on the nerve that controls the muscle.</p>
+<p>Radiofrequency (RF) heats the fat layer until the fat cells are damaged, and your body clears them over the next few weeks. The magnetic pulses, called HIFEM, act directly on the nerve that controls the muscle. Apex says a 30-minute session makes the muscle contract about 20,000 times.</p>
 <p>The muscle responds the same way it does to heavy training and gets thicker and stronger. The researchers think the RF heat adds to the muscle growth since heat on its own helps muscle grow.</p>
 
 <h2>Results from studies</h2>
@@ -132,10 +133,11 @@ body="""
 <p>Wait until your own doctor says you can exercise again after giving birth. A wide gap may still need physiotherapy or surgery, and our doctor will check it at your consult.</p>
 
 <h2>When you'll see a change</h2>
-<p>The muscle often feels firmer after the first few sessions. The fat loss starts to show at around 1 month. In the studies, the results for both fat and muscle were biggest at 3 months.</p>
+<p>Apex says results start to show after 2 to 4 sessions and are clearest after 4 to 6. In the studies, the results for both fat and muscle were biggest at 3 months.</p>
 
 <h2>Who it's for</h2>
-<p>Emsculpt Neo is for people close to a healthy weight. It only takes fat out of the area being treated, so it won't replace weight loss if you have a lot to lose.</p>
+<p>Emsculpt Neo is for people who want more muscle but don't see it from exercise, mothers who want their belly muscle back after giving birth, people with no time for the gym, and anyone after a six-pack, lines down the belly or firmer buttocks. An applicator called Edge treats the sides of the waist, where fat is hard to shift.</p>
+<p>It works best if you're close to a healthy weight. It only takes fat out of the area being treated, so it won't replace weight loss if you have a lot to lose.</p>
 <p>It can't be used if you're pregnant, have a pacemaker or another electronic implant, or have metal implants in or near the area.</p>
 """,
 faq=[
@@ -148,42 +150,42 @@ faq=[
 
 # ---------------------------------------------------------------- FIT FIRM
 "fit-firm": dict(
-desc="FIT FIRM at Apex Slim and Longevity uses radiofrequency and muscle stimulation to firm the belly, thighs and upper arms with no downtime.",
-note=("How heat firms loose skin", "Radiofrequency makes the skin build new collagen and muscle stimulation firms the layer under it."),
+desc="FIT FIRM at Apex Slim and Longevity uses 448 kHz radiofrequency to smooth cellulite and firm loose skin in about 20 minutes a session.",
+note=("How heat smooths cellulite", "Radiofrequency warms the layer under the skin and makes it build new collagen."),
 pair="FIT FIRM can firm the skin that gets loose as you lose weight with 1 Week 1 Kilo.",
 hook=[
-"FIT FIRM is the Apex Slim program for loose skin and soft areas on the belly, thighs and upper arms. These areas often stay loose after losing weight or having a baby, and exercise takes a long time to change them.",
-"FIT FIRM works without needles or downtime. Radiofrequency (RF) heats the deeper layer of your skin, which makes your body build new collagen over the next few months, while electromagnetic stimulation makes the muscle underneath contract again and again like it does when you train.",
+"FIT FIRM is the Apex Slim program for cellulite and loose skin. Cellulite is the dimpled, orange-peel skin that shows most on the thighs, hips and buttocks, and it often stays after losing weight or having a baby even when the rest of you has slimmed down.",
+"FIT FIRM uses a radiofrequency (RF) handpiece at 448 kHz to warm the layer under your skin. The heat helps break down stored fat there and makes your skin build new collagen and elastin over the next few months. Each session takes about 20 minutes with no needles and no downtime.",
 ],
 body="""
-<h2>How heat firms the skin</h2>
-<p>Collagen is the protein that keeps skin firm, and you make less of it as you get older. When RF heats the deeper layer of the skin, the collagen already there tightens and the heat signals your skin cells to make more. New collagen takes weeks to months to form, so your skin keeps getting firmer after the sessions are over.</p>
+<h2>What causes cellulite</h2>
+<p>Under the skin, fat sits in small pockets held in place by bands of collagen that run down to the muscle. When the pockets fill up, the fat pushes up between the bands while the bands hold the skin down, and the surface looks dimpled. Women get cellulite far more often than men since their bands run straight up toward the skin.</p>
+<p>Diet and exercise help by shrinking the fat in the pockets, but the bands and the skin over them stay the same. FIT FIRM works on the skin and the layer under it.</p>
 
-<h2>Firming the muscle</h2>
-<p>An area looks tighter when the muscle under the skin is firm. The electromagnetic stimulation makes the muscle contract in strong pulses while you lie still, and the muscle gets firmer over a course of sessions.</p>
-<p>A 2022 study gave 38 people 3 sessions of RF combined with muscle stimulation. Their fat layer and body measurements were smaller afterwards, they were happy with the results and nobody had serious side effects. Results vary from one machine to another, so ask the doctor to show you the machine Apex uses.</p>
+<h2>How the heat works</h2>
+<p>The handpiece sends radiofrequency energy into the skin at 448 kHz, and the tissue under the skin warms up. The collagen already there tightens and the warmth signals your skin cells to make new collagen and elastin. New collagen takes weeks to months to form, so your skin keeps getting smoother and firmer after the course ends.</p>
 
-<h2>After a session</h2>
-<p>The area may look tighter and feel warm right after a session. Some of this is heat and fluid that goes down in a day or two. The change that lasts comes from new collagen and firmer muscle over the next few weeks.</p>
-<p>You can go back to work straight away. Your skin may stay pink for a few hours and your muscles may feel like you've exercised.</p>
-
-<h2>Your course</h2>
+<h2>Your session</h2>
 <ol>
-<li>At your consult the doctor pinches and measures the area, checks how loose the skin is and takes photos.</li>
-<li>The doctor decides how many sessions you need and how far apart they should be.</li>
-<li>At each session a gel or pad goes on your skin and the applicator is moved or strapped over the area while it heats up and the muscle contracts.</li>
-<li>After the course you come back for new measurements and photos. They show the change better than the mirror does since it happens slowly.</li>
+<li>You talk with the doctor or the Apex Slim specialist team, who look at your shape and the areas you want treated and plan your course.</li>
+<li>The skin over the area is cleaned.</li>
+<li>A gel goes on the skin to help the energy pass through.</li>
+<li>The handpiece is moved over the area with a light massage. It feels warm with a light pull.</li>
+<li>After about 20 minutes you can go straight back to your day.</li>
 </ol>
 
+<h2>How many sessions</h2>
+<p>Apex says most people see a change after the first session, a clear change after 4 to 6 and the best result after 8 to 10. How far you get depends on your skin, the number of sessions and how you look after your skin between them.</p>
+
 <h2>Who it's for</h2>
-<p>FIT FIRM is for mild loose skin or softness on the belly, thighs or upper arms. Very loose skin after a big weight loss may need surgery to remove, and the doctor will tell you at your consult if FIT FIRM can't give you the result you want.</p>
+<p>FIT FIRM is for cellulite and mildly loose skin on the thighs, hips, buttocks, belly, upper arms, inner knees, back or waist, including skin that loosened after pregnancy or weight loss. The front and back of the thighs are the most common areas. Very loose skin after a big weight loss may need surgery to remove, and the doctor will tell you at your consult if FIT FIRM can't give you the result you want.</p>
 <p>It can't be used if you're pregnant, have a pacemaker or another electronic implant, have metal implants in the area, or have an infection or open wound on the skin there.</p>
 """,
 faq=[
-("How is it different from Emsculpt Neo?", "Both combine heat with muscle stimulation. Emsculpt Neo is made to remove fat and build muscle, and FIT FIRM is for firming the skin and toning the muscle under it."),
-("How many sessions do I need?", "The doctor decides after looking at the area at your consult. You'll need a course of sessions since new collagen takes weeks to form."),
-("Does it hurt?", "It feels warm and the muscle contractions are strong. The nurse will turn it down if it gets too hot."),
-("When will I see results?", "Your skin keeps getting firmer for weeks after the last session. The photos at your follow-up show it best."),
+("Does it hurt?", "No. It feels warm with a light pull, like a massage."),
+("How is it different from Emsculpt Neo?", "FIT FIRM uses heat to smooth cellulite and firm the skin. Emsculpt Neo adds magnetic pulses that work the muscle and is made to remove fat and build muscle."),
+("How many sessions do I need?", "Apex says the change is clear after 4 to 6 sessions and best after 8 to 10. The doctor sets the number after looking at the area."),
+("Is the machine approved?", "Apex says the machine is approved by the US FDA and the Thai FDA (อย.)."),
 ("Can men do it?", "Yes."),
 ("Can I do it after CoolSculpting?", "Yes. FIT FIRM can firm the skin over an area after CoolSculpting has removed some of the fat."),
 ],
@@ -208,7 +210,27 @@ body="""
 
 <h2>What's in the drip</h2>
 <p>The base is saline with salts called electrolytes. The doctor adds the vitamins and minerals for your goal, most often B vitamins, vitamin C, magnesium and zinc, and decides the dose after your health check.</p>
-<p>A hydration drip gives you fluid and electrolytes after a stomach bug, a fever or a day out in the heat. A vitamin B drip is for people with low vitamin B12, which is more common in vegetarians, older adults and people on some long-term medicines. A vitamin C drip is for people with low vitamin C or when the doctor wants a higher level than tablets can reach. A blood test shows whether you're low in a vitamin, and the doctor uses it to decide what goes in your drip.</p>
+
+<h2>The Drip B-A-R menu</h2>
+<p>Apex's drips go by the name Drip B-A-R. Apex doctors made the formulas and adjust them for each person, and the menu has 12 drips.</p>
+<table class="drips">
+<thead><tr><th scope="col">Drip</th><th scope="col">What Apex lists in it</th><th scope="col">Made for</th></tr></thead>
+<tbody>
+<tr><td>Super C</td><td>High-dose vitamin C</td><td>Tiredness, stress and the immune system</td></tr>
+<tr><td>Celebrity Secret</td><td>Vitamins and minerals for the skin</td><td>Skin</td></tr>
+<tr><td>Skin Bright</td><td>Nutrients for the skin</td><td>A brighter, healthier-looking skin</td></tr>
+<tr><td>Super Energy Charge</td><td>Extra vitamin B12 and amino acids</td><td>Energy and recovery after exercise</td></tr>
+<tr><td>Rejuvenate</td><td>Electrolytes, minerals and micronutrients</td><td>Rehydrating after exercise</td></tr>
+<tr><td>Cell Balance</td><td>Essential nutrients</td><td>A general top-up</td></tr>
+<tr><td>Detoxifying</td><td>EDTA</td><td>Removing heavy metals such as lead and mercury from the blood</td></tr>
+<tr><td>Hang Over</td><td>Fluid, with the rest not listed</td><td>Rehydrating after drinking</td></tr>
+<tr><td>Revitalize Hair &amp; Nail</td><td>Nutrients and minerals</td><td>Hair and nails</td></tr>
+<tr><td>Fat Burn</td><td>Not listed</td><td>Use alongside a weight-loss plan</td></tr>
+<tr><td>Weight Loss</td><td>Not listed</td><td>Use alongside a weight-loss plan</td></tr>
+<tr><td>Premium NAD+</td><td>NAD+, a molecule your cells use to make energy</td><td>Energy</td></tr>
+</tbody>
+</table>
+<p>Ask the doctor what's in a drip before you book where the menu doesn't list it. A blood test shows whether you're low in a vitamin, and the doctor uses it to pick the drip. EDTA is the drip used in hospitals for lead poisoning, and the doctor checks your kidneys and calcium before giving it since it can affect both.</p>
 
 <h2>Your visit</h2>
 <p>The doctor asks about your health and any medicines you take and checks your blood pressure. A nurse puts a thin tube into a vein in your arm, and the drip runs for 30 to 60 minutes while you sit and read or use your phone. You can go back to your day as soon as the tube comes out.</p>
@@ -252,7 +274,7 @@ body="""
 <p>The US FDA has cleared hyperbaric chambers for a list of conditions. These include decompression sickness, air bubbles in the blood, carbon monoxide poisoning, burns, severe infections, slow-healing diabetic wounds, radiation injury and severe anaemia when a blood transfusion isn't possible. For wounds, hospitals give sessions of 1.5 to 2 hours every day for 20 to 40 days.</p>
 
 <h2>HBOT for wellness and recovery</h2>
-<p>At Apex Slim we offer HBOT for wellness and recovery, which isn't on the FDA list. The main study on this, done in Israel, gave 35 adults aged 64 and over 60 sessions at 2 times normal pressure over 3 months.</p>
+<p>At Apex Slim we offer HBOT as a 60-minute session for people who sleep badly, feel worn out from work, train hard or are recovering from surgery, and for people who want to slow the effects of ageing. None of these is on the FDA list. The main study on this, done in Israel, gave 35 adults aged 64 and over 60 sessions at 2 times normal pressure over 3 months.</p>
 <p>Telomeres are the caps on the ends of your chromosomes, and they get shorter as you age. In the study they got more than 20 percent longer in several types of immune cell, and worn-out helper T cells went down by 37 percent.</p>
 <p>The study was small and had no comparison group. It also only measured blood cells, so we still don't know what HBOT does to ageing in the rest of the body. The FDA warns against centres that say HBOT can cure conditions it isn't cleared for.</p>
 
@@ -297,11 +319,11 @@ body="""
 <p>When you fall asleep, the muscles in your throat relax and the soft palate, the uvula and the tissue around them sag into your airway. Air going through the smaller gap makes the loose tissue flap and make the snoring sound. Snoring gets worse with age, alcohol, sleeping on your back and extra weight around the neck.</p>
 
 <h2>How the laser works</h2>
-<p>Snorelase uses an erbium laser (Er:YAG) in a mode that heats without cutting. Short pulses warm the lining of your mouth and throat without breaking the surface. The heat makes the collagen in the tissue shrink and tighten and starts new collagen growing over the next few weeks. Firmer tissue flaps less, so you snore more quietly, and imaging studies have measured a wider airway after treatment.</p>
+<p>Snorelase uses an erbium laser (Er:YAG) in a mode that heats without cutting. Short pulses warm the lining of your mouth and throat without breaking the surface. The heat makes the collagen in the tissue shrink and tighten and starts new collagen growing over the next few weeks. Firmer tissue flaps less, so you snore more quietly, and imaging studies have measured a wider airway after treatment. At Apex the doctor treats the soft palate, the inside of the cheeks and the base of the tongue.</p>
 
 <h2>Results from studies</h2>
 <p>The people in the 2022 trial didn't have significant sleep apnoea, and the fake treatment used a handpiece that blocked the laser. People rated the discomfort 3 out of 10 on average. Nobody needed an anaesthetic and there were no complications.</p>
-<p>A review of 7 studies with 247 patients found that 80 percent were happy with the result. A review from 2025 found that the effect usually lasts 12 to 24 months, and 25 to 40 percent of people needed a top-up session to keep it.</p>
+<p>A review of 7 studies with 247 patients found that 80 percent were happy with the result. A review from 2025 found that the effect usually lasts 12 to 24 months, and 25 to 40 percent of people needed a top-up session to keep it. A study Apex cites in its leaflet, of 40 patients treated with an Er:YAG laser at 2940 nm, found that 97 percent were satisfied.</p>
 
 <h2>Snoring or sleep apnoea</h2>
 <p>Snoring can be a sign of obstructive sleep apnoea, where your airway closes completely and you stop breathing many times a night. Ask a doctor about a sleep test first if:</p>
@@ -312,9 +334,10 @@ body="""
 <li>you have high blood pressure</li>
 </ul>
 <p>In the review of 7 studies, snoring got quieter but the number of times people stopped breathing stayed about the same. Snorelase treats snoring and can't replace treatment for sleep apnoea.</p>
+<p>Apex also treats people who already use a CPAP machine for sleep apnoea and still snore. Keep using the CPAP since the laser doesn't treat the apnoea itself.</p>
 
 <h2>Your sessions</h2>
-<p>You sit in the chair with safety glasses on, and the doctor moves the laser over your soft palate, your uvula, the sides of your throat and sometimes the back of your tongue. Each session takes about 30 minutes and feels warm. You can eat and go back to work straight after, and your throat may feel dry or scratchy for a day or so.</p>
+<p>You sit in the chair with safety glasses on, and the doctor moves the laser over your soft palate, the inside of your cheeks and the base of your tongue. Each session takes about 30 minutes and feels warm. You can eat and go back to work straight after, and your throat may feel dry or scratchy for a day or so.</p>
 <p>Most people need 3 to 6 sessions. The doctor will tell you how far apart to book them.</p>
 
 <h2>Who it's for</h2>

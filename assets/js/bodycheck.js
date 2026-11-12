@@ -11,12 +11,12 @@ if (form && canvas) init();
 async function init() {
   /* ---------- treatments ---------- */
   const T = {
-    wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'index.html#treatments', goal: 'weight', time: 'Once a week for 4 weeks' },
+    wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'one-week-one-kilo.html', goal: 'weight', time: 'Weekly visits for 3 months or more' },
     cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', goal: 'fat', cls: 'cold', time: 'About 35 min per area' },
-    en: { sym: 'En', name: 'Emsculpt Neo', url: 'index.html#treatments', goal: 'tone', time: '30 min, 4 sessions' },
-    ff: { sym: 'Ff', name: 'FIT FIRM', url: 'index.html#treatments', goal: 'firm', time: 'Buttocks and thighs' },
-    iv: { sym: 'Iv', name: 'IV Therapy', url: 'index.html#longevity', goal: 'energy', cls: 'long', time: '30 to 60 min drip' },
-    hb: { sym: 'Hb', name: 'HBOT', url: 'index.html#longevity', goal: 'energy', cls: 'long', time: '60 to 90 min in the chamber' }
+    en: { sym: 'En', name: 'Emsculpt Neo', url: 'emsculpt-neo.html', goal: 'tone', time: '30 min, 4 to 6 sessions' },
+    ff: { sym: 'Ff', name: 'FIT FIRM', url: 'fit-firm.html', goal: 'firm', time: '20 min, cellulite and firmer skin' },
+    iv: { sym: 'Iv', name: 'IV Therapy', url: 'iv-therapy.html', goal: 'energy', cls: 'long', time: '30 to 60 min drip' },
+    hb: { sym: 'Hb', name: 'HBOT', url: 'hbot.html', goal: 'energy', cls: 'long', time: '60 min in the chamber' }
   };
 
   /* ---------- Thai scale (Department of Health) ---------- */

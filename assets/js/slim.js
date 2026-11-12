@@ -1,19 +1,19 @@
 (() => {
   const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
   const T = {
-    wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'index.html#treatments', time: 'Once a week for 4 weeks',
+    wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'one-week-one-kilo.html', time: 'Weekly visits for 3 months or more',
       desc: 'A weekly program prescribed by the doctor that works on the hunger that rises when you eat less.' },
     cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', cls: 'cold', time: 'About 35 min per area',
       desc: 'Cools a fold of fat until the fat cells in it die, and you go back to work the same day.' },
-    en: { sym: 'En', name: 'Emsculpt Neo', url: 'index.html#treatments', time: '30 min, 4 sessions',
+    en: { sym: 'En', name: 'Emsculpt Neo', url: 'emsculpt-neo.html', time: '30 min, 4 to 6 sessions',
       desc: 'Heat and magnetic pulses work on fat and muscle in the same session.' },
-    ff: { sym: 'Ff', name: 'FIT FIRM', url: 'index.html#treatments', time: 'Buttocks and thighs',
-      desc: '' },
-    iv: { sym: 'Iv', name: 'IV Therapy', url: 'index.html#longevity', cls: 'long', time: '30 to 60 min drip',
+    ff: { sym: 'Ff', name: 'FIT FIRM', url: 'fit-firm.html', time: '20 min, cellulite and firmer skin',
+      desc: 'Radiofrequency warms the layer under the skin to smooth cellulite and firm loose skin.' },
+    iv: { sym: 'Iv', name: 'IV Therapy', url: 'iv-therapy.html', cls: 'long', time: '30 to 60 min drip',
       desc: 'Vitamins, minerals and fluids through a drip, mixed by the doctor for your goal.' },
-    hb: { sym: 'Hb', name: 'HBOT', url: 'index.html#longevity', cls: 'long', time: '60 to 90 min in the chamber',
+    hb: { sym: 'Hb', name: 'HBOT', url: 'hbot.html', cls: 'long', time: '60 min in the chamber',
       desc: 'You breathe pure oxygen in a pressurised chamber, which raises the oxygen carried in your blood.' },
-    sl: { sym: 'Sl', name: 'Snorelase', url: 'index.html#longevity', cls: 'long', time: '3 sessions, no cuts',
+    sl: { sym: 'Sl', name: 'Snorelase', url: 'snorelase.html', cls: 'long', time: '3 to 6 sessions, no cuts',
       desc: 'A laser tightens the soft palate to reduce snoring, with no anaesthetic.' }
   };
   const GOALS = {

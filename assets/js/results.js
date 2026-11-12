@@ -4,13 +4,20 @@
   if (!stage || !window.RX_MAP) return;
   const MAP = window.RX_MAP;
   const IMG = 'assets/img/results/';
+  // Case photos from Apex's own leaflets (Cindy, Nov 2026). The right panel shows the machine when a case has no video.
   const CASES = [
-    { id: 'jaw', title: 'Orthognathic surgery', tx: [{ sym: 'Og', name: 'Orthognathic surgery' }],
-      before: 'jaw-front-before.webp', after: 'jaw-front-after.webp', bdate: '9 Mar 2026', adate: '22 Jun 2026',
-      facts: [['Time between photos', '15 weeks']], video: 'assets/video/jaw-case.mp4', poster: 'jaw-video-poster.webp' },
-    { id: 'vline', title: 'V-line facial bone surgery', tx: [{ sym: 'Vl', name: 'V-line facial bone surgery' }],
-      before: 'vline-before.webp', after: 'vline-after.webp', bdate: '9 Mar 2026', adate: '22 Jun 2026',
-      facts: [['Time between photos', '15 weeks'], ['Change', '7 mm']], video: null }
+    { id: 'cs-belly', title: 'CoolSculpting Elite, belly and flanks', tx: [{ sym: 'Cs', name: 'CoolSculpting' }],
+      before: 'cs-abdomen-flanks-before.webp', after: 'cs-abdomen-flanks-after.webp', bdate: '', adate: '8 weeks after the 2nd session',
+      facts: [['Sessions', '2'], ['Time between photos', 'About 3 months']], video: null, img: 'assets/img/tx/device-coolsculpting-elite.webp', imgCap: 'CoolSculpting Elite' },
+    { id: 'cs-bra', title: 'CoolSculpting Elite, bra line', tx: [{ sym: 'Cs', name: 'CoolSculpting' }],
+      before: 'cs-bra-before.webp', after: 'cs-bra-after.webp', bdate: '', adate: '8 weeks after the 2nd session',
+      facts: [['Sessions', '2'], ['Time between photos', 'About 3 months']], video: null, img: 'assets/img/tx/device-coolsculpting-elite.webp', imgCap: 'CoolSculpting Elite' },
+    { id: 'em', title: 'Emsculpt Neo, belly', tx: [{ sym: 'En', name: 'Emsculpt Neo' }],
+      before: 'em-1-before.webp', after: 'em-1-after.webp', bdate: '', adate: '12 weeks after the 4th treatment',
+      facts: [['Treatments', '4'], ['Photos', 'Arash Akhavan, M.D.']], video: null, img: 'assets/img/tx/device-emsculpt-neo.webp', imgCap: 'Emsculpt Neo' },
+    { id: 'ff', title: 'FIT FIRM, belly', tx: [{ sym: 'Ff', name: 'FIT FIRM' }],
+      before: 'ff-abdomen-before.webp', after: 'ff-abdomen-after.webp', bdate: '31 inches', adate: '29.5 inches',
+      facts: [['Belly', '31 to 29.5 inches']], video: null, img: 'assets/img/tx/leaflet-08-t.webp', imgCap: 'FIT FIRM leaflet' }
   ];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wide = matchMedia('(min-width: 760px)');
@@ -53,9 +60,10 @@
     $('rx-before').src = IMG + c.before; $('rx-before').alt = c.title + ', before';
     $('rx-after').src = IMG + c.after; $('rx-after').alt = c.title + ', after';
     $('rx-bdate').textContent = c.bdate; $('rx-adate').textContent = c.adate;
+    $('rx-vid-h').textContent = c.video ? 'Patient video' : 'The machine';
     $('rx-vid').innerHTML = c.video
       ? `<video controls playsinline preload="none" poster="${IMG + c.poster}" src="${c.video}"></video>`
-      : '<p>No video for this case.</p>';
+      : c.img ? `<figure class="rx-machine"><img src="${c.img}" alt="${c.imgCap}"><figcaption>${c.imgCap}</figcaption></figure>` : '<p>No video for this case.</p>';
     $('rx-facts').innerHTML = c.facts.map(f => `<dt>${f[0]}</dt><dd>${f[1]}</dd>`).join('');
     picker.querySelectorAll('.rx-chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === c.id));
   };

@@ -10,9 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
+from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "21"
-JS = '<script src="assets/js/slim.js?v=7"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
+CSS_V = "22"
+JS = '<script src="assets/js/slim.js?v=8"></script>\n<script src="assets/js/tx.js?v=1"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
 GOALS = [("weight", "Lose weight"), ("fat", "Belly and flank fat"), ("tone", "Muscle tone"),
@@ -21,6 +22,51 @@ GOALS = [("weight", "Lose weight"), ("fat", "Belly and flank fat"), ("tone", "Mu
 
 def icon(sym):
     return f'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">{ICONS[sym]}</svg>'
+
+
+IMG = "assets/img/tx/"
+
+
+def device_fig(m):
+    if "device" not in m:
+        return ""
+    f, cap = m["device"]
+    return f'<figure class="tx-device"><img src="{IMG}{f}" alt="{html.escape(cap)}" loading="lazy"><figcaption>{cap}</figcaption></figure>\n'
+
+
+def gallery(m, name):
+    g = m.get("gallery")
+    if not g:
+        return ""
+    cases = []
+    for label, cells in g["cases"]:
+        figs = "".join(f'<figure><button type="button" class="zoomable" data-full="{IMG}{f}"><img src="{IMG}{f}" alt="{html.escape(label)}, {html.escape(c.lower())}" loading="lazy"></button><figcaption>{c}</figcaption></figure>' for f, c in cells)
+        cases.append(f'<div class="tx-case" style="--n:{len(cells)}"><h3>{label}</h3><div class="tx-cells">{figs}</div></div>')
+    return f"""
+<section class="sec tx-gallery" aria-labelledby="h-cases">
+<div class="wrap">
+<div class="sec-head"><h2 id="h-cases">{g['title']}</h2><p>{g['note']}</p></div>
+<div class="tx-cases">
+{chr(10).join(cases)}
+</div>
+</div>
+</section>
+"""
+
+
+def leaflets(m, name):
+    ls = m.get("leaflets")
+    if not ls:
+        return ""
+    items = "".join(f'<li><button type="button" class="zoomable" data-full="{IMG}leaflet-{n:02d}.webp" data-set="leaflets"><img src="{IMG}leaflet-{n:02d}-t.webp" alt="{html.escape(LEAFLET_ALT[n])}" loading="lazy"></button></li>' for n in ls)
+    return f"""
+<section class="sec tx-leaflets" aria-labelledby="h-leaflets">
+<div class="wrap">
+<div class="sec-head"><h2 id="h-leaflets">Apex leaflets</h2><p>The {html.escape(name)} leaflets Apex hands out at the clinic, in Thai. Tap one to see it full size.</p></div>
+<ul class="leaflet-row">{items}</ul>
+</div>
+</section>
+"""
 
 
 def words(p):
@@ -45,6 +91,7 @@ def page(p):
     extra = STAGES if p.get("extra") == "stages" else ""
     body_top = ' style="padding-top:0"' if extra else ""
     title = html.escape(p["name"])
+    m = MEDIA.get(p["slug"], {})
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -105,7 +152,7 @@ def page(p):
 <section class="sec" id="article"{body_top} aria-label="Article">
 <div class="wrap article">
 <div class="prose">
-{p['body'].strip()}
+{device_fig(m)}{p['body'].strip()}
 
 <h2>Questions</h2>
 <div class="faq">
@@ -126,6 +173,7 @@ def page(p):
 </aside>
 </div>
 </section>
+{gallery(m, p['name'])}{leaflets(m, p['name'])}
 
 <section class="sec" id="consult" style="padding-top:0" aria-labelledby="h-consult">
 <div class="wrap request">
