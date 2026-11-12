@@ -7,20 +7,20 @@
   // Case photos from Apex's own leaflets (Cindy, Nov 2026). The right panel shows the machine when a case has no video.
   const CASES = [
     { id: 'cs-belly', title: 'CoolSculpting Elite, belly and flanks', tx: [{ sym: 'Cs', name: 'CoolSculpting' }],
-      before: 'cs-abdomen-flanks-before.webp', after: 'cs-abdomen-flanks-after.webp', bdate: '', adate: '8 weeks after the 2nd session',
+      before: 'cs-abdomen-flanks-before.webp', after: 'cs-abdomen-flanks-after.webp', raw: ['tx/cs-19-2-0.webp', 'tx/cs-19-2-2.webp'], wide: true, bdate: '', adate: '8 weeks after the 2nd session',
       facts: [['Sessions', '2'], ['Time between photos', 'About 3 months']], video: null, img: 'assets/img/tx/device-coolsculpting-elite.webp', imgCap: 'CoolSculpting Elite' },
     { id: 'cs-bra', title: 'CoolSculpting Elite, bra line', tx: [{ sym: 'Cs', name: 'CoolSculpting' }],
-      before: 'cs-bra-before.webp', after: 'cs-bra-after.webp', bdate: '', adate: '8 weeks after the 2nd session',
+      before: 'cs-bra-before.webp', after: 'cs-bra-after.webp', raw: ['tx/cs-18-1-0.webp', 'tx/cs-18-1-2.webp'], wide: true, bdate: '', adate: '8 weeks after the 2nd session',
       facts: [['Sessions', '2'], ['Time between photos', 'About 3 months']], video: null, img: 'assets/img/tx/device-coolsculpting-elite.webp', imgCap: 'CoolSculpting Elite' },
     { id: 'em', title: 'Emsculpt Neo, belly', tx: [{ sym: 'En', name: 'Emsculpt Neo' }],
-      before: 'em-1-before.webp', after: 'em-1-after.webp', bdate: '', adate: '12 weeks after the 4th treatment',
+      before: 'em-1-before.webp', after: 'em-1-after.webp', raw: ['tx/em-01-before.webp', 'tx/em-01-after.webp'], wide: true, bdate: '', adate: '12 weeks after the 4th treatment',
       facts: [['Treatments', '4'], ['Photos', 'Arash Akhavan, M.D.']], video: null, img: 'assets/img/tx/device-emsculpt-neo.webp', imgCap: 'Emsculpt Neo' },
     { id: 'ff', title: 'FIT FIRM, belly', tx: [{ sym: 'Ff', name: 'FIT FIRM' }],
-      before: 'ff-abdomen-before.webp', after: 'ff-abdomen-after.webp', bdate: '31 inches', adate: '29.5 inches',
-      facts: [['Belly', '31 to 29.5 inches']], video: null, img: 'assets/img/tx/leaflet-08-t.webp', imgCap: 'FIT FIRM leaflet' }
+      before: 'ff-abdomen-before.webp', after: 'ff-abdomen-after.webp', raw: ['tx/ff-1-before.webp', 'tx/ff-1-after.webp'], bdate: '31 inches', adate: '29.5 inches',
+      facts: [['Belly', '31 to 29.5 inches']], video: null, img: 'assets/img/tx/leaflet-08-t.webp', imgCap: 'FIT FIRM brochure' }
   ];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const wide = matchMedia('(min-width: 760px)');
+  const wide = matchMedia('(min-width: 1024px)');
   const $ = id => document.getElementById(id);
   const panels = $('rx-panels'), picker = $('rx-picker'), again = $('rx-again');
   const photo = $('rx-photo'), photoImg = $('rx-photo-img'), crown = $('rx-crown'), crownText = $('rx-crown-text');
@@ -57,8 +57,9 @@
     $('rx-tx').innerHTML = c.tx.map(t => `<div class="rx-tile"><b>${t.sym}</b><span>${t.name}<small>Dialled in</small></span></div>`).join('');
     $('rx-cases').innerHTML = CASES.map(k => `<button class="rx-case" type="button" data-id="${k.id}" aria-current="${k === c}"><img src="${IMG + k.before}" alt="">${k.title}</button>`).join('');
     $('rx-title').textContent = c.title;
-    $('rx-before').src = IMG + c.before; $('rx-before').alt = c.title + ', before';
-    $('rx-after').src = IMG + c.after; $('rx-after').alt = c.title + ', after';
+    $('rx-before').src = 'assets/img/' + c.raw[0]; $('rx-before').alt = c.title + ', before';
+    $('rx-after').src = 'assets/img/' + c.raw[1]; $('rx-after').alt = c.title + ', after';
+    panels.querySelector('.rx-ba').classList.toggle('stack', !!c.wide);
     $('rx-bdate').textContent = c.bdate; $('rx-adate').textContent = c.adate;
     $('rx-vid-h').textContent = c.video ? 'Patient video' : 'The machine';
     $('rx-vid').innerHTML = c.video
@@ -157,7 +158,7 @@
   document.body.appendChild(zoom);
   panels.querySelector('.rx-ba').addEventListener('click', () => {
     const imgs = zoom.querySelectorAll('img'), spans = zoom.querySelectorAll('p span');
-    imgs[0].src = IMG + current.before; imgs[1].src = IMG + current.after;
+    imgs[0].src = 'assets/img/' + current.raw[0]; imgs[1].src = 'assets/img/' + current.raw[1];
     imgs[0].alt = current.title + ', before'; imgs[1].alt = current.title + ', after';
     spans[0].textContent = current.bdate; spans[1].textContent = current.adate;
     zoom.hidden = false; zoom.querySelector('button').focus();

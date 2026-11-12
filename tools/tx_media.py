@@ -8,11 +8,24 @@ MEDIA = {
 
 "coolsculpting": dict(
     leaflets=[17, 18, 19, 20],
-    device=("device-coolsculpting-elite.webp", "The CoolSculpting Elite machine Apex uses, with two applicators."),
+    areas=[  # from Allergan's treatment guide by area in Apex's CoolSculpting deck
+        ("Belly", "4 to 8", "ppt-area-02.webp"), ("Flanks", "4 to 8", "ppt-area-03.webp"),
+        ("Bra line", "4 to 6", "ppt-area-04.webp"), ("Upper arms", "2 to 4", "ppt-area-05.webp"),
+        ("Inner thighs", "2 to 4", "ppt-area-06.webp"), ("Under the buttocks", "2 to 4", "ppt-area-08.webp"),
+        ("Under the chin", "2 to 3", "ppt-area-09.webp"), ("Fat by the armpit", "2 to 4", "ppt-area-10.webp"),
+        ("Above the knees", "4", "ppt-area-11.webp"), ("Outer thighs", "2", None), ("Male chest", "2 to 4", None)],
+    device=("device-coolsculpting-elite.webp", "Our CoolSculpting Elite machine, with two applicators."),
     gallery=dict(
         title="Case photos",
-        note="From Apex's CoolSculpting Elite leaflets. Each case shows the same area before treatment, 4 weeks after the 1st session and 8 weeks after the 2nd.",
-        cases=[(name, [(f"cs-{p}-{k}-{s}.webp", CS_STAGES[s]) for s in range(3)]) for p, k, name in [
+        note="Each case is the same person before and after CoolSculpting. The first six photos are from Allergan, the maker of CoolSculpting.",
+        cases=[
+            ("Belly", [("ppt-case-14-0.webp", "Before"), ("ppt-case-14-1.webp", "3 months after the 2nd session")], "10 cycles over 2 sessions, 5 in each"),
+            ("Flanks", [("ppt-case-15-0.webp", "Before"), ("ppt-case-15-1.webp", "17 weeks after the 2nd session")], "8 cycles over 2 sessions, 6 then 2"),
+            ("Inner and outer thighs", [("ppt-case-16-0.webp", "Before"), ("ppt-case-16-1.webp", "19 weeks after the 2nd session")], "6 cycles over 2 sessions, 4 then 2"),
+            ("Under the buttocks", [("ppt-case-20-0.webp", "Before, side"), ("ppt-case-20-1.webp", "27 weeks after the 2nd session"), ("ppt-case-20-2.webp", "Before, back"), ("ppt-case-20-3.webp", "27 weeks after the 2nd session")], "6 cycles over 2 sessions"),
+            ("Under the chin", [("ppt-case-21-0.webp", "Before"), ("ppt-case-21-1.webp", "12 weeks after the session")], "2 cycles in 1 session"),
+            ("Upper arms", [("ppt-case-22-0.webp", "Before"), ("ppt-case-22-1.webp", "11 weeks after the session")], "1 cycle on each arm"),
+        ] + [(name, [(f"cs-{p}-{k}-{s}.webp", CS_STAGES[s]) for s in range(3)]) for p, k, name in [
             (18, 1, "Bra line"), (18, 2, "Upper arm"), (18, 3, "Lower belly and love handles"), (18, 4, "Love handles and bra line"),
             (19, 1, "Lower belly and love handles"), (19, 2, "Belly and flanks"), (19, 3, "Belly"), (19, 4, "Love handles")]],
     ),
@@ -23,7 +36,7 @@ MEDIA = {
     device=("device-emsculpt-neo.webp", "The Emsculpt Neo machine. The applicator on the left is strapped over the area."),
     gallery=dict(
         title="Case photos",
-        note="From Apex's Emsculpt Neo leaflet: 12 weeks after the 4th treatment, photos courtesy of Arash Akhavan, M.D.",
+        note="Each case is the same person before and 12 weeks after the 4th treatment. Photos courtesy of Arash Akhavan, M.D.",
         cases=[(f"Case {i}", [(f"em-{i:02d}-before.webp", "Before"), (f"em-{i:02d}-after.webp", "12 weeks after")]) for i in range(1, 11)],
     ),
 ),
@@ -32,7 +45,7 @@ MEDIA = {
     leaflets=[8, 9, 10],
     gallery=dict(
         title="Case photos",
-        note="From Apex's FIT FIRM leaflet.",
+        note="The belly measured around the navel before and after FIT FIRM.",
         cases=[("Belly", [("ff-1-before.webp", "Before: 31 inches"), ("ff-1-after.webp", "After: 29.5 inches")])],
     ),
 ),
@@ -43,7 +56,7 @@ MEDIA = {
 
 "hbot": dict(
     leaflets=[1, 2, 3, 4],
-    device=("device-hbot.webp", "The chamber at Apex. You lie inside and can see out through the window."),
+    device=("device-hbot.webp", "Our chamber. You lie inside and can see out through the window."),
 ),
 
 "snorelase": dict(

@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "22"
+CSS_V = "24"
 JS = '<script src="assets/js/slim.js?v=8"></script>\n<script src="assets/js/tx.js?v=1"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
@@ -39,9 +39,12 @@ def gallery(m, name):
     if not g:
         return ""
     cases = []
-    for label, cells in g["cases"]:
+    for case in g["cases"]:
+        label, cells = case[0], case[1]
+        sub = f'<p class="tx-case-sub">{case[2]}</p>' if len(case) > 2 else ""
         figs = "".join(f'<figure><button type="button" class="zoomable" data-full="{IMG}{f}"><img src="{IMG}{f}" alt="{html.escape(label)}, {html.escape(c.lower())}" loading="lazy"></button><figcaption>{c}</figcaption></figure>' for f, c in cells)
-        cases.append(f'<div class="tx-case" style="--n:{len(cells)}"><h3>{label}</h3><div class="tx-cells">{figs}</div></div>')
+        n = 2 if len(cells) == 4 else len(cells)
+        cases.append(f'<div class="tx-case" style="--n:{n}"><h3>{label}</h3>{sub}<div class="tx-cells">{figs}</div></div>')
     return f"""
 <section class="sec tx-gallery" aria-labelledby="h-cases">
 <div class="wrap">
@@ -49,6 +52,24 @@ def gallery(m, name):
 <div class="tx-cases">
 {chr(10).join(cases)}
 </div>
+</div>
+</section>
+"""
+
+
+def areas(m):
+    a = m.get("areas")
+    if not a:
+        return ""
+    cards = []
+    for name, cyc, img in a:
+        pic = (f'<button type="button" class="zoomable" data-full="{IMG}{img}" data-set="areas"><img src="{IMG}{img}" alt="Where the applicator goes on the {html.escape(name.lower())}" loading="lazy"></button>') if img else '<div class="tx-area-blank" aria-hidden="true"></div>'
+        cards.append(f'<li class="tx-area">{pic}<h3>{name}</h3><p><b>{cyc}</b> cycles</p></li>')
+    return f"""
+<section class="sec tx-areas" aria-labelledby="h-areas">
+<div class="wrap">
+<div class="sec-head"><h2 id="h-areas">Areas and cycles</h2><p>A cycle is one round of cooling on one spot. A bigger area takes more cycles since each applicator covers a set size, and the Elite can run two cycles at once. These are the usual starting numbers, and the doctor plans yours at the consult.</p></div>
+<ul class="tx-area-grid">{''.join(cards)}</ul>
 </div>
 </section>
 """
@@ -62,7 +83,7 @@ def leaflets(m, name):
     return f"""
 <section class="sec tx-leaflets" aria-labelledby="h-leaflets">
 <div class="wrap">
-<div class="sec-head"><h2 id="h-leaflets">Apex leaflets</h2><p>The {html.escape(name)} leaflets Apex hands out at the clinic, in Thai. Tap one to see it full size.</p></div>
+<div class="sec-head"><h2 id="h-leaflets">Brochures</h2><p>Our {html.escape(name)} brochures, in Thai. Tap one to see it full size.</p></div>
 <ul class="leaflet-row">{items}</ul>
 </div>
 </section>
@@ -173,7 +194,7 @@ def page(p):
 </aside>
 </div>
 </section>
-{gallery(m, p['name'])}{leaflets(m, p['name'])}
+{areas(m)}{gallery(m, p['name'])}{leaflets(m, p['name'])}
 
 <section class="sec" id="consult" style="padding-top:0" aria-labelledby="h-consult">
 <div class="wrap request">
