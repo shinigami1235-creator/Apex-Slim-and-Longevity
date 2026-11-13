@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "25"
+CSS_V = "26"
 JS = '<script src="assets/js/slim.js?v=8"></script>\n<script src="assets/js/tx.js?v=1"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
@@ -150,6 +150,40 @@ def reviews(m):
 """
 
 
+def banners(m):
+    """Cards down the sidebar beside the article, taken from the page's own reviews, clients, cases or brochures."""
+    out = []
+    if m.get("reviews"):
+        for i, en, th, role, q, qth in m["reviews"]["items"]:
+            first = q.split(". ")[0].rstrip(".") + "."
+            r = f", {role.lower()}" if role else ""
+            out.append(f'<a class="bn bn-rev" href="#h-reviews"><img src="{IMG}snore-review-{i}-face.webp" alt="" loading="lazy">'
+                       f'<span class="bn-kick">Review</span><q>{first}</q><span class="bn-name">{en}{r}</span></a>')
+        more = ("#h-reviews", "Read all three reviews")
+    elif m.get("people"):
+        for f, en, th in m["people"]["items"]:
+            out.append(f'<a class="bn bn-person" href="#h-people"><img src="{IMG}{f}" alt="" loading="lazy">'
+                       f'<span class="bn-kick">Our client</span><span class="bn-name">{en} <span lang="th">{th}</span></span></a>')
+        more = None
+    elif m.get("gallery"):
+        for case in m["gallery"]["cases"][:4]:
+            label, cells = case[0], case[1]
+            sub = f'<span class="bn-sub">{case[2]}</span>' if len(case) > 2 else ""
+            b4, af = cells[0], cells[-1]
+            out.append(f'<a class="bn bn-case" href="#h-cases"><span class="bn-kick">Before and after</span>'
+                       f'<span class="bn-pair"><img src="{IMG}{b4[0]}" alt="" loading="lazy"><img src="{IMG}{af[0]}" alt="" loading="lazy"></span>'
+                       f'<span class="bn-name">{label}</span>{sub}<span class="bn-sub">{af[1]}</span></a>')
+        more = ("#h-cases", "See all the cases")
+    elif m.get("leaflets"):
+        for n in m["leaflets"]:
+            out.append(f'<a class="bn bn-leaf" href="#h-leaflets"><img src="{IMG}leaflet-{n:02d}-t.webp" alt="" loading="lazy"><span class="bn-name">{html.escape(LEAFLET_ALT[n])}</span></a>')
+        more = None
+    if not out:
+        return ""
+    tail = f'<a class="bn-more" href="{more[0]}">{more[1]}</a>' if more else ""
+    return f'<div class="banners" aria-label="From this page">{"".join(out)}{tail}</div>'
+
+
 def leaflets(m, name):
     ls = m.get("leaflets")
     if not ls:
@@ -261,12 +295,15 @@ def page(p):
 </ol>
 <p class="note-mark">Results vary from person to person. The doctor checks whether a treatment suits you at your consult.</p>
 </div>
+<div class="side">
 <aside class="aside" aria-labelledby="h-pair">
 <h3 id="h-pair">Pairs with</h3>
 <div class="chem"><a class="mini{cls}" href="{p['slug']}.html"><b>{p['sym']}</b><small>{title}</small></a><span class="plus" aria-hidden="true">+</span><a class="mini{pc}" href="{ph}"><b>{ps}</b><small>{pn}</small></a></div>
 <p style="color:var(--ink-2)">{pt}</p>
 <a class="btn" href="#consult" style="width:100%">Book a consult</a>
 </aside>
+{banners(m)}
+</div>
 </div>
 </section>
 {areas(m)}{plan(m)}{people(m)}{reviews(m)}{gallery(m, p['name'])}{leaflets(m, p['name'])}
