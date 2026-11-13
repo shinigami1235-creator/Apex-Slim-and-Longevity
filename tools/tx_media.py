@@ -11,9 +11,28 @@ MEDIA = {
     areas=[  # from Allergan's treatment guide by area in Apex's CoolSculpting deck
         ("Belly", "4 to 8", "ppt-area-02.webp"), ("Flanks", "4 to 8", "ppt-area-03.webp"),
         ("Bra line", "4 to 6", "ppt-area-04.webp"), ("Upper arms", "2 to 4", "ppt-area-05.webp"),
-        ("Inner thighs", "2 to 4", "ppt-area-06.webp"), ("Under the buttocks", "2 to 4", "ppt-area-08.webp"),
+        ("Inner thighs", "2 to 4", ["ppt-area-06.webp", "ppt-area-07.webp"], "Larger or smaller applicator, depending on the thigh."),
+        ("Under the buttocks", "2 to 4", "ppt-area-08.webp"),
         ("Under the chin", "2 to 3", "ppt-area-09.webp"), ("Fat by the armpit", "2 to 4", "ppt-area-10.webp"),
-        ("Above the knees", "4", "ppt-area-11.webp"), ("Outer thighs", "2", None), ("Male chest", "2 to 4", None)],
+        ("Above the knees", "4", "ppt-area-11.webp"), ("Outer thighs", "2", "ppt-good-0.webp", "Works best on a clear pocket of fat at the side."),
+        ("Male chest", "2 to 4", "ppt-area-malechest.webp")],
+    area_map="ppt-map.webp",
+    plan=dict(
+        title="Why the doctor plans the cycles",
+        intro="Clinics used to give everyone the same plan, one cycle on each area. On some people that left a hard edge or a dip next to the treated spot. Now the number and placement of cycles is planned for each person, and the outer thighs show why picking the right person matters.",
+        groups=[
+            ("One cycle on each area, the old way",
+             "These two cases had one cycle on the flank and one on the belly. The flank was left with a step at the edge and the belly with a dip around the navel.",
+             [("ppt-s13-0.webp", "Flank, before"), ("ppt-s13-1.webp", "After one cycle"), ("ppt-s13-2.webp", "Belly, before"), ("ppt-s13-3.webp", "After one cycle")]),
+            ("Outer thighs: who it suits",
+             "The outer thighs respond well when the fat forms a clear pocket that sticks out at the side, marked with dots here. A thigh with no clear pocket or peak is a poor fit.",
+             [("ppt-good-0.webp", "Good fit"), ("ppt-good-1.webp", "Good fit"), ("ppt-poor-0.webp", "Poor fit"), ("ppt-poor-1.webp", "Poor fit"), ("ppt-poor-2.webp", "Poor fit")]),
+            ("Outer thighs: planned and not planned",
+             "On the left, a good fit treated to plan. On the right, a thigh treated off the plan, which left an uneven result.",
+             [("ppt-s17-0.webp", "Good fit, before"), ("ppt-s17-1.webp", "16 weeks after"), ("ppt-s17-2.webp", "Off the plan, before"), ("ppt-s17-3.webp", "12 weeks after")]),
+        ],
+        credit="Photos from Allergan, the maker of CoolSculpting. The good fit and poor fit photos are models. The one-cycle cases are from Kotlus and Mok, 2013.",
+    ),
     device=("device-coolsculpting-elite.webp", "Our CoolSculpting Elite machine, with two applicators."),
     gallery=dict(
         title="Case photos",
@@ -57,11 +76,31 @@ MEDIA = {
 "hbot": dict(
     leaflets=[1, 2, 3, 4],
     device=("device-hbot.webp", "Our chamber. You lie inside and can see out through the window."),
+    people=dict(
+        title="Our clients",
+        note="Three of our clients who come in for HBOT.",
+        items=[("hbot-client-m.webp", "Khun M", "คุณเอ็ม"), ("hbot-client-aye.webp", "Khun Aye", "คุณอาย"), ("hbot-client-chaya.webp", "Khun Chaya", "คุณชาญ่า")],
+    ),
 ),
 
 "snorelase": dict(
     leaflets=[11, 12, 13],
     device=("device-snorelase-mouth.webp", "The laser treats the soft palate, the inside of the cheeks and the base of the tongue."),
+    reviews=dict(
+        title="Reviews",
+        note="Three of our clients on their Snorelase treatment. We translated their words from Thai, and the Thai is under each one.",
+        items=[
+            (1, "Ping Adison", "ปิ๊ง อดิสรณ์", "",
+             "I saw real results from the very first session. Get it treated soon, and don't let it become a burden on the person next to you.",
+             "เห็นผลจริงตั้งแต่ทำครั้งแรก รีบรักษาเถอะครับ อย่าปล่อยให้เป็นภาระคนข้างๆ"),
+            (2, "Khun Lindy", "คุณลินดี้", "",
+             "Women snore too, and it can be treated. It's easy, it doesn't hurt and it's over quickly. Very chill.",
+             "ผู้หญิงก็กรนได้ และก็รักษาได้ ง่าย ไม่เจ็บ ทำแปปเดียว ชิลมากเลยค่ะ"),
+            (3, "Bew Kittipat", "บิว กิตติพัฒน์", "Actor",
+             "I was afraid of dying from snoring. I saw it happen to someone close to me, so I made a point of choosing the best treatment.",
+             "กลัวตายจากการนอนกรน เห็นตัวอย่างจากคนใกล้ชิด เลยตั้งใจเลือกวิธีรักษาที่ดีที่สุด"),
+        ],
+    ),
 ),
 }
 

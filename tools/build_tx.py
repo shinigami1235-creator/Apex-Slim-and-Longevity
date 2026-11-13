@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "24"
+CSS_V = "25"
 JS = '<script src="assets/js/slim.js?v=8"></script>\n<script src="assets/js/tx.js?v=1"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
@@ -62,14 +62,89 @@ def areas(m):
     if not a:
         return ""
     cards = []
-    for name, cyc, img in a:
-        pic = (f'<button type="button" class="zoomable" data-full="{IMG}{img}" data-set="areas"><img src="{IMG}{img}" alt="Where the applicator goes on the {html.escape(name.lower())}" loading="lazy"></button>') if img else '<div class="tx-area-blank" aria-hidden="true"></div>'
-        cards.append(f'<li class="tx-area">{pic}<h3>{name}</h3><p><b>{cyc}</b> cycles</p></li>')
+    for row in a:
+        name, cyc, img = row[0], row[1], row[2]
+        note = f'<p class="tx-area-note">{row[3]}</p>' if len(row) > 3 else ""
+        imgs = img if isinstance(img, list) else [img]
+        alt = f"Where the applicator goes on the {html.escape(name.lower())}"
+        pics = "".join(f'<button type="button" class="zoomable" data-full="{IMG}{f}" data-set="areas"><img src="{IMG}{f}" alt="{alt}" loading="lazy"></button>' for f in imgs)
+        cls = " two" if len(imgs) > 1 else ""
+        cards.append(f'<li class="tx-area"><div class="tx-area-pics{cls}">{pics}</div><h3>{name}</h3><p><b>{cyc}</b> cycles</p>{note}</li>')
+    amap = ""
+    if m.get("area_map"):
+        f = m["area_map"]
+        amap = f'<figure class="tx-map"><svg viewBox="0 30 734 750" role="img" aria-label="Body map of the CoolSculpting areas"><image href="{IMG}{f}" x="0" y="0" width="734" height="801"/>{MAP_LABELS}</svg></figure>'
     return f"""
 <section class="sec tx-areas" aria-labelledby="h-areas">
 <div class="wrap">
 <div class="sec-head"><h2 id="h-areas">Areas and cycles</h2><p>A cycle is one round of cooling on one spot. A bigger area takes more cycles since each applicator covers a set size, and the Elite can run two cycles at once. These are the usual starting numbers, and the doctor plans yours at the consult.</p></div>
+{amap}
 <ul class="tx-area-grid">{''.join(cards)}</ul>
+</div>
+</section>
+"""
+
+
+# labels drawn over the body map (ppt-map.webp, Allergan's figure with its own labels removed)
+_L = [(190, 110, "Upper arms"), (190, 251, "Flanks"), (190, 348, "Under the"), (190, 376, "buttocks"),
+      (190, 479, "Outer thighs"), (190, 528, "Above the"), (190, 556, "knees"), (486, 634, "Male"), (486, 662, "chest")]
+_R = [(462, 110, "Under the chin"), (462, 159, "Fat by the armpit"), (462, 206, "Bra line"), (462, 358, "Belly"), (462, 480, "Inner thighs")]
+MAP_LABELS = ('<polyline points="455,152 385,152 356,178" fill="none" stroke="#0C69B2" stroke-width="1.6"/><circle cx="455" cy="152" r="2.6" fill="#0C69B2"/>'
+              + "".join(f'<text x="{x}" y="{y}" text-anchor="end">{t}</text>' for x, y, t in _L)
+              + "".join(f'<text x="{x}" y="{y}">{t}</text>' for x, y, t in _R))
+
+
+def plan(m):
+    pl = m.get("plan")
+    if not pl:
+        return ""
+    groups = []
+    for h, txt, cells in pl["groups"]:
+        figs = "".join(f'<figure><button type="button" class="zoomable" data-full="{IMG}{f}" data-set="plan"><img src="{IMG}{f}" alt="{html.escape(c)}" loading="lazy"></button><figcaption>{c}</figcaption></figure>' for f, c in cells)
+        groups.append(f'<div class="tx-plan-group"><h3>{h}</h3><p>{txt}</p><div class="tx-plan-row" style="--n:{len(cells)}">{figs}</div></div>')
+    return f"""
+<section class="sec tx-plan" aria-labelledby="h-plan">
+<div class="wrap">
+<div class="sec-head"><h2 id="h-plan">{pl['title']}</h2><p>{pl['intro']}</p></div>
+{''.join(groups)}
+<p class="tx-credit">{pl['credit']}</p>
+</div>
+</section>
+"""
+
+
+def people(m):
+    pp = m.get("people")
+    if not pp:
+        return ""
+    figs = "".join(f'<figure><button type="button" class="zoomable" data-full="{IMG}{f}" data-set="people"><img src="{IMG}{f}" alt="{en}" loading="lazy"></button><figcaption>{en} <span lang="th">{th}</span></figcaption></figure>' for f, en, th in pp["items"])
+    return f"""
+<section class="sec tx-people" aria-labelledby="h-people">
+<div class="wrap">
+<div class="sec-head"><h2 id="h-people">{pp['title']}</h2><p>{pp['note']}</p></div>
+<div class="tx-people-row">{figs}</div>
+</div>
+</section>
+"""
+
+
+def reviews(m):
+    rv = m.get("reviews")
+    if not rv:
+        return ""
+    cards = []
+    for i, en, th, role, q, qth in rv["items"]:
+        r = f'<span class="tx-rev-role">{role}</span>' if role else ""
+        cards.append(f'<li class="tx-rev"><div class="tx-rev-pics">'
+                     f'<button type="button" class="zoomable" data-full="{IMG}snore-review-{i}-face.webp" data-set="reviews"><img src="{IMG}snore-review-{i}-face.webp" alt="{en}" loading="lazy"></button>'
+                     f'<button type="button" class="zoomable" data-full="{IMG}snore-review-{i}-tx.webp" data-set="reviews"><img src="{IMG}snore-review-{i}-tx.webp" alt="{en} during Snorelase" loading="lazy"></button></div>'
+                     f'<blockquote><p>{q}</p><p class="tx-rev-th" lang="th">{qth}</p></blockquote>'
+                     f'<p class="tx-rev-name">{en} <span lang="th">{th}</span>{r}</p></li>')
+    return f"""
+<section class="sec tx-reviews" aria-labelledby="h-reviews">
+<div class="wrap">
+<div class="sec-head"><h2 id="h-reviews">{rv['title']}</h2><p>{rv['note']}</p></div>
+<ul class="tx-rev-grid">{''.join(cards)}</ul>
 </div>
 </section>
 """
@@ -194,7 +269,7 @@ def page(p):
 </aside>
 </div>
 </section>
-{areas(m)}{gallery(m, p['name'])}{leaflets(m, p['name'])}
+{areas(m)}{plan(m)}{people(m)}{reviews(m)}{gallery(m, p['name'])}{leaflets(m, p['name'])}
 
 <section class="sec" id="consult" style="padding-top:0" aria-labelledby="h-consult">
 <div class="wrap request">

@@ -51,6 +51,7 @@ pair_to=('En', 'Emsculpt Neo', 'emsculpt-neo.html', ''),
 refs=[
 'Apex Hospital &amp; Clinics. CoolSculpting Elite brochures, 2026.',
 'Allergan Aesthetics. CoolSculpting Elite treatment guide by area, 2026.',
+'Kotlus BE, Mok C. Am J Surg 2013;30:89-93, as cited in the Allergan treatment guide above.',
 'Manstein D, Laubach H, Watanabe K, Farinelli W, Zurakowski D, Anderson RR. Selective cryolysis: a novel method of non-invasive fat removal. <i>Lasers Surg Med</i>. 2008;40(9):595-604. <a href="https://doi.org/10.1002/lsm.20719" target="_blank" rel="noopener">doi:10.1002/lsm.20719</a>',
 'Ingargiola MJ, Motakef S, Chung MT, Vasconez HC, Sasaki GH. Cryolipolysis for fat reduction and body contouring: safety and efficacy of current treatment paradigms. <i>Plast Reconstr Surg</i>. 2015;135(6):1581-1590. <a href="https://pubmed.ncbi.nlm.nih.gov/26017594/" target="_blank" rel="noopener">PubMed 26017594</a>',
 'Jalian HR, Avram MM, Garibyan L, Mihm MC, Anderson RR. Paradoxical adipose hyperplasia after cryolipolysis. <i>JAMA Dermatol</i>. 2014;150(3):317-319.',
