@@ -12,8 +12,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "28"
-JS = '<script src="assets/js/slim.js?v=9"></script>\n<script src="assets/js/tx.js?v=2"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
+CSS_V = "29"
+JS = '<script src="assets/js/slim.js?v=10"></script>\n<script src="assets/js/tx.js?v=3"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
 GOALS = [("weight", "Lose weight"), ("fat", "Belly and flank fat"), ("tone", "Muscle tone"),
@@ -238,7 +238,7 @@ def page(p):
     cls = (" " + p["cls"]) if p["cls"] else ""
     rows = "\n".join(f'<tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in p["protocol"])
     hook = "\n".join(f'<p class="lede hook">{h}</p>' for h in p["hook"])
-    faq = "\n".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in p["faq"])
+    faq = "\n".join(f"<details name='faq'><summary>{q}</summary><p>{a}</p></details>" for q, a in p["faq"])
     refs = "\n".join(f"<li>{r}</li>" for r in p["refs"])
     ps, pn, ph, pc, pt = p["pair"]
     pc = (" " + pc) if pc else ""
@@ -348,10 +348,12 @@ def page(p):
 <form class="form" id="request" data-goals="{p['goal']}" novalidate>
 <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
 <div class="form-body">
-<div class="row2">
 <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
-<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
+<div class="row2">
+<div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
+<div class="field"><label for="f-line">LINE ID</label><input id="f-line" name="line" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
 </div>
+<p class="bc-hint" id="f-reach">Fill in at least one.</p>
 <fieldset class="field">
 <legend>Goals <span class="opt">(optional)</span></legend>
 <div class="checks">

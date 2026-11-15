@@ -43,3 +43,10 @@
     if (e.key === 'ArrowRight') go(1);
   });
 })();
+
+/* FAQ: one answer open at a time. <details name="faq"> does it natively; older Safari and Firefox get this. */
+(() => {
+  if ('name' in HTMLDetailsElement.prototype) return;
+  const all = [...document.querySelectorAll('details[name="faq"]')];
+  all.forEach(d => d.addEventListener('toggle', () => { if (d.open) all.forEach(o => { if (o !== d) o.open = false; }); }));
+})();

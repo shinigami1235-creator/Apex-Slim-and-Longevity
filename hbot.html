@@ -11,7 +11,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=28">
+<link rel="stylesheet" href="assets/css/slim.css?v=29">
 </head>
 <body>
 
@@ -101,11 +101,11 @@
 
 <h2>Questions</h2>
 <div class="faq">
-<details><summary>Does it hurt?</summary><p>Your ears can hurt for a moment as the pressure goes up if they don't clear, and the staff can slow the pressure down for you. After that it's like sitting in a quiet room.</p></details>
-<details><summary>How many sessions do I need?</summary><p>The doctor decides based on your goal. The study on ageing used 60 sessions over 3 months.</p></details>
-<details><summary>Is it the same as breathing oxygen from a tank?</summary><p>No. At normal pressure, oxygen from a tank only tops up red blood cells that are already nearly full. You need the pressure in the chamber to get the extra oxygen into your plasma.</p></details>
-<details><summary>Can I bring my phone?</summary><p>No. Phones and other electronics have to stay outside since a spark is dangerous in pure oxygen.</p></details>
-<details><summary>I don't like small spaces. Can I still do it?</summary><p>Tell the doctor at your consult. The staff stay in contact with you the whole time and can stop the session if you need to come out.</p></details>
+<details name='faq'><summary>Does it hurt?</summary><p>Your ears can hurt for a moment as the pressure goes up if they don't clear, and the staff can slow the pressure down for you. After that it's like sitting in a quiet room.</p></details>
+<details name='faq'><summary>How many sessions do I need?</summary><p>The doctor decides based on your goal. The study on ageing used 60 sessions over 3 months.</p></details>
+<details name='faq'><summary>Is it the same as breathing oxygen from a tank?</summary><p>No. At normal pressure, oxygen from a tank only tops up red blood cells that are already nearly full. You need the pressure in the chamber to get the extra oxygen into your plasma.</p></details>
+<details name='faq'><summary>Can I bring my phone?</summary><p>No. Phones and other electronics have to stay outside since a spark is dangerous in pure oxygen.</p></details>
+<details name='faq'><summary>I don't like small spaces. Can I still do it?</summary><p>Tell the doctor at your consult. The staff stay in contact with you the whole time and can stop the session if you need to come out.</p></details>
 </div>
 
 <h2 class="refs-h">Sources</h2>
@@ -154,10 +154,12 @@
 <form class="form" id="request" data-goals="energy" novalidate>
 <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
 <div class="form-body">
-<div class="row2">
 <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
-<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
+<div class="row2">
+<div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
+<div class="field"><label for="f-line">LINE ID</label><input id="f-line" name="line" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
 </div>
+<p class="bc-hint" id="f-reach">Fill in at least one.</p>
 <fieldset class="field">
 <legend>Goals <span class="opt">(optional)</span></legend>
 <div class="checks">
@@ -193,8 +195,8 @@
 </div>
 </footer>
 
-<script src="assets/js/slim.js?v=9"></script>
-<script src="assets/js/tx.js?v=2"></script>
+<script src="assets/js/slim.js?v=10"></script>
+<script src="assets/js/tx.js?v=3"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>
 </body>
 </html>

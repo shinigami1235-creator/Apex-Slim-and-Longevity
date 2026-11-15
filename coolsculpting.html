@@ -11,7 +11,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=28">
+<link rel="stylesheet" href="assets/css/slim.css?v=29">
 </head>
 <body>
 
@@ -109,12 +109,12 @@
 
 <h2>Questions</h2>
 <div class="faq">
-<details><summary>Does it hurt?</summary><p>It feels very cold and tight for the first 5 to 10 minutes until the area goes numb. The massage afterwards can sting for about a minute.</p></details>
-<details><summary>How many sessions do I need?</summary><p>One session is often enough for an area. We suggest a second one 8 to 12 weeks later for a clearer result, and the doctor decides after measuring the fat at your first visit.</p></details>
-<details><summary>Will the fat come back?</summary><p>The fat cells that were treated are gone for good. The ones left in the area can still get bigger if you gain weight.</p></details>
-<details><summary>Will I weigh less?</summary><p>Only a little since the fat in one area doesn't weigh much. You'll notice it more in how your clothes fit and in the photos at 3 months.</p></details>
-<details><summary>Can I exercise after?</summary><p>Yes, on the same day.</p></details>
-<details><summary>Is it FDA cleared?</summary><p>Yes. The FDA cleared it for the flanks in 2010 and later added the belly, thighs, upper arms, under the chin, the bra line, the back and under the buttocks.</p></details>
+<details name='faq'><summary>Does it hurt?</summary><p>It feels very cold and tight for the first 5 to 10 minutes until the area goes numb. The massage afterwards can sting for about a minute.</p></details>
+<details name='faq'><summary>How many sessions do I need?</summary><p>One session is often enough for an area. We suggest a second one 8 to 12 weeks later for a clearer result, and the doctor decides after measuring the fat at your first visit.</p></details>
+<details name='faq'><summary>Will the fat come back?</summary><p>The fat cells that were treated are gone for good. The ones left in the area can still get bigger if you gain weight.</p></details>
+<details name='faq'><summary>Will I weigh less?</summary><p>Only a little since the fat in one area doesn't weigh much. You'll notice it more in how your clothes fit and in the photos at 3 months.</p></details>
+<details name='faq'><summary>Can I exercise after?</summary><p>Yes, on the same day.</p></details>
+<details name='faq'><summary>Is it FDA cleared?</summary><p>Yes. The FDA cleared it for the flanks in 2010 and later added the belly, thighs, upper arms, under the chin, the bra line, the back and under the buttocks.</p></details>
 </div>
 
 <h2 class="refs-h">Sources</h2>
@@ -197,10 +197,12 @@
 <form class="form" id="request" data-goals="fat" novalidate>
 <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
 <div class="form-body">
-<div class="row2">
 <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
-<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
+<div class="row2">
+<div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
+<div class="field"><label for="f-line">LINE ID</label><input id="f-line" name="line" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
 </div>
+<p class="bc-hint" id="f-reach">Fill in at least one.</p>
 <fieldset class="field">
 <legend>Goals <span class="opt">(optional)</span></legend>
 <div class="checks">
@@ -236,8 +238,8 @@
 </div>
 </footer>
 
-<script src="assets/js/slim.js?v=9"></script>
-<script src="assets/js/tx.js?v=2"></script>
+<script src="assets/js/slim.js?v=10"></script>
+<script src="assets/js/tx.js?v=3"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>
 </body>
 </html>

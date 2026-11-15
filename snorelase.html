@@ -11,7 +11,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=28">
+<link rel="stylesheet" href="assets/css/slim.css?v=29">
 </head>
 <body>
 
@@ -103,10 +103,10 @@
 
 <h2>Questions</h2>
 <div class="faq">
-<details><summary>Does it hurt?</summary><p>It feels warm. People in the trial rated it 3 out of 10 and none of them needed an anaesthetic.</p></details>
-<details><summary>When will my partner notice?</summary><p>Some couples notice a change after the first session. The full effect builds up over the course as new collagen forms.</p></details>
-<details><summary>How long does it last?</summary><p>Usually 12 to 24 months. You can book a top-up session when the snoring starts to come back.</p></details>
-<details><summary>My partner says I stop breathing at night.</summary><p>Get a sleep test before you book Snorelase since stopping breathing is a sign of sleep apnoea, which needs its own treatment.</p></details>
+<details name='faq'><summary>Does it hurt?</summary><p>It feels warm. People in the trial rated it 3 out of 10 and none of them needed an anaesthetic.</p></details>
+<details name='faq'><summary>When will my partner notice?</summary><p>Some couples notice a change after the first session. The full effect builds up over the course as new collagen forms.</p></details>
+<details name='faq'><summary>How long does it last?</summary><p>Usually 12 to 24 months. You can book a top-up session when the snoring starts to come back.</p></details>
+<details name='faq'><summary>My partner says I stop breathing at night.</summary><p>Get a sleep test before you book Snorelase since stopping breathing is a sign of sleep apnoea, which needs its own treatment.</p></details>
 </div>
 
 <h2 class="refs-h">Sources</h2>
@@ -156,10 +156,12 @@
 <form class="form" id="request" data-goals="sleep" novalidate>
 <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
 <div class="form-body">
-<div class="row2">
 <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
-<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
+<div class="row2">
+<div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
+<div class="field"><label for="f-line">LINE ID</label><input id="f-line" name="line" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
 </div>
+<p class="bc-hint" id="f-reach">Fill in at least one.</p>
 <fieldset class="field">
 <legend>Goals <span class="opt">(optional)</span></legend>
 <div class="checks">
@@ -195,8 +197,8 @@
 </div>
 </footer>
 
-<script src="assets/js/slim.js?v=9"></script>
-<script src="assets/js/tx.js?v=2"></script>
+<script src="assets/js/slim.js?v=10"></script>
+<script src="assets/js/tx.js?v=3"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>
 </body>
 </html>

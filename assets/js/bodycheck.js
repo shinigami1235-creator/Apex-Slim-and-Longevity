@@ -1,12 +1,22 @@
 /* Body check: BMI and waist on the Thai scale, a 3D body built from the numbers, and
    programs to ask the doctor about. The body is the MakeHuman CC0 base mesh with thin,
    average and heavy shapes for each sex plus a belly shape (tools/slimbody builds it). */
-import * as THREE from '../vendor/three/three.module.js';
+/* three.js (1.3 MB) loads only when the body check is near the screen or someone starts typing */
+let THREE;
 const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
 
 const $ = id => document.getElementById(id);
 const form = $('bc-form'), canvas = $('bc-canvas');
-if (form && canvas) init();
+if (form && canvas) {
+  let started = false;
+  const go = async () => {
+    if (started) return; started = true;
+    try { THREE = await import('../vendor/three/three.module.js'); } catch { $('bc-msg').textContent = 'The 3D body could not be loaded.'; return; }
+    init();
+  };
+  new IntersectionObserver((en, ob) => { if (en.some(e => e.isIntersecting)) { ob.disconnect(); go(); } }, { rootMargin: '300px' }).observe(form);
+  form.addEventListener('focusin', go, { once: true });
+}
 
 async function init() {
   /* ---------- treatments ---------- */
@@ -109,13 +119,22 @@ async function init() {
   };
   /* errors show once a field is left, not on every keystroke */
   const FIELD = { h: 'bc-h', w: 'bc-w', waist: 'bc-waist' };
+  const sec = $('body-check');
   let left = new Set(), liveT = 0;
   const update = () => {
     const d = read(), err = valid(d);
     const bad = err ? (err.includes('height') ? 'h' : err.includes('weight') ? 'w' : 'waist') : '';
     Object.entries(FIELD).forEach(([k, id]) => $(id).setAttribute('aria-invalid', k === bad && left.has(id)));
     $('bc-msg').textContent = bad && left.has(FIELD[bad]) ? err : '';
-    if (err) return;
+    if (err) {
+      /* nothing worked out yet: dashes, no goal or programs, and a neutral body */
+      sec.classList.remove('has-result');
+      $('bc-bmi').textContent = '–'; $('bc-cat').textContent = 'Enter your numbers'; $('bc-cat').className = '';
+      $('bc-wv').textContent = '–'; $('bc-wcat').textContent = ''; $('bc-note').textContent = '';
+      view.sex = d.sex; target.w = bmiToW(22); target.b = whtrToB(0.45); target.warm = 0;
+      return;
+    }
+    sec.classList.add('has-result');
     if (!measured) { measured = true; buddy('measure'); }
     const m = d.h / 100, bmi = d.w / (m * m), whtr = d.waist / d.h, half = d.h / 2;
     const [cat, tone] = category(bmi);

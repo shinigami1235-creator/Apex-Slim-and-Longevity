@@ -441,17 +441,27 @@
   if (form) {
     const pre = form.dataset.goals || new URLSearchParams(location.search).get('goals');
     if (pre) tickGoals(pre.split(','));
-    form.addEventListener('input', e => { if (e.target.getAttribute('aria-invalid') === 'true' && (e.target.type === 'checkbox' ? e.target.checked : e.target.value.trim())) e.target.setAttribute('aria-invalid', false); });
+    form.addEventListener('input', e => {
+      const t = e.target; if (t.getAttribute('aria-invalid') !== 'true') return;
+      if (t.type === 'checkbox' ? t.checked : t.value.trim()) {
+        t.setAttribute('aria-invalid', false);
+        if (t === form.elements.phone || t === form.elements.line) [form.elements.phone, form.elements.line].forEach(f => f.setAttribute('aria-invalid', false));
+      }
+    });
     form.addEventListener('submit', e => {
       e.preventDefault();
       const msg = form.querySelector('.form-msg');
       const el = form.elements, missing = [];
+      const noReach = !el.phone.value.trim() && !el.line.value.trim();
       if (!el.name.value.trim()) missing.push(el.name);
-      if (!el.contact.value.trim()) missing.push(el.contact);
+      if (noReach) missing.push(el.phone, el.line);
       if (!el.consent.checked) missing.push(el.consent);
-      [el.name, el.contact, el.consent].forEach(f => f.setAttribute('aria-invalid', missing.includes(f)));
+      [el.name, el.phone, el.line, el.consent].forEach(f => f.setAttribute('aria-invalid', missing.includes(f)));
       if (missing.length) {
-        msg.textContent = missing.includes(el.consent) && missing.length === 1 ? 'Tick the consent box to send the request.' : 'Add your name and a phone number or LINE ID, and tick the consent box.';
+        msg.textContent = missing.length === 1 && missing[0] === el.consent ? 'Tick the consent box to send the request.'
+          : missing.length === 1 ? 'Add your name.'
+          : noReach && missing.length === 2 ? 'Add a phone number or a LINE ID.'
+          : 'Add your name, a phone number or LINE ID, and tick the consent box.';
         missing[0].focus(); buddy('oops'); return;
       }
       msg.textContent = 'The form connects to Apex Slim in the build stage.'; buddy('sent');

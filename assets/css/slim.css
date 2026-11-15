@@ -15,7 +15,8 @@
   --max:1180px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 body{margin:0;background:var(--wash);color:var(--ink);font:400 clamp(1.0625rem,.45vw + .78125rem,1.1875rem)/1.65 var(--font);overflow-x:hidden}
 img,svg{display:block;max-width:100%}
 img{height:auto}
@@ -103,7 +104,8 @@ section{position:relative}
 .el::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
   background:linear-gradient(112deg,transparent 40%,rgba(255,255,255,.9) 49%,rgba(255,255,255,.15) 55%,transparent 62%) no-repeat,
     linear-gradient(180deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,.12) 34%,rgba(255,255,255,0) 50%);
-  background-size:260% 100%,100% 100%;background-position:160% 0,0 0;animation:el-glint 9s ease-in-out infinite;animation-delay:var(--gd,0s)}
+  background-size:260% 100%,100% 100%;background-position:160% 0,0 0}
+@media (prefers-reduced-motion:no-preference){.el::after{animation:el-glint 9s ease-in-out infinite;animation-delay:var(--gd,0s)}}
 @keyframes el-glint{0%,82%{background-position:160% 0,0 0}96%,100%{background-position:-60% 0,0 0}}
 .el .sym{text-shadow:-1px -1px 0 rgba(255,255,255,.9),1px 1.5px 0 color-mix(in srgb,var(--deep) 30%,transparent),2px 5px 8px color-mix(in srgb,var(--deep) 18%,transparent)}
 .el .ic{position:absolute;top:12px;right:12px;width:clamp(28px,3.1vw,40px);height:clamp(28px,3.1vw,40px);fill:none;stroke:var(--deep);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
@@ -114,7 +116,7 @@ section{position:relative}
 .specimen .el .ic{width:44px;height:44px;top:18px;right:18px}
 .table .el:nth-child(2){--gd:1.1s}.table .el:nth-child(3){--gd:2.2s}.table .el:nth-child(4){--gd:3.3s}
 .table .el:nth-child(6){--gd:.55s}.table .el:nth-child(7){--gd:1.65s}.table .el:nth-child(8){--gd:2.75s}.table .el:nth-child(9){--gd:3.85s}
-@media (prefers-reduced-motion:reduce){.el::after{animation:none}.el:hover,.el:focus-visible{transform:none}}
+@media (prefers-reduced-motion:reduce){.el:hover,.el:focus-visible{transform:none}}
 
 .table{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .table .gap{grid-column:1/-1;height:20px;border-bottom:1.5px dashed var(--lilac-300);margin-bottom:28px}
@@ -326,9 +328,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .refs li{margin-bottom:8px;overflow-wrap:anywhere}
 .refs a{color:var(--ink-2)}
 
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
-}
+
 .btn[hidden]{display:none}
 .lab-stage>svg{width:0;height:0}
 .lab-stage .st-fx img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -723,7 +723,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .bn-leaf img{aspect-ratio:auto}
 .bn-leaf .bn-name{font-weight:400;font-size:0.9375rem;color:var(--ink-2)}
 .bn-more{font-weight:700;color:var(--plum);text-align:center}
-@media (prefers-reduced-motion:reduce){.bn{transition:none}.bn:hover{transform:none}}
+@media (prefers-reduced-motion:reduce){.bn{transition:border-color .2s}.bn:hover,.bn:focus-visible{transform:none}}
 .side:not(:has(.banners)) .aside{position:sticky;top:110px}
 @media (max-width:899px){.side .aside{position:static!important}}
 @media (min-width:641px) and (max-width:1023px){.lab-stage{width:min(100%,460px)}}
@@ -737,3 +737,20 @@ main:focus{outline:none}
 .opt{font-weight:400;color:var(--ink-2)}
 .table-wrap{overflow-x:auto}
 .table-wrap:focus-visible{outline:2px solid var(--plum);outline-offset:4px}
+
+#body-check:not(.has-result) :is(.bc-goal,.bc-rx){display:none}
+.field input::placeholder{color:#75648A;font-style:italic}
+
+/* reduced motion, case by case: movement, growing and spinning stop; fades and colour changes stay */
+@media (prefers-reduced-motion:reduce){
+  .el::before,.specimen .el::before{transition:none}
+  .bottle img{transition:opacity .3s}
+  .st-status{transition:opacity .35s var(--ease);transform:none}
+  .faq summary::after{transition:none}
+  .st-bubbles i,.st-clip .cloud,.st-finish .steam,.st-finish .droplet,.st-finish .ring,.st-finish .glint,.st-finish .mote,.ecg-fin path{animation:none;display:none}
+  .st-finish .halo,.st-finish .shine{animation:none}
+  .buddy.bubbled .buddy-float{transition:opacity .6s;animation:none}
+  .buddy.pop .buddy-float{transition:opacity .35s ease-out;transform:none}
+  .buddy-wind{display:none}
+  .buddy-hehe{animation:none;opacity:0}
+}

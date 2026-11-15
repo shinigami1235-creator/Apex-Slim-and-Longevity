@@ -11,7 +11,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=28">
+<link rel="stylesheet" href="assets/css/slim.css?v=29">
 </head>
 <body>
 
@@ -63,9 +63,9 @@
             </div>
           </fieldset>
           <div class="row3">
-            <div class="field"><label for="bc-h">Height (cm)</label><input id="bc-h" aria-describedby="bc-msg" name="h" type="number" inputmode="decimal" min="120" max="220" value="160"></div>
-            <div class="field"><label for="bc-w">Weight (kg)</label><input id="bc-w" aria-describedby="bc-msg" name="w" type="number" inputmode="decimal" min="30" max="250" value="62"></div>
-            <div class="field"><label for="bc-waist">Waist (cm)</label><input id="bc-waist" aria-describedby="bc-msg" name="waist" type="number" inputmode="decimal" min="40" max="200" value="82"></div>
+            <div class="field"><label for="bc-h">Height (cm)</label><input id="bc-h" aria-describedby="bc-msg" name="h" type="number" inputmode="decimal" min="120" max="220" placeholder="160"></div>
+            <div class="field"><label for="bc-w">Weight (kg)</label><input id="bc-w" aria-describedby="bc-msg" name="w" type="number" inputmode="decimal" min="30" max="250" placeholder="62"></div>
+            <div class="field"><label for="bc-waist">Waist (cm)</label><input id="bc-waist" aria-describedby="bc-msg" name="waist" type="number" inputmode="decimal" min="40" max="200" placeholder="82"></div>
           </div>
           <p class="bc-hint">Measure your waist around your belly button in the morning, before you eat.</p>
           <p class="form-msg" id="bc-msg" role="status"></p>
@@ -83,8 +83,8 @@
           <p class="bc-drag">Drag to turn</p>
         </div>
         <div class="bc-read">
-          <div><span>BMI</span><b id="bc-bmi">24.2</b><i id="bc-cat">Overweight</i></div>
-          <div><span>Waist</span><b id="bc-wv">82 cm</b><i id="bc-wcat">Over half your height</i></div>
+          <div><span>BMI</span><b id="bc-bmi">–</b><i id="bc-cat">Enter your numbers</i></div>
+          <div><span>Waist</span><b id="bc-wv">–</b><i id="bc-wcat"></i></div>
         </div>
         <p class="bc-note" id="bc-note"></p>
         <div class="bc-goal" id="bc-goal">
@@ -168,8 +168,8 @@
   </div>
 </footer>
 
-<script src="assets/js/slim.js?v=9"></script>
-<script type="module" src="assets/js/bodycheck.js?v=4"></script>
+<script src="assets/js/slim.js?v=10"></script>
+<script type="module" src="assets/js/bodycheck.js?v=5"></script>
 <script type="module" src="assets/js/goalphoto.js?v=2"></script>
 <script src="assets/js/meals.js?v=2"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>

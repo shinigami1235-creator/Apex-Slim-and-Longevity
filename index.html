@@ -11,7 +11,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=28">
+<link rel="stylesheet" href="assets/css/slim.css?v=29">
 </head>
 <body>
 
@@ -233,10 +233,12 @@
     <form class="form" id="request" novalidate>
       <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
       <div class="form-body">
+        <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
         <div class="row2">
-          <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
-          <div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
+        <div class="field"><label for="f-phone">Phone</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
+        <div class="field"><label for="f-line">LINE ID</label><input id="f-line" name="line" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="f-reach f-msg" enterkeyhint="next"></div>
         </div>
+        <p class="bc-hint" id="f-reach">Fill in at least one.</p>
         <fieldset class="field">
           <legend>Goals <span class="opt">(optional)</span></legend>
           <div class="checks">
@@ -273,7 +275,7 @@
 </footer>
 
 <script src="assets/js/mix-data.js?v=4"></script>
-<script src="assets/js/slim.js?v=9"></script>
+<script src="assets/js/slim.js?v=10"></script>
 <script src="assets/js/results-map.js?v=3"></script>
 <script src="assets/js/results.js?v=7"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>
