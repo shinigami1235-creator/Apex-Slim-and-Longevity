@@ -1,0 +1,20 @@
+/* Apex Slim admin forms */
+.slim-fields{max-width:980px}
+.slim-fields .slim-note{background:#f6f1fb;border-left:4px solid #6b3fa0;padding:10px 12px;margin:6px 0 14px}
+.slim-field{margin:0 0 14px}
+.slim-field>label,.slim-group>legend{display:block;font-weight:600;margin:0 0 4px}
+.slim-field .description{margin-top:4px}
+.slim-group{border:1px solid #dcdcde;border-radius:6px;padding:10px 14px 4px;margin:0 0 16px;background:#fff}
+.slim-group>legend{padding:0 6px}
+.slim-group .slim-group{background:#fbfbfc}
+.slim-rows{list-style:decimal;margin:8px 0 0 22px;padding:0}
+.slim-row{border:1px solid #e0e0e3;border-radius:6px;padding:8px 12px 2px;margin:0 0 10px;background:#fbfbfc;position:relative}
+.slim-row-tools{position:absolute;top:6px;right:10px;display:flex;gap:10px}
+.slim-row-tools .slim-del{color:#b32d2e}
+.slim-image{display:flex;gap:8px;align-items:center}
+.slim-thumb{flex:0 0 64px;height:48px;border:1px solid #dcdcde;border-radius:4px;background:#f0f0f1 center/cover;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.slim-thumb img{max-width:100%;max-height:100%;object-fit:contain}
+.slim-check{font-weight:600}
+.slim-in-editor{opacity:.75}
+.slim-txpick{display:flex;flex-wrap:wrap;gap:6px 18px}
+.slim-lead th{width:180px;text-align:left}

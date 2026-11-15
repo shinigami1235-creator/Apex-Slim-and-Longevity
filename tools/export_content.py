@@ -97,7 +97,7 @@ def cases():
     for m in re.finditer(r"\{ id: '([^']+)', title: '([^']+)', tx: \[(.*?)\],\s*before: '([^']+)', after: '([^']+)', raw: \['([^']+)', '([^']+)'\],(?: (wide): true,)? bdate: '([^']*)', adate: '([^']*)',\s*facts: \[(.*?)\], video: null, img: '([^']+)', imgCap: '([^']+)' \}", src, re.S):
         out.append({
             'key': m[1], 'title': m[2], 'tx': re.findall(r"sym: '(\w+)'", m[3]),
-            'pod': ['img/results/' + m[4], 'img/results/' + m[5]], 'raw': ['img/' + m[6], 'img/' + m[7]], 'wide': bool(m[8]),
+            'pod': [m[4].removeprefix('assets/'), m[5].removeprefix('assets/')], 'raw': [m[6].removeprefix('assets/'), m[7].removeprefix('assets/')], 'wide': bool(m[8]),
             'bdate': m[9], 'adate': m[10], 'facts': [{'k': a, 'v': b} for a, b in re.findall(r"\['([^']+)', '([^']+)'\]", m[11])],
             'video': '', 'img': m[12].replace('assets/', ''), 'imgCap': m[13],
         })
@@ -108,7 +108,7 @@ def cases():
 
 def meals():
     src = (ROOT / 'assets/js/meals.js').read_text()
-    block = re.search(r'const M = \{(.*?)\n  \};', src, re.S).group(1)
+    block = re.search(r'const M = [^{]*\{(.*?)\n  \};', src, re.S).group(1)
     out = []
     for meal, rows in re.findall(r"(\w+): \[(.*?)\n    \]", block + "\n", re.S):
         out.append({'meal': meal, 'dishes': [{'en': a, 'th': b, 'tip': c} for a, b, c in re.findall(r"\['((?:[^'\\]|\\.)*)', '((?:[^'\\]|\\.)*)', '((?:[^'\\]|\\.)*)'\]", rows)]})
