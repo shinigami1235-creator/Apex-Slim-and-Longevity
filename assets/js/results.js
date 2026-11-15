@@ -3,22 +3,24 @@
   const stage = document.getElementById('rx-stage');
   if (!stage || !window.RX_MAP) return;
   const MAP = window.RX_MAP;
-  const IMG = 'assets/img/results/';
   // Case photos from Apex's own leaflets (Cindy, Nov 2026). The right panel shows the machine when a case has no video.
-  const CASES = [
+  // On WordPress the cases come from the admin (window.SLIM_DATA.cases) with full addresses.
+  const D = window.SLIM_DATA || {};
+  const CASES = D.cases || [
     { id: 'cs-belly', title: 'CoolSculpting Elite, belly and flanks', tx: [{ sym: 'Cs', name: 'CoolSculpting' }],
-      before: 'cs-abdomen-flanks-before.webp', after: 'cs-abdomen-flanks-after.webp', raw: ['tx/cs-19-2-0.webp', 'tx/cs-19-2-2.webp'], wide: true, bdate: '', adate: '8 weeks after the 2nd session',
+      before: 'assets/img/results/cs-abdomen-flanks-before.webp', after: 'assets/img/results/cs-abdomen-flanks-after.webp', raw: ['assets/img/tx/cs-19-2-0.webp', 'assets/img/tx/cs-19-2-2.webp'], wide: true, bdate: '', adate: '8 weeks after the 2nd session',
       facts: [['Sessions', '2'], ['Time between photos', 'About 3 months']], video: null, img: 'assets/img/tx/device-coolsculpting-elite.webp', imgCap: 'CoolSculpting Elite' },
     { id: 'cs-bra', title: 'CoolSculpting Elite, bra line', tx: [{ sym: 'Cs', name: 'CoolSculpting' }],
-      before: 'cs-bra-before.webp', after: 'cs-bra-after.webp', raw: ['tx/cs-18-1-0.webp', 'tx/cs-18-1-2.webp'], wide: true, bdate: '', adate: '8 weeks after the 2nd session',
+      before: 'assets/img/results/cs-bra-before.webp', after: 'assets/img/results/cs-bra-after.webp', raw: ['assets/img/tx/cs-18-1-0.webp', 'assets/img/tx/cs-18-1-2.webp'], wide: true, bdate: '', adate: '8 weeks after the 2nd session',
       facts: [['Sessions', '2'], ['Time between photos', 'About 3 months']], video: null, img: 'assets/img/tx/device-coolsculpting-elite.webp', imgCap: 'CoolSculpting Elite' },
     { id: 'em', title: 'Emsculpt Neo, belly', tx: [{ sym: 'En', name: 'Emsculpt Neo' }],
-      before: 'em-1-before.webp', after: 'em-1-after.webp', raw: ['tx/em-01-before.webp', 'tx/em-01-after.webp'], wide: true, bdate: '', adate: '12 weeks after the 4th treatment',
+      before: 'assets/img/results/em-1-before.webp', after: 'assets/img/results/em-1-after.webp', raw: ['assets/img/tx/em-01-before.webp', 'assets/img/tx/em-01-after.webp'], wide: true, bdate: '', adate: '12 weeks after the 4th treatment',
       facts: [['Treatments', '4'], ['Photos', 'Arash Akhavan, M.D.']], video: null, img: 'assets/img/tx/device-emsculpt-neo.webp', imgCap: 'Emsculpt Neo' },
     { id: 'ff', title: 'FIT FIRM, belly', tx: [{ sym: 'Ff', name: 'FIT FIRM' }],
-      before: 'ff-abdomen-before.webp', after: 'ff-abdomen-after.webp', raw: ['tx/ff-1-before.webp', 'tx/ff-1-after.webp'], bdate: '31 inches', adate: '29.5 inches',
+      before: 'assets/img/results/ff-abdomen-before.webp', after: 'assets/img/results/ff-abdomen-after.webp', raw: ['assets/img/tx/ff-1-before.webp', 'assets/img/tx/ff-1-after.webp'], bdate: '31 inches', adate: '29.5 inches',
       facts: [['Belly', '31 to 29.5 inches']], video: null, img: 'assets/img/tx/leaflet-08-t.webp', imgCap: 'FIT FIRM brochure' }
   ];
+  const esc = s => String(s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const wide = matchMedia('(min-width: 1024px)');
   const $ = id => document.getElementById(id);
@@ -54,21 +56,21 @@
 
   /* panel content */
   const fill = c => {
-    $('rx-tx').innerHTML = c.tx.map(t => `<div class="rx-tile"><b>${t.sym}</b><span>${t.name}<small>Dialled in</small></span></div>`).join('');
-    $('rx-cases').innerHTML = CASES.map(k => `<button class="rx-case" type="button" data-id="${k.id}" aria-current="${k === c}"><img src="${IMG + k.before}" alt="">${k.title}</button>`).join('');
+    $('rx-tx').innerHTML = c.tx.map(t => `<div class="rx-tile"><b>${esc(t.sym)}</b><span>${esc(t.name)}<small>Dialled in</small></span></div>`).join('');
+    $('rx-cases').innerHTML = CASES.map(k => `<button class="rx-case" type="button" data-id="${esc(k.id)}" aria-current="${k === c}"><img src="${esc(k.before)}" alt="">${esc(k.title)}</button>`).join('');
     $('rx-title').textContent = c.title;
-    $('rx-before').src = 'assets/img/' + c.raw[0]; $('rx-before').alt = c.title + ', before';
-    $('rx-after').src = 'assets/img/' + c.raw[1]; $('rx-after').alt = c.title + ', after';
+    $('rx-before').src = c.raw[0]; $('rx-before').alt = c.title + ', before';
+    $('rx-after').src = c.raw[1]; $('rx-after').alt = c.title + ', after';
     panels.querySelector('.rx-ba').classList.toggle('stack', !!c.wide);
     $('rx-bdate').textContent = c.bdate; $('rx-adate').textContent = c.adate;
     $('rx-vid-h').textContent = c.video ? 'Patient video' : 'The machine';
     $('rx-vid').innerHTML = c.video
-      ? `<video controls playsinline preload="none" poster="${IMG + c.poster}" src="${c.video}"></video>`
-      : c.img ? `<figure class="rx-machine"><img src="${c.img}" alt="${c.imgCap}"><figcaption>${c.imgCap}</figcaption></figure>` : '<p>No video for this case.</p>';
-    $('rx-facts').innerHTML = c.facts.map(f => `<dt>${f[0]}</dt><dd>${f[1]}</dd>`).join('');
+      ? `<video controls playsinline preload="none" poster="${esc(c.poster || '')}" src="${esc(c.video)}"></video>`
+      : c.img ? `<figure class="rx-machine"><img src="${esc(c.img)}" alt="${esc(c.imgCap)}"><figcaption>${esc(c.imgCap)}</figcaption></figure>` : '<p>No video for this case.</p>';
+    $('rx-facts').innerHTML = c.facts.map(f => `<dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd>`).join('');
     picker.querySelectorAll('.rx-chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === c.id));
   };
-  picker.innerHTML = '<span class="lbl">Pick a case</span>' + CASES.map(c => `<button class="rx-chip" type="button" data-id="${c.id}" aria-pressed="false"><b>${c.tx[0].sym}</b>${c.title}</button>`).join('');
+  picker.innerHTML = '<span class="lbl">Pick a case</span>' + CASES.map(c => `<button class="rx-chip" type="button" data-id="${esc(c.id)}" aria-pressed="false"><b>${esc(c.tx[0].sym)}</b>${esc(c.title)}</button>`).join('');
 
   /* helpers */
   const wait = ms => new Promise(r => setTimeout(r, ms));
@@ -99,7 +101,7 @@
     if (f <= 24) crownText.textContent = c.tx.map(t => t.name).join(' + ');
     else if (f <= 120) {
       crownText.textContent = `Processing ${Math.min(100, Math.round((f - 25) / 95 * 100))}%`;
-      if (!st.swapped && f > 40) { st.swapped = true; photoImg.src = IMG + c.after; }
+      if (!st.swapped && f > 40) { st.swapped = true; photoImg.src = c.after; }
     } else if (f <= 200) crownText.textContent = 'Done';
     else crownText.textContent = 'Sending';
     // the after shows only as the fog thins, then leaves as light when the data goes
@@ -120,7 +122,7 @@
     if (reduce) { step('terminal'); panels.hidden = false; layout(); panels.classList.add('on'); lock(false); return; }
     step('loaded'); stage.classList.remove('rx-moving');
     photoImg.style.opacity = ''; photoImg.style.filter = ''; photo.style.clipPath = '';
-    photoImg.src = IMG + c.before; photo.classList.add('on');
+    photoImg.src = c.before; photo.classList.add('on');
     crownText.textContent = c.tx.map(t => t.name).join(' + ');
     const ok = await ready(film); if (id !== run) return;
     await wait(900); if (id !== run) return;
@@ -159,7 +161,7 @@
   const ba = panels.querySelector('.rx-ba');
   const openZoom = () => {
     const imgs = zoom.querySelectorAll('img'), spans = zoom.querySelectorAll('p span');
-    imgs[0].src = 'assets/img/' + current.raw[0]; imgs[1].src = 'assets/img/' + current.raw[1];
+    imgs[0].src = current.raw[0]; imgs[1].src = current.raw[1];
     imgs[0].alt = current.title + ', before'; imgs[1].alt = current.title + ', after';
     spans[0].textContent = current.bdate; spans[1].textContent = current.adate;
     zoom.showModal(); document.documentElement.style.overflow = 'hidden';

@@ -3,7 +3,9 @@
 (() => {
   const grid = document.getElementById('ml-grid');
   if (!grid) return;
-  const M = {
+  // On WordPress the dishes come from the admin (Lab page › Meals).
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
+  const M = (window.SLIM_DATA || {}).meals || {
     Breakfast: [
       ['Rice porridge with minced pork and egg', 'โจ๊กหมูใส่ไข่', 'Skip the fried dough sticks and add ginger and spring onion.'],
       ['Rice soup with fish', 'ข้าวต้มปลา', 'Clear broth and white fish keep it light. Add celery and garlic oil only a little.'],
@@ -46,9 +48,9 @@
   const show = () => {
     const d = day0 + shift, date = new Date(d * 864e5);
     document.getElementById('ml-date').textContent = shift ? date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Today, ' + date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
-    grid.innerHTML = Object.entries(M).map(([meal, list], k) => {
+    grid.innerHTML = Object.entries(M).filter(([, list]) => list.length).map(([meal, list], k) => {
       const [en, th, tip] = list[(d * (k + 3) + k * 2) % list.length];
-      return `<article class="ml-card"><span class="ml-meal">${meal}</span><h3>${en}</h3><p class="ml-th" lang="th">${th}</p><p>${tip}</p></article>`;
+      return `<article class="ml-card"><span class="ml-meal">${esc(meal)}</span><h3>${esc(en)}</h3><p class="ml-th" lang="th">${esc(th)}</p><p>${esc(tip)}</p></article>`;
     }).join('');
   };
   document.getElementById('ml-next').addEventListener('click', () => { shift++; show(); document.dispatchEvent(new CustomEvent('buddy', { detail: 'meals' })); });

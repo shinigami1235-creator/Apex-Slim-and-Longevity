@@ -64,7 +64,7 @@ faq=[
 
 # ---------------------------------------------------------------- CoolSculpting
 "coolsculpting": dict(
-desc="CoolSculpting at Apex Slim and Longevity takes about 35 minutes per area. You can go back to work the same day and see the full result at 3 months.",
+desc="CoolSculpting at Apex Slim and Longevity takes 35 to 75 minutes per area. You can go back to work the same day and see the full result at 3 months.",
 note=("How cold removes fat cells", "Fat cells freeze at a warmer temperature than skin, so cooling the skin can kill the fat under it."),
 pair="Emsculpt Neo builds up the muscle under an area after CoolSculpting has thinned the fat.",
 hook=[

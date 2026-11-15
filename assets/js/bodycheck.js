@@ -18,11 +18,14 @@ if (form && canvas) {
   form.addEventListener('focusin', go, { once: true });
 }
 
+const D = window.SLIM_DATA || {};
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
+
 async function init() {
-  /* ---------- treatments ---------- */
-  const T = {
+  /* ---------- treatments (from the admin on WordPress) ---------- */
+  const T = D.T || {
     wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'one-week-one-kilo.html', goal: 'weight', time: 'Weekly visits for 3 months or more' },
-    cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', goal: 'fat', cls: 'cold', time: 'About 35 min per area' },
+    cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', goal: 'fat', cls: 'cold', time: '35 to 75 min per area' },
     en: { sym: 'En', name: 'Emsculpt Neo', url: 'emsculpt-neo.html', goal: 'tone', time: '30 min, 4 to 6 sessions' },
     ff: { sym: 'Ff', name: 'FIT FIRM', url: 'fit-firm.html', goal: 'firm', time: '20 min, cellulite and firmer skin' },
     iv: { sym: 'Iv', name: 'IV Therapy', url: 'iv-therapy.html', goal: 'energy', cls: 'long', time: '30 to 60 min drip' },
@@ -46,7 +49,7 @@ async function init() {
   };
 
   /* ---------- body mesh ---------- */
-  const buf = await fetch('assets/lab/slimbody.bin').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
+  const buf = await fetch((D.base || 'assets/') + 'lab/slimbody.bin').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null);
   if (!buf) { $('bc-msg').textContent = 'The 3D body could not be loaded.'; return; }
   const dv = new DataView(buf);
   const N = dv.getUint32(0, true), E = dv.getUint32(4, true);
@@ -157,10 +160,10 @@ async function init() {
     if (mode === 'now') { target.w = bmiToW(bmi); target.b = whtrToB(whtr); target.warm = over ? 0.85 : 0; }
     else { const gwaist = Math.max(d.h * 0.4, d.waist - (d.w - g)); target.w = bmiToW(gbmi); target.b = whtrToB(gwaist / d.h); target.warm = 0; }
     // programs
-    const list = suggest(bmi, whtr);
-    $('bc-list').innerHTML = list.map(([k, why]) => { const t = T[k]; return `<a class="rx-card" href="${t.url}"><span class="mini ${t.cls || ''}"><b>${t.sym}</b></span><span class="rx-text"><b class="rx-name">${t.name}</b><span class="rx-desc">${why}</span><span class="rx-time">${t.time}</span></span></a>`; }).join('');
+    const list = suggest(bmi, whtr).filter(([k]) => T[k]);   // a treatment removed in the admin drops out
+    $('bc-list').innerHTML = list.map(([k, why]) => { const t = T[k]; return `<a class="rx-card" href="${esc(t.url)}"><span class="mini ${esc(t.cls)}"><b>${esc(t.sym)}</b></span><span class="rx-text"><b class="rx-name">${esc(t.name)}</b><span class="rx-desc">${why}</span><span class="rx-time">${esc(t.time)}</span></span></a>`; }).join('');
     const goals = [...new Set(list.map(([k]) => T[k].goal))];
-    $('bc-book').href = 'index.html?goals=' + goals.join(',') + '#consult';
+    $('bc-book').href = (D.home || 'index.html') + '?goals=' + goals.join(',') + '#consult';
   };
   form.addEventListener('input', e => { if (e.target === gw) goalTouched = true; update(); });
   form.addEventListener('focusout', e => { if (Object.values(FIELD).includes(e.target.id)) { left.add(e.target.id); update(); } });

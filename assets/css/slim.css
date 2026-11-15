@@ -741,6 +741,8 @@ main:focus{outline:none}
 #body-check:not(.has-result) :is(.bc-goal,.bc-rx){display:none}
 .field input::placeholder{color:#75648A;font-style:italic}
 
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+
 /* reduced motion, case by case: movement, growing and spinning stop; fades and colour changes stay */
 @media (prefers-reduced-motion:reduce){
   .el::before,.specimen .el::before{transition:none}

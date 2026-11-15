@@ -12,8 +12,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "29"
-JS = '<script src="assets/js/slim.js?v=10"></script>\n<script src="assets/js/tx.js?v=3"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
+CSS_V = "30"
+JS = '<script src="assets/js/slim.js?v=11"></script>\n<script src="assets/js/tx.js?v=3"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
 GOALS = [("weight", "Lose weight"), ("fat", "Belly and flank fat"), ("tone", "Muscle tone"),
@@ -364,7 +364,7 @@ def page(p):
 <select id="f-time" name="time"><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Weekend</option></select>
 </div>
 <label class="consent"><input type="checkbox" name="consent" required aria-describedby="f-msg">I agree to Apex Slim using these details to contact me about my consultation.</label>
-<div><button class="btn" type="submit">Send request</button></div>
+<div class="hp" aria-hidden="true"><label for="f-website">Website</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div><div><button class="btn" type="submit">Send request</button></div>
 <p class="form-msg" id="f-msg" role="status"></p>
 </div>
 </form>

@@ -1,9 +1,12 @@
 (() => {
   const buddy = e => document.dispatchEvent(new CustomEvent('buddy', { detail: e }));
-  const T = {
+  // On WordPress the treatments, addresses and the form's endpoint come from window.SLIM_DATA.
+  const D = window.SLIM_DATA || {};
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
+  const T = D.T || {
     wk: { sym: 'Wk', name: '1 Week 1 Kilo', url: 'one-week-one-kilo.html', time: 'Weekly visits for 3 months or more',
       desc: 'A weekly program prescribed by the doctor that works on the hunger that rises when you eat less.' },
-    cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', cls: 'cold', time: 'About 35 min per area',
+    cs: { sym: 'Cs', name: 'CoolSculpting', url: 'coolsculpting.html', cls: 'cold', time: '35 to 75 min per area',
       desc: 'Cools a fold of fat until the fat cells in it die, and you go back to work the same day.' },
     en: { sym: 'En', name: 'Emsculpt Neo', url: 'emsculpt-neo.html', time: '30 min, 4 to 6 sessions',
       desc: 'Heat and magnetic pulses work on fat and muscle in the same session.' },
@@ -24,6 +27,10 @@
     energy: { label: 'Energy and recovery', color: '#F2B33D', t: ['iv', 'hb'] },
     sleep: { label: 'Sleep without snoring', color: '#86DCCB', t: ['sl'] }
   };
+  if (D.T) {   // each treatment names its goal in the admin
+    Object.values(GOALS).forEach(g => { g.t = []; });
+    Object.entries(T).forEach(([k, t]) => { if (GOALS[t.goal]) GOALS[t.goal].t.push(k); });
+  }
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* menu */
@@ -73,7 +80,7 @@
   /* formula readout */
   const chemHTML = keys => keys.map(k => {
     const t = T[k];
-    return `<a class="mini ${t.cls || ''}" href="${t.url}"><b>${t.sym}</b><small>${t.name}</small></a>`;
+    return `<a class="mini ${esc(t.cls)}" href="${esc(t.url)}"><b>${esc(t.sym)}</b><small>${esc(t.name)}</small></a>`;
   }).join('<span class="plus" aria-hidden="true">+</span>');
 
   /* consult form goal ticks */
@@ -83,7 +90,7 @@
   /* mixing bench: pick ingredients, pour each one, mix to one colour */
   const stage = document.getElementById('stage');
   if (stage && window.MIX) {
-    const M = window.MIX, LAB = 'assets/img/lab/mix2/';
+    const M = window.MIX, LAB = (D.base || 'assets/') + 'img/lab/mix2/';
     const ORDER = ['weight', 'fat', 'tone', 'firm', 'energy', 'sleep'];
     /* 8 mix motions x 8 finishing touches = 64 pairs; each of the 63 combinations gets its own */
     const MIXES = ['swirl', 'fizz', 'shift', 'rise', 'sink', 'sweep', 'bloom', 'glow'];
@@ -137,15 +144,15 @@
       const sh = shares(ids.length);
       return ids.map((id, i) => {
         const syms = GOALS[id].t.map(k => T[k].sym).join(' ');
-        const cls = T[GOALS[id].t[0]].cls || '';
-        return `<span class="mini ${cls}"><b>${syms}</b><small>${GOALS[id].label}</small><i>${sh[i]}%</i></span>`;
+        const cls = (T[GOALS[id].t[0]] || {}).cls || '';
+        return `<span class="mini ${esc(cls)}"><b>${esc(syms)}</b><small>${GOALS[id].label}</small><i>${sh[i]}%</i></span>`;
       }).join('<span class="plus" aria-hidden="true">+</span>');
     };
     const rxHTML = ids => {
       const keys = [...new Set(ids.flatMap(id => GOALS[id].t))];
       return keys.map(k => {
         const t = T[k], goal = ids.find(id => GOALS[id].t.includes(k));
-        return `<a class="rx-card" href="${t.url}"><span class="mini ${t.cls || ''}"><b>${t.sym}</b></span><span class="rx-text"><span class="rx-for">For ${GOALS[goal].label.toLowerCase()}</span><b class="rx-name">${t.name}</b>${t.desc ? `<span class="rx-desc">${t.desc}</span>` : ''}<span class="rx-time">${t.time}</span></span></a>`;
+        return `<a class="rx-card" href="${esc(t.url)}"><span class="mini ${esc(t.cls)}"><b>${esc(t.sym)}</b></span><span class="rx-text"><span class="rx-for">For ${GOALS[goal].label.toLowerCase()}</span><b class="rx-name">${esc(t.name)}</b>${t.desc ? `<span class="rx-desc">${esc(t.desc)}</span>` : ''}<span class="rx-time">${esc(t.time)}</span></span></a>`;
       }).join('');
     };
     const hsl = hex => {
@@ -464,8 +471,19 @@
           : 'Add your name, a phone number or LINE ID, and tick the consent box.';
         missing[0].focus(); buddy('oops'); return;
       }
-      msg.textContent = 'The form connects to Apex Slim in the build stage.'; buddy('sent');
-      (window.dataLayer = window.dataLayer || []).push({ event: 'consult:submit' });
+      const done = () => {
+        msg.textContent = D.sent || 'Thank you. The Apex Slim team will contact you soon.'; buddy('sent');
+        (window.dataLayer = window.dataLayer || []).push({ event: 'consult:submit' });
+      };
+      if (!D.consult) { msg.textContent = 'This preview does not send the request anywhere.'; buddy('sent'); return; }
+      const btn = form.querySelector('[type=submit]'); btn.disabled = true; msg.textContent = 'Sending…';
+      const body = { name: el.name.value, phone: el.phone.value, line: el.line.value, time: el.time.value, consent: el.consent.checked,
+        goals: formChecks().filter(c => c.checked).map(c => c.value), page: location.pathname, hp: el.website ? el.website.value : '' };
+      fetch(D.consult, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        .then(r => r.json().then(j => ({ ok: r.ok, j })))
+        .then(({ ok, j }) => { if (!ok) throw new Error(j.message || ''); form.reset(); done(); })
+        .catch(err => { msg.textContent = err.message || 'The request did not go through. Please try again, or chat with us on LINE.'; buddy('oops'); })
+        .finally(() => { btn.disabled = false; });
     });
   }
 })();
