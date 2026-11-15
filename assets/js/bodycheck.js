@@ -107,14 +107,21 @@ async function init() {
     if (!(d.waist >= 40 && d.waist <= 200)) return 'Enter a waist between 40 and 200 cm.';
     return '';
   };
+  /* errors show once a field is left, not on every keystroke */
+  const FIELD = { h: 'bc-h', w: 'bc-w', waist: 'bc-waist' };
+  let left = new Set(), liveT = 0;
   const update = () => {
     const d = read(), err = valid(d);
-    $('bc-msg').textContent = err;
+    const bad = err ? (err.includes('height') ? 'h' : err.includes('weight') ? 'w' : 'waist') : '';
+    Object.entries(FIELD).forEach(([k, id]) => $(id).setAttribute('aria-invalid', k === bad && left.has(id)));
+    $('bc-msg').textContent = bad && left.has(FIELD[bad]) ? err : '';
     if (err) return;
     if (!measured) { measured = true; buddy('measure'); }
     const m = d.h / 100, bmi = d.w / (m * m), whtr = d.waist / d.h, half = d.h / 2;
     const [cat, tone] = category(bmi);
     $('bc-bmi').textContent = bmi.toFixed(1); $('bc-cat').textContent = cat; $('bc-cat').className = tone;
+    clearTimeout(liveT);
+    liveT = setTimeout(() => { $('bc-live').textContent = `BMI ${bmi.toFixed(1)}, ${cat}. Waist ${whtr >= 0.5 ? 'over' : 'under'} half your height.`; }, 900);
     $('bc-wv').textContent = Math.round(d.waist) + ' cm';
     const over = whtr >= 0.5;
     $('bc-wcat').textContent = over ? 'Over half your height' : 'Under half your height'; $('bc-wcat').className = over ? 'warn' : 'ok';
@@ -137,6 +144,7 @@ async function init() {
     $('bc-book').href = 'index.html?goals=' + goals.join(',') + '#consult';
   };
   form.addEventListener('input', e => { if (e.target === gw) goalTouched = true; update(); });
+  form.addEventListener('focusout', e => { if (Object.values(FIELD).includes(e.target.id)) { left.add(e.target.id); update(); } });
   gw.addEventListener('change', () => buddy('goal'));
   gw.addEventListener('input', () => { goalTouched = true; if (mode !== 'goal') setMode('goal'); update(); });
   const setMode = m => {

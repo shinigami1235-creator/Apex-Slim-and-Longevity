@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="text-scale" content="scale">
+<script type="speculationrules">{"prefetch":[{"where":{"selector_matches":"a[href$=\".html\"]"},"eagerness":"moderate"}]}</script>
 <meta name="color-scheme" content="only light">
 <title>1 Week 1 Kilo | Apex Slim and Longevity</title>
 <meta name="description" content="1 Week 1 Kilo at Apex Slim and Longevity is a weight-loss program where you see the doctor every week and the plan is adjusted around your hunger.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=27">
+<link rel="stylesheet" href="assets/css/slim.css?v=28">
 </head>
 <body>
 
+<a class="skip-link" href="#content">Skip to main content</a>
 <header class="top">
 <div class="wrap">
 <a class="brand" href="index.html">
@@ -31,7 +34,7 @@
 </div>
 </header>
 
-<main>
+<main id="content" tabindex="-1">
 
 <section class="tx-top" aria-labelledby="h-tx">
 <div class="wrap">
@@ -45,6 +48,7 @@
 <p class="lede hook">Most people who lose weight on a diet put some of it back on. A 2011 study in the New England Journal of Medicine found that after a diet, the body makes more ghrelin, the hormone that makes you hungry, and less of the hormones that tell you you're full.</p>
 <p class="lede hook">The 50 people in that study lost an average of 13.5 kg over 10 weeks. A year later their hormones still hadn't gone back to normal and they still felt hungrier than before they started. 1 Week 1 Kilo is our weight-loss program for people who regain weight after dieting. You see the doctor every week, and the plan is adjusted around your hunger as well as your weight.</p>
 <table class="protocol">
+<caption class="sr-only">1 Week 1 Kilo at a glance</caption>
 <tr><th scope="row">Visits</th><td>Once a week with the doctor</td></tr>
 <tr><th scope="row">First visit</th><td>Body composition scan, BMI and waist on the Asian scale, and your goals</td></tr>
 <tr><th scope="row">Plan length</th><td>At least 3 months</td></tr>
@@ -145,11 +149,11 @@
 <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
 <div class="form-body">
 <div class="row2">
-<div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name"></div>
-<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel"></div>
+<div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
+<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
 </div>
 <fieldset class="field">
-<legend>Goals</legend>
+<legend>Goals <span class="opt">(optional)</span></legend>
 <div class="checks">
 <label><input type="checkbox" name="goal" value="weight"><span>Lose weight</span></label>
 <label><input type="checkbox" name="goal" value="fat"><span>Belly and flank fat</span></label>
@@ -162,9 +166,9 @@
 <div class="field"><label for="f-time">Best time to call</label>
 <select id="f-time" name="time"><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Weekend</option></select>
 </div>
-<label class="consent"><input type="checkbox" name="consent">I agree to Apex Slim using these details to contact me about my consultation.</label>
+<label class="consent"><input type="checkbox" name="consent" required aria-describedby="f-msg">I agree to Apex Slim using these details to contact me about my consultation.</label>
 <div><button class="btn" type="submit">Send request</button></div>
-<p class="form-msg" role="status"></p>
+<p class="form-msg" id="f-msg" role="status"></p>
 </div>
 </form>
 </div>
@@ -183,8 +187,8 @@
 </div>
 </footer>
 
-<script src="assets/js/slim.js?v=8"></script>
-<script src="assets/js/tx.js?v=1"></script>
+<script src="assets/js/slim.js?v=9"></script>
+<script src="assets/js/tx.js?v=2"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>
 </body>
 </html>

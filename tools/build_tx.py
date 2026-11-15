@@ -12,8 +12,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "27"
-JS = '<script src="assets/js/slim.js?v=8"></script>\n<script src="assets/js/tx.js?v=1"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
+CSS_V = "28"
+JS = '<script src="assets/js/slim.js?v=9"></script>\n<script src="assets/js/tx.js?v=2"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
 GOALS = [("weight", "Lose weight"), ("fat", "Belly and flank fat"), ("tone", "Muscle tone"),
@@ -24,7 +24,33 @@ def icon(sym):
     return f'<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">{ICONS[sym]}</svg>'
 
 
+SPEC = '<script type="speculationrules">{"prefetch":[{"where":{"selector_matches":"a[href$=\\".html\\"]"},"eagerness":"moderate"}]}</script>'
 IMG = "assets/img/tx/"
+
+# every generated <img> gets its real width and height (stops the page jumping while photos load)
+import re as _re
+from PIL import Image as _Image
+_DIMS = {}
+def _dim(src):
+    if src not in _DIMS:
+        try:
+            with _Image.open(ROOT / src) as im:
+                _DIMS[src] = im.size
+        except OSError:
+            _DIMS[src] = None
+    return _DIMS[src]
+def sized(html_text):
+    def fix(m):
+        tag = m.group(0)
+        if " width=" in tag:
+            return tag
+        d = _dim(m.group(1))
+        if not d:
+            return tag
+        extra = f' width="{d[0]}" height="{d[1]}"' + (' decoding="async"' if 'loading="lazy"' in tag else "")
+        return tag[:-1] + extra + ">"
+    return _re.sub(r'<img src="([^"]+)"[^>]*>', fix, html_text)
+
 
 
 def device_fig(m):
@@ -227,6 +253,8 @@ def page(p):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="text-scale" content="scale">
+{SPEC}
 <meta name="color-scheme" content="only light">
 <title>{title} | Apex Slim and Longevity</title>
 <meta name="description" content="{html.escape(p['desc'])}">
@@ -237,6 +265,7 @@ def page(p):
 </head>
 <body>
 
+<a class="skip-link" href="#content">Skip to main content</a>
 <header class="top">
 <div class="wrap">
 <a class="brand" href="index.html">
@@ -255,7 +284,7 @@ def page(p):
 </div>
 </header>
 
-<main>
+<main id="content" tabindex="-1">
 
 <section class="tx-top" aria-labelledby="h-tx">
 <div class="wrap">
@@ -268,6 +297,7 @@ def page(p):
 <h1 id="h-tx">{title}</h1>
 {hook}
 <table class="protocol">
+<caption class="sr-only">{title} at a glance</caption>
 {rows}
 </table>
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:32px">
@@ -319,11 +349,11 @@ def page(p):
 <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
 <div class="form-body">
 <div class="row2">
-<div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name"></div>
-<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel"></div>
+<div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
+<div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
 </div>
 <fieldset class="field">
-<legend>Goals</legend>
+<legend>Goals <span class="opt">(optional)</span></legend>
 <div class="checks">
 {checks}
 </div>
@@ -331,9 +361,9 @@ def page(p):
 <div class="field"><label for="f-time">Best time to call</label>
 <select id="f-time" name="time"><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Weekend</option></select>
 </div>
-<label class="consent"><input type="checkbox" name="consent">I agree to Apex Slim using these details to contact me about my consultation.</label>
+<label class="consent"><input type="checkbox" name="consent" required aria-describedby="f-msg">I agree to Apex Slim using these details to contact me about my consultation.</label>
 <div><button class="btn" type="submit">Send request</button></div>
-<p class="form-msg" role="status"></p>
+<p class="form-msg" id="f-msg" role="status"></p>
 </div>
 </form>
 </div>
@@ -371,7 +401,7 @@ def notes():
 def main():
     for p in PAGES:
         out = ROOT / f"{p['slug']}.html"
-        out.write_text(page(p))
+        out.write_text(sized(page(p)))
         print(f"{out.name:28} {words(p):5} words")
     idx = ROOT / "index.html"
     s = idx.read_text()

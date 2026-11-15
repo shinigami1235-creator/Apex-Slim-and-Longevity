@@ -152,22 +152,29 @@
     current = CASES.find(c => c.id === b.dataset.id); fill(current);
   });
 
-  /* tap the before and after to see them large */
-  const zoom = document.createElement('div'); zoom.className = 'rx-zoom'; zoom.hidden = true;
-  zoom.innerHTML = '<button class="rx-btn" type="button">Close</button><div class="ba"><figure><img alt=""><p><b>Before</b><span></span></p></figure><figure><img alt=""><p><b>After</b><span></span></p></figure></div>';
+  /* tap the before and after to see them large (native dialog: focus stays inside, Esc closes) */
+  const zoom = document.createElement('dialog'); zoom.className = 'rx-zoom'; zoom.setAttribute('aria-label', 'Before and after');
+  zoom.innerHTML = '<form method="dialog"><button class="rx-btn">Close</button></form><div class="ba"><figure><img alt=""><p><b>Before</b><span></span></p></figure><figure><img alt=""><p><b>After</b><span></span></p></figure></div>';
   document.body.appendChild(zoom);
-  panels.querySelector('.rx-ba').addEventListener('click', () => {
+  const ba = panels.querySelector('.rx-ba');
+  const openZoom = () => {
     const imgs = zoom.querySelectorAll('img'), spans = zoom.querySelectorAll('p span');
     imgs[0].src = 'assets/img/' + current.raw[0]; imgs[1].src = 'assets/img/' + current.raw[1];
     imgs[0].alt = current.title + ', before'; imgs[1].alt = current.title + ', after';
     spans[0].textContent = current.bdate; spans[1].textContent = current.adate;
-    zoom.hidden = false; zoom.querySelector('button').focus();
-  });
-  zoom.addEventListener('click', e => { if (e.target === zoom || e.target.closest('button')) zoom.hidden = true; });
-  addEventListener('keydown', e => { if (e.key === 'Escape') zoom.hidden = true; });
+    zoom.showModal(); document.documentElement.style.overflow = 'hidden';
+  };
+  ba.addEventListener('click', openZoom);
+  ba.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openZoom(); } });
+  zoom.addEventListener('click', e => { if (e.target === zoom || e.target.closest('.ba')) zoom.close(); });
+  zoom.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
 
   /* load the film once the section is near */
-  new IntersectionObserver((en, ob) => { if (en[0].isIntersecting) { film.preload = 'auto'; film.load(); ob.disconnect(); } }, { rootMargin: '400px' }).observe(stage);
+  /* the film (about 600 KB) only downloads once someone reaches for a case: metadata when the section is near,
+     the whole file on the first hover, focus or touch on the case picker */
+  new IntersectionObserver((en, ob) => { if (en[0].isIntersecting) { film.preload = 'metadata'; film.load(); ob.disconnect(); } }, { rootMargin: '400px' }).observe(stage);
+  const want = () => { if (film.preload !== 'auto') { film.preload = 'auto'; film.load(); } };
+  ['pointerenter', 'pointerdown', 'focusin'].forEach(ev => picker.addEventListener(ev, want, { once: true }));
   addEventListener('resize', layout);
   wide.addEventListener('change', layout);
   fill(current); picker.querySelectorAll('.rx-chip').forEach(b => b.setAttribute('aria-pressed', 'false'));

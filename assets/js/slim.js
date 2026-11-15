@@ -29,11 +29,21 @@
   /* menu */
   const mb = document.querySelector('.menu-btn'), nav = document.querySelector('.nav');
   if (mb && nav) {
+    const shut = (refocus) => {
+      if (!nav.classList.contains('open')) return;
+      nav.classList.remove('open'); mb.setAttribute('aria-expanded', false);
+      if (refocus) mb.focus();
+    };
     mb.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
       mb.setAttribute('aria-expanded', open);
     });
-    nav.addEventListener('click', e => { if (e.target.closest('a')) { nav.classList.remove('open'); mb.setAttribute('aria-expanded', false); } });
+    nav.addEventListener('click', e => { if (e.target.closest('a')) shut(false); });
+    /* Esc, a tap outside the menu, tabbing out of it, or widening past the phone layout closes it */
+    addEventListener('keydown', e => { if (e.key === 'Escape') shut(nav.contains(document.activeElement)); });
+    addEventListener('pointerdown', e => { if (!nav.contains(e.target) && !mb.contains(e.target)) shut(false); });
+    nav.addEventListener('focusout', e => { if (e.relatedTarget && !nav.contains(e.relatedTarget) && e.relatedTarget !== mb) shut(false); });
+    matchMedia('(min-width: 900px)').addEventListener('change', e => { if (e.matches) shut(false); });
   }
 
   /* tape measure: vertical on desktop, progress tape on mobile */
@@ -431,12 +441,19 @@
   if (form) {
     const pre = form.dataset.goals || new URLSearchParams(location.search).get('goals');
     if (pre) tickGoals(pre.split(','));
+    form.addEventListener('input', e => { if (e.target.getAttribute('aria-invalid') === 'true' && (e.target.type === 'checkbox' ? e.target.checked : e.target.value.trim())) e.target.setAttribute('aria-invalid', false); });
     form.addEventListener('submit', e => {
       e.preventDefault();
       const msg = form.querySelector('.form-msg');
-      const name = form.elements.name.value.trim(), contact = form.elements.contact.value.trim();
-      if (!name || !contact) { msg.textContent = 'Add your name and a phone number or LINE ID.'; buddy('oops'); return; }
-      if (!form.elements.consent.checked) { msg.textContent = 'Tick the consent box to send the request.'; return; }
+      const el = form.elements, missing = [];
+      if (!el.name.value.trim()) missing.push(el.name);
+      if (!el.contact.value.trim()) missing.push(el.contact);
+      if (!el.consent.checked) missing.push(el.consent);
+      [el.name, el.contact, el.consent].forEach(f => f.setAttribute('aria-invalid', missing.includes(f)));
+      if (missing.length) {
+        msg.textContent = missing.includes(el.consent) && missing.length === 1 ? 'Tick the consent box to send the request.' : 'Add your name and a phone number or LINE ID, and tick the consent box.';
+        missing[0].focus(); buddy('oops'); return;
+      }
       msg.textContent = 'The form connects to Apex Slim in the build stage.'; buddy('sent');
       (window.dataLayer = window.dataLayer || []).push({ event: 'consult:submit' });
     });

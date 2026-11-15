@@ -213,7 +213,9 @@ body="""
 
 <h2>The Drip B-A-R menu</h2>
 <p>Our drips go by the name Drip B-A-R. Our doctors made the formulas and adjust them for each person, and the menu has 12 drips.</p>
+<div class="table-wrap" role="region" aria-labelledby="drips-cap" tabindex="0">
 <table class="drips">
+<caption id="drips-cap" class="sr-only">The 12 drips on the Drip B-A-R menu</caption>
 <thead><tr><th scope="col">Drip</th><th scope="col">What's in it</th><th scope="col">Made for</th></tr></thead>
 <tbody>
 <tr><td>Super C</td><td>High-dose vitamin C</td><td>Tiredness, stress and the immune system</td></tr>
@@ -230,6 +232,7 @@ body="""
 <tr><td>Premium NAD+</td><td>NAD+, a molecule your cells use to make energy</td><td>Energy</td></tr>
 </tbody>
 </table>
+</div>
 <p>Ask the doctor what's in a drip before you book where the menu doesn't list it. A blood test shows whether you're low in a vitamin, and the doctor uses it to pick the drip. EDTA is the drip used in hospitals for lead poisoning, and the doctor checks your kidneys and calcium before giving it since it can affect both.</p>
 
 <h2>Your visit</h2>

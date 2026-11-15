@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="text-scale" content="scale">
+<script type="speculationrules">{"prefetch":[{"where":{"selector_matches":"a[href$=\".html\"]"},"eagerness":"moderate"}]}</script>
 <meta name="color-scheme" content="only light">
 <title>Apex Slim and Longevity | Slim science and wellness</title>
 <meta name="description" content="Body fat, muscle tone, energy and sleep treatments at Apex Slim and Longevity, part of the Apex Medical Center group. CoolSculpting, Emsculpt Neo, 1 Week 1 Kilo, FIT FIRM, IV Therapy, HBOT and Snorelase.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/LINESeed-Bd-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/slim.css?v=27">
+<link rel="stylesheet" href="assets/css/slim.css?v=28">
 </head>
 <body>
 
+<a class="skip-link" href="#content">Skip to main content</a>
 <header class="top">
   <div class="wrap">
     <a class="brand" href="index.html">
@@ -31,7 +34,7 @@
   </div>
 </header>
 
-<main>
+<main id="content" tabindex="-1">
 
 <section class="bench" aria-labelledby="h-bench">
   <div class="wrap">
@@ -43,7 +46,7 @@
     <div class="flask-box">
       <p class="st-status" id="st-status" aria-live="polite"></p>
       <div class="lab-stage" id="stage" role="img" aria-label="Glass flask where the ingredients you pick are poured and mixed">
-        <img class="st-still" id="st-empty" src="assets/img/lab/mix2/flask-empty.webp" alt="" width="840" height="840">
+        <img class="st-still" id="st-empty" src="assets/img/lab/mix2/flask-empty.webp" alt="" width="840" height="840" fetchpriority="high">
         <video class="st-video" id="st-video" muted playsinline preload="none" aria-hidden="true"></video>
         <div class="st-liquid" id="st-liquid"></div>
         <div class="st-fx" id="st-fx"></div>
@@ -172,7 +175,7 @@
         </div>
         <div class="rx-panel rx-pc" data-w="600" data-h="510">
           <div class="rx-pc-head"><h3 id="rx-title"></h3></div>
-          <div class="rx-ba">
+          <div class="rx-ba" role="button" tabindex="0" aria-label="See the before and after larger">
             <figure><img id="rx-before" alt=""><figcaption><b>Before</b><span id="rx-bdate"></span></figcaption></figure>
             <figure><img id="rx-after" alt=""><figcaption><b>After</b><span id="rx-adate"></span></figcaption></figure>
           </div>
@@ -231,11 +234,11 @@
       <div class="form-head"><b>Request form</b><span>Apex Slim and Longevity</span></div>
       <div class="form-body">
         <div class="row2">
-          <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name"></div>
-          <div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel"></div>
+          <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required aria-describedby="f-msg" enterkeyhint="next"></div>
+          <div class="field"><label for="f-contact">Phone or LINE ID</label><input id="f-contact" name="contact" autocomplete="tel" required aria-describedby="f-msg" enterkeyhint="next"></div>
         </div>
         <fieldset class="field">
-          <legend>Goals</legend>
+          <legend>Goals <span class="opt">(optional)</span></legend>
           <div class="checks">
             <label><input type="checkbox" name="goal" value="weight"><span>Lose weight</span></label>
             <label><input type="checkbox" name="goal" value="fat"><span>Belly and flank fat</span></label>
@@ -248,9 +251,9 @@
         <div class="field"><label for="f-time">Best time to call</label>
           <select id="f-time" name="time"><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Weekend</option></select>
         </div>
-        <label class="consent"><input type="checkbox" name="consent">I agree to Apex Slim using these details to contact me about my consultation.</label>
+        <label class="consent"><input type="checkbox" name="consent" required aria-describedby="f-msg">I agree to Apex Slim using these details to contact me about my consultation.</label>
         <div><button class="btn" type="submit">Send request</button></div>
-        <p class="form-msg" role="status"></p>
+        <p class="form-msg" id="f-msg" role="status"></p>
       </div>
     </form>
   </div>
@@ -270,9 +273,9 @@
 </footer>
 
 <script src="assets/js/mix-data.js?v=4"></script>
-<script src="assets/js/slim.js?v=8"></script>
+<script src="assets/js/slim.js?v=9"></script>
 <script src="assets/js/results-map.js?v=3"></script>
-<script src="assets/js/results.js?v=6"></script>
+<script src="assets/js/results.js?v=7"></script>
 <script type="module" src="assets/js/buddy.js?v=17"></script>
 </body>
 </html>
