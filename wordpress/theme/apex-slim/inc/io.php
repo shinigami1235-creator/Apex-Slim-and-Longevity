@@ -61,9 +61,9 @@ function slim_import( array $d ): array {
 		$pid = (int) get_option( 'wp_page_for_privacy_policy' );
 		$text = (string) file_get_contents( SLIM_DIR . '/parts/privacy.html' );
 		if ( $pid && get_post_status( $pid ) && get_post_field( 'post_name', $pid ) === 'privacy-policy' ) wp_delete_post( $pid, true );   // WordPress's sample policy, so the address is free
-		$id = (int) wp_insert_post( [ 'post_type' => 'page', 'post_status' => 'draft', 'post_title' => 'Privacy policy', 'post_name' => 'privacy-policy', 'post_content' => $text, 'meta_input' => [ '_slim_page' => 'privacy' ] ] );
+		$id = (int) wp_insert_post( [ 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Privacy policy', 'post_name' => 'privacy-policy', 'post_content' => $text, 'meta_input' => [ '_slim_page' => 'privacy' ] ] );
 		update_option( 'wp_page_for_privacy_policy', $id );
-		$log[] = 'Privacy policy page, as a draft for Apex to check and publish';
+		$log[] = 'Privacy policy page (Apex Medical Center\'s policy)';
 	}
 	foreach ( (array) ( $d['treatments'] ?? [] ) as $i => $t ) {
 		$key = sanitize_title( (string) ( $t['key'] ?? '' ) );

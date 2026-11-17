@@ -1,12 +1,13 @@
 # Apex Slim and Longevity website: WordPress handover
 
-This is the Apex Slim and Longevity website as a WordPress theme, in English. It is written for Apex's IT team, who install and run it, and for the staff who edit it. Install it on a staging copy first and follow the steps in order.
+This is the Apex Slim and Longevity website as a WordPress theme, in English. It is written for Apex's PM, who hosts, installs and maintains it, and for the staff who edit it. Install it on a staging copy first and follow the steps in order.
 
 ## Who does what
 
-- **Apex's IT team** sets up hosting for staging and live, installs the theme with the steps below, and runs the server, domain, SSL, email sending, backups and plugin updates.
+- **Apex's PM** runs hosting on Apex's own servers, the domain and DNS, and maintenance after launch, installs the theme with the steps below, and sets up Google Analytics, Tag Manager and the Meta Pixel from Apex's central accounts once the site is complete.
 - **Apex Slim staff** edit the content in WordPress: treatments, Results cases, the home and lab page text, the meals, the footer and the consult form. None of it needs a developer.
-- **Apex** signs off the privacy policy, the advertising permit (สบส.) and every claim, review and before and after photo on the site.
+- **K. Eye**, Dr. Nan's secretary, submits the site for the สบส. advertising permit once it is complete and uploaded. The permit number then goes in Apex Slim › Settings.
+- **Apex** signs off every claim, review and before and after photo on the site.
 - **Gid** sends bigger changes, a new tool or a new section, as a new theme zip. "Updating the theme" at the end says how to install one without losing content.
 
 ## What is in the package
@@ -38,7 +39,7 @@ No other plugin is needed. An SEO plugin (Yoast, Rank Math, SEOPress, All in One
 3. Appearance › Themes › Add New › Upload Theme: upload `apex-slim-1.0.0.zip`, then **Activate**.
 4. Tools › Apex Slim content › **Import the content that came with the theme**. This makes the Home, Slim Wellness Lab and Privacy policy pages, sets Home as the front page, and adds the 7 treatments and 4 Results cases. On the command line it is `wp slim import`.
 5. Apex Slim › Settings: put the Apex Slim team's email addresses in **Send new requests to**, separated by commas. Check the footer lines and the LINE link.
-6. Pages › Privacy policy: the import adds it as a draft written for this site, with Apex's data controller and Data Protection Officer details from the Apex Medical Center policy. Apex's lawyer checks it, then **Publish**. It states that requests are kept 365 days, the same as **Keep requests for (days)** in Settings; change both together.
+6. Pages › Privacy policy: the import publishes Apex Medical Center's own privacy policy, the same text and contacts as apexmedicalcenter.co.th/en/privacy-policy/, as Apex asked. A short "This website" section is added for the consult form and the lab. It states that requests are kept 365 days, the same as **Keep requests for (days)** in Settings; change both together. When Apex Medical Center's policy changes, paste the new text here too.
 7. Settings › Reading: tick **Discourage search engines** on staging only.
 8. Send a test request from the form at the foot of the home page. It shows under **Enquiries** and arrives by email.
 9. Tools › Apex Slim content shows a **Check** list. Fix every line marked Fix. Lines marked Note are reminders.
@@ -95,23 +96,25 @@ The form has a hidden field people never fill in, accepts requests only from thi
 
 ## Tracking
 
-Nothing from Google or Facebook loads until a Tag Manager container is set in Apex Slim › Tracking and code. With one set, a cookie banner asks first, Consent Mode v2 keeps analytics and ads off until the visitor accepts, and **Cookie settings** appears in the footer. A sent request pushes `consult:submit` to the dataLayer; use it as the conversion trigger.
+Nothing from Google or Facebook loads until a Tag Manager container is set in Apex Slim › Tracking and code. Load GA4 and the Meta Pixel through that container, not as separate plugins, so the cookie banner controls them. With one set, a cookie banner asks first, Consent Mode v2 keeps analytics and ads off until the visitor accepts, and **Cookie settings** appears in the footer. A sent request pushes `consult:submit` to the dataLayer; use it as the conversion trigger.
 
 ## Security the theme sets
 
-No comments, no XML-RPC, no user listing at `/wp-json/wp/v2/users` or `/?author=1`, the same message for a wrong user name or password, no SVG uploads, and the headers `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` and `Permissions-Policy`. The server's side is IT's: file permissions, no PHP running in `wp-content/uploads/`, automatic minor WordPress updates and a firewall.
+No comments, no XML-RPC, no user listing at `/wp-json/wp/v2/users` or `/?author=1`, the same message for a wrong user name or password, no SVG uploads, and the headers `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options` and `Permissions-Policy`. The server's side is the host's: file permissions, no PHP running in `wp-content/uploads/`, automatic minor WordPress updates and a firewall.
 
 ## Checks before going live
 
 1. Tools › Apex Slim content shows no line marked Fix.
 2. The privacy policy is published and linked in the footer and from the consent box.
-3. A test request arrives in Enquiries and by email.
-4. Settings › Reading: **Discourage search engines** is off on live, and `/wp-sitemap.xml` opens.
-5. The advertising permit number is in Apex Slim › Settings and shows in the footer.
+3. The domain points at the live server and every page opens over HTTPS.
+4. A test request arrives in Enquiries and by email.
+5. Settings › Reading: **Discourage search engines** is off on live, and `/wp-sitemap.xml` opens.
 6. In a private window with cookies declined, the browser's network tab shows no request to Google, Facebook or fonts.googleapis.com.
 7. PageSpeed Insights on mobile for the home page and one treatment page.
 8. Paste the home page and one treatment page into a LINE chat and check the picture and title. Set a 1200 x 630 picture in Settings › **Picture for shared links** first.
 9. A backup restores cleanly to staging.
+
+When the สบส. permit is issued, its number goes in Apex Slim › Settings › **Advertising permit number** and shows in the footer.
 
 ## Updating the theme
 
