@@ -1,10 +1,10 @@
 # Apex Slim and Longevity website: WordPress handover
 
-This is the Apex Slim and Longevity website as a WordPress theme, in English. It is written for Apex's PM, who hosts, installs and maintains it, and for the staff who edit it. Install it on a staging copy first and follow the steps in order.
+This is the Apex Slim and Longevity website as a WordPress theme, in English. It is written for P'Mac, Apex's IT, who hosts, installs and maintains it, and for the staff who edit it. Install it on a staging copy first and follow the steps in order.
 
 ## Who does what
 
-- **Apex's PM** runs hosting on Apex's own servers, the domain and DNS, and maintenance after launch, installs the theme with the steps below, and sets up Google Analytics, Tag Manager and the Meta Pixel from Apex's central accounts once the site is complete.
+- **P'Mac (Apex IT)** runs hosting on Apex's own servers, the domain and DNS, and maintenance after launch, installs the theme with the steps below, and sets up Google Analytics, Tag Manager and the Meta Pixel from Apex's central accounts once the site is complete.
 - **Apex Slim staff** edit the content in WordPress: treatments, Results cases, the home and lab page text, the meals, the footer and the consult form. None of it needs a developer.
 - **K. Eye**, Dr. Nan's secretary, submits the site for the สบส. advertising permit once it is complete and uploaded. The permit number then goes in Apex Slim › Settings.
 - **Apex** signs off every claim, review and before and after photo on the site.
