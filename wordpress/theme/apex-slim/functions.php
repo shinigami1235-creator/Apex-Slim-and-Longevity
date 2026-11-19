@@ -19,17 +19,18 @@
  * inc/security.php  hardening
  * inc/audit.php     access log: who opened enquiries, changed settings or roles
  * inc/io.php        content import, export and check (Tools › Apex Slim content, and wp slim on the command line)
+ * inc/instagram.php the Instagram feed on the home page, fetched by the server with local copies of the pictures
  * inc/admin.php     menus, columns, dashboard
  */
 defined( 'ABSPATH' ) || exit;
 
-define( 'SLIM_VERSION', '1.0.0' );   // keep in step with Version in style.css; tools/build_theme.py checks both
+define( 'SLIM_VERSION', '1.0.1' );   // keep in step with Version in style.css; tools/build_theme.py checks both
 define( 'SLIM_DIR', __DIR__ );
 define( 'SLIM_URI', get_template_directory_uri() );
 
 add_filter( 'update_footer', fn( $t ) => 'Apex Slim theme ' . SLIM_VERSION . ' · ' . $t, 20 );
 
-foreach ( [ 'helpers', 'schema', 'types', 'fields', 'data', 'render', 'forms', 'seo', 'tracking', 'media', 'security', 'audit', 'io', 'admin' ] as $f ) {
+foreach ( [ 'helpers', 'schema', 'types', 'fields', 'data', 'render', 'forms', 'seo', 'tracking', 'media', 'security', 'audit', 'io', 'instagram', 'admin' ] as $f ) {
 	require_once SLIM_DIR . "/inc/$f.php";
 }
 if ( defined( 'WP_CLI' ) && WP_CLI ) {

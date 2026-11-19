@@ -14,7 +14,7 @@ This is the Apex Slim and Longevity website as a WordPress theme, in English. It
 
 | File | What it is |
 |---|---|
-| `apex-slim-1.0.0.zip` | The theme. Every page of the site is drawn by it. It holds the styles, scripts, fonts, pictures and `content.json`, the site's content as it was designed. |
+| `apex-slim-1.0.1.zip` | The theme. Every page of the site is drawn by it. It holds the styles, scripts, fonts, pictures and `content.json`, the site's content as it was designed. |
 | `HANDOVER.pdf` | This document. |
 
 The source is in the repository `shinigami1235-creator/Apex-Slim-and-Longevity` under `wordpress/theme/apex-slim/`. `python3 tools/build_theme.py` builds the zip from it.
@@ -24,7 +24,7 @@ The source is in the repository `shinigami1235-creator/Apex-Slim-and-Longevity` 
 - WordPress 6.5 or newer. Tested on 6.8.3.
 - PHP 8.0 or newer with the GD extension and WebP support. Tested on PHP 8.3. GD cuts the Results pod pictures and saves uploads as WebP.
 - MySQL 5.7+ or MariaDB 10.4+, and HTTPS.
-- An upload limit of 40 MB or more for the theme zip (it is 33 MB), since it carries the 3D body and the face and body tracking models. If the host's limit is lower, unzip `apex-slim/` into `wp-content/themes/` by FTP or SFTP instead.
+- An upload limit of 40 MB or more for the theme zip (it is 34 MB), since it carries the 3D body and the face and body tracking models. If the host's limit is lower, unzip `apex-slim/` into `wp-content/themes/` by FTP or SFTP instead.
 - Outgoing email that works: the host's mailer or WP Mail SMTP. New consult requests are emailed with `wp_mail`.
 - Two-step login for every Administrator and Editor account, since those accounts read enquiries: the Two Factor plugin or Wordfence Login Security.
 - A daily backup of the database and `wp-content/uploads/`, kept 30 days, from the host or UpdraftPlus.
@@ -36,8 +36,8 @@ No other plugin is needed. An SEO plugin (Yoast, Rank Math, SEOPress, All in One
 
 1. Install WordPress on staging. In Settings › General set the site language to English and the time zone to Bangkok.
 2. Settings › Permalinks: choose **Post name**.
-3. Appearance › Themes › Add New › Upload Theme: upload `apex-slim-1.0.0.zip`, then **Activate**.
-4. Tools › Apex Slim content › **Import the content that came with the theme**. This makes the Home, Slim Wellness Lab and Privacy policy pages, sets Home as the front page, and adds the 7 treatments and 4 Results cases. On the command line it is `wp slim import`.
+3. Appearance › Themes › Add New › Upload Theme: upload `apex-slim-1.0.1.zip`, then **Activate**.
+4. Tools › Apex Slim content › **Import the content that came with the theme**. This makes the Home, Slim Wellness Lab and Privacy policy pages, sets Home as the front page, and adds the 8 treatments and 4 Results cases. On the command line it is `wp slim import`.
 5. Apex Slim › Settings: put the Apex Slim team's email addresses in **Send new requests to**, separated by commas. Check the footer lines and the LINE link.
 6. Pages › Privacy policy: the import publishes Apex Medical Center's own privacy policy, the same text and contacts as apexmedicalcenter.co.th/en/privacy-policy/, as Apex asked. A short "This website" section is added for the consult form and the lab. It states that requests are kept 365 days, the same as **Keep requests for (days)** in Settings; change both together. When Apex Medical Center's policy changes, paste the new text here too.
 7. Settings › Reading: tick **Discourage search engines** on staging only.
@@ -73,7 +73,8 @@ Anything else (blog posts, archives, search, attachment pages) shows the "Page n
 | A treatment's page, its tile on the home page, its Lab Notes card and its card on the mixing bench | **Treatments**, one screen per treatment. The article is in the editor box; use its Text tab to keep the figures and boxes as they are. |
 | The order of the treatments | **Order** on each treatment (Page attributes, on the right). |
 | Before and after cases in the Results section | **Results cases**. Choose the before and after photos and save; the pod pictures are cut from them. |
-| Home page text: headings, the first visit slip, the Longevity and Results lines | **Apex Slim › Home page** |
+| Home page text: headings, the first visit slip, the doctors, the Longevity and Results lines | **Apex Slim › Home page** |
+| The Instagram feed on the home page | **Apex Slim › Instagram** (Administrators) |
 | Lab text and the meals list | **Apex Slim › Slim Wellness Lab page** |
 | Logo text, footer, LINE, footer links, the consult form's text and times, where requests go, how long they are kept | **Apex Slim › Settings** |
 | Google Tag Manager and custom code | **Apex Slim › Tracking and code** (Administrators) |
@@ -89,6 +90,23 @@ Uploaded JPEG and PNG photos are saved as WebP. Settings › Media turns that of
 - Requests older than the keep period (365 days unless Settings says otherwise, never under 30) are deleted every night at 03:00 by WordPress's scheduler. On a quiet site, make the host call `wp-cron.php` every 15 minutes so the job runs.
 - When someone asks for their details to be removed, open the enquiry and use **Delete for good**.
 - **Enquiries › Access log** (Administrators) lists who opened, changed or deleted an enquiry, who imported content, changed settings or a user's role, and logins of staff who can read enquiries. It keeps the newest 3,000 entries from the last 400 days.
+
+## Instagram feed
+
+The home page shows the latest posts of Apex Slim's Instagram account. The server fetches them every hour and keeps its own square copy of each picture in `wp-content/uploads/slim-ig/`, so a visitor's browser loads nothing from Instagram and no visitor data goes to Meta. Each picture links to its post on Instagram. The section stays hidden until the first fetch works, and a failed fetch keeps the posts already shown.
+
+It needs an access token for the account, made once on staging:
+
+1. The Apex Slim Instagram account must be a professional account (Business or Creator). Instagram app › Settings › Account type and tools shows which.
+2. At developers.facebook.com, create an app with the Instagram API use case, then open **API setup with Instagram login** › **Generate access tokens**.
+3. **Add account**, log in as the Apex Slim Instagram account and allow access. Copy the token it shows (it starts with IG).
+4. In WordPress, Apex Slim › Instagram: paste it in **Access token** and **Save**. The page fetches straight away and shows the account name, how many posts it saved and any error from Instagram.
+
+A token stops working 60 days after it was made or last renewed, so the site renews it every week by itself. If the site is offline for more than 60 days, make a new token with steps 2 to 4.
+
+Moving staging to live: copy the database and `wp-content/uploads/` as usual. The token and the post list come with the database, and missing pictures are downloaded again at the next fetch. Then tick **Remove the token** on staging and save, so only the live site uses the token.
+
+The hourly fetch and the weekly renewal run on WordPress's scheduler, like the nightly deletion of old requests, so make the host call `wp-cron.php` every 15 minutes.
 
 ## Spam and limits
 
@@ -113,12 +131,15 @@ No comments, no XML-RPC, no user listing at `/wp-json/wp/v2/users` or `/?author=
 7. PageSpeed Insights on mobile for the home page and one treatment page.
 8. Paste the home page and one treatment page into a LINE chat and check the picture and title. Set a 1200 x 630 picture in Settings › **Picture for shared links** first.
 9. A backup restores cleanly to staging.
+10. Apex Slim › Instagram shows the right account, a recent fetch and no error, and the posts show above the Slim Wellness Lab section on the home page.
 
 When the สบส. permit is issued, its number goes in Apex Slim › Settings › **Advertising permit number** and shows in the footer.
 
 ## Updating the theme
 
 Gid sends a new zip with a higher version. Appearance › Themes › Add New › Upload Theme, upload it and choose **Replace current with uploaded**. Content lives in the database, so it stays. Do it on staging first. The version shows at the bottom right of every admin page.
+
+Going from 1.0.0 to 1.0.1: after replacing the theme, use Tools › Apex Slim content › **Import the content that came with the theme**, since 1.0.1 adds the Exomind page, the doctors and new case photos. Import writes over the text of the pages and treatments it brings, so on a site where staff have already edited content, download content.json first.
 
 Before a big change, Tools › Apex Slim content › **Download content.json** keeps a copy of every text and picture address; importing it puts them back.
 
@@ -127,3 +148,4 @@ Before a big change, Tools › Apex Slim content › **Download content.json** k
 | Version | Date | What changed |
 |---|---|---|
 | 1.0.0 | 15 November 2026 | First release: home, 7 treatment pages, Slim Wellness Lab, privacy policy, Enquiries inbox, import, export and check. |
+| 1.0.1 | 19 November 2026 | Exomind page. Our doctors on the home page. Apex's own client photos on 1 Week 1 Kilo, CoolSculpting and FIT FIRM. Instagram feed (Apex Slim › Instagram). |

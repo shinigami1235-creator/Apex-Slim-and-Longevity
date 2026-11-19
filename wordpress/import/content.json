@@ -44,7 +44,7 @@
  },
  "home": {
   "seoTitle": "Apex Slim and Longevity | Slim science and wellness",
-  "seoDesc": "Body fat, muscle tone, energy and sleep treatments at Apex Slim and Longevity, part of the Apex Medical Center group. CoolSculpting, Emsculpt Neo, 1 Week 1 Kilo, FIT FIRM, IV Therapy, HBOT and Snorelase.",
+  "seoDesc": "Body fat, muscle tone, energy and sleep treatments at Apex Slim and Longevity, part of the Apex Medical Center group. CoolSculpting, Emsculpt Neo, 1 Week 1 Kilo, FIT FIRM, IV Therapy, HBOT, Snorelase and Exomind.",
   "h1": "Slim science and wellness",
   "lede": "Apex Slim and Longevity treats body fat, muscle tone and the health behind them, and is part of the Apex Medical Center group.",
   "shelf": "Tap the ingredients you want, then mix them.",
@@ -75,6 +75,37 @@
     }
    ]
   },
+  "docsH": "Our doctors",
+  "docsP": "Five doctors from Apex Medical Center see Apex Slim clients. The number under each name is the doctor's licence from the Medical Council of Thailand.",
+  "docsPhoto": "img/doctors.webp",
+  "docsAlt": "The five Apex Slim doctors, from left: Dr. Eung, Dr. Annie, Dr. Tor, Dr. Yung and Dr. Ann",
+  "docs": [
+   {
+    "en": "Dr. Eung",
+    "th": "พญ.ปรณีย์ ฉัตรธานี",
+    "lic": "57758"
+   },
+   {
+    "en": "Dr. Annie",
+    "th": "พญ.วรพร ประทีปชัยบูรณ์",
+    "lic": "66171"
+   },
+   {
+    "en": "Dr. Tor",
+    "th": "นพ.ต่อศักดิ์ ทิพย์ไพโรจน์",
+    "lic": "15855"
+   },
+   {
+    "en": "Dr. Yung",
+    "th": "พญ.ศิริรัตน์ พูลทรัพย์",
+    "lic": "23897"
+   },
+   {
+    "en": "Dr. Ann",
+    "th": "พญ.ธนัชพร ลาภาธารกุล",
+    "lic": "66289"
+   }
+  ],
   "longH": "Longevity",
   "longP": "Longevity at Apex Slim covers recovery, energy and sleep, and each treatment can run alongside a slimming plan.",
   "resultsH": "Results",
@@ -351,6 +382,92 @@
    "pair": {
     "to": "coolsculpting",
     "text": "CoolSculpting removes a stubborn patch of fat once you're close to your goal weight."
+   },
+   "gallery": {
+    "title": "Our clients",
+    "note": "Eight of our clients on 1 Week 1 Kilo, with their weight at the start and now. The black and white photo is from the start of the program. Results depend on each person.",
+    "cases": [
+     {
+      "label": "91 kg to 69 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-47.webp",
+        "cap": "Khun JJ, 4 months"
+       }
+      ]
+     },
+     {
+      "label": "66 kg to 54 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-48.webp",
+        "cap": "Khun Praewa, 4 months"
+       }
+      ]
+     },
+     {
+      "label": "57 kg to 47 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-43.webp",
+        "cap": "Khun Chompoo, 4 months"
+       }
+      ]
+     },
+     {
+      "label": "58 kg to 46 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-49.webp",
+        "cap": "Khun App, 2.5 months"
+       }
+      ]
+     },
+     {
+      "label": "60 kg to 51 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-44.webp",
+        "cap": "Khun Nam, 3 months"
+       }
+      ]
+     },
+     {
+      "label": "67 kg to 59 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-50.webp",
+        "cap": "Chef Pom, 4 months"
+       }
+      ]
+     },
+     {
+      "label": "88 kg to 81 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-46.webp",
+        "cap": "Khun James, 3 months"
+       }
+      ]
+     },
+     {
+      "label": "57 kg to 50 kg",
+      "sub": "",
+      "cells": [
+       {
+        "src": "img/tx/wk-45.webp",
+        "cap": "Khun Little, 2 months"
+       }
+      ]
+     }
+    ]
    }
   },
   {
@@ -461,8 +578,50 @@
    },
    "gallery": {
     "title": "Case photos",
-    "note": "Each case is the same person before and after CoolSculpting. The first six photos are from Allergan, the maker of CoolSculpting.",
+    "note": "Each case is the same person before and after CoolSculpting. The first three are our clients at Apex. The next six are from Allergan, the maker of CoolSculpting.",
     "cases": [
+     {
+      "label": "Kru Uan, belly",
+      "sub": "Our client, about 4 months apart",
+      "cells": [
+       {
+        "src": "img/tx/csa-uan-then.webp",
+        "cap": "20 Dec 2025"
+       },
+       {
+        "src": "img/tx/csa-uan-now.webp",
+        "cap": "17 Apr 2026"
+       }
+      ]
+     },
+     {
+      "label": "Khun Khun, belly",
+      "sub": "Our client, about 11 weeks apart",
+      "cells": [
+       {
+        "src": "img/tx/csa-khun-then.webp",
+        "cap": "27 Oct 2025"
+       },
+       {
+        "src": "img/tx/csa-khun-now.webp",
+        "cap": "15 Jan 2026"
+       }
+      ]
+     },
+     {
+      "label": "Khun Kelly, belly",
+      "sub": "Our client, 1 month apart",
+      "cells": [
+       {
+        "src": "img/tx/csa-kelly-then.webp",
+        "cap": "10 May 2026"
+       },
+       {
+        "src": "img/tx/csa-kelly-now.webp",
+        "cap": "10 Jun 2026"
+       }
+      ]
+     },
      {
       "label": "Belly",
       "sub": "10 cycles over 2 sessions, 5 in each",
@@ -1247,19 +1406,89 @@
    },
    "gallery": {
     "title": "Case photos",
-    "note": "The belly measured around the navel before and after FIT FIRM.",
+    "note": "Our clients, measured in inches before a session and again straight after it. The waist is measured at three heights: upper, middle and lower.",
     "cases": [
      {
       "label": "Belly",
-      "sub": "",
+      "sub": "Around the navel",
       "cells": [
        {
         "src": "img/tx/ff-1-before.webp",
-        "cap": "Before: 31 inches"
+        "cap": "Before: 31"
        },
        {
         "src": "img/tx/ff-1-after.webp",
-        "cap": "After: 29.5 inches"
+        "cap": "After: 29.5"
+       }
+      ]
+     },
+     {
+      "label": "Waist",
+      "sub": "Upper, middle and lower",
+      "cells": [
+       {
+        "src": "img/tx/ffa-12-before.webp",
+        "cap": "Before: 32, 34, 37"
+       },
+       {
+        "src": "img/tx/ffa-12-after.webp",
+        "cap": "After: 31.5, 32.6, 35.7"
+       }
+      ]
+     },
+     {
+      "label": "Waist",
+      "sub": "Upper, middle and lower",
+      "cells": [
+       {
+        "src": "img/tx/ffa-20-before.webp",
+        "cap": "Before: 26.5, 29.5, 31.6"
+       },
+       {
+        "src": "img/tx/ffa-20-after.webp",
+        "cap": "After: 25.5, 26.5, 29"
+       }
+      ]
+     },
+     {
+      "label": "Waist",
+      "sub": "Upper, middle and lower",
+      "cells": [
+       {
+        "src": "img/tx/ffa-6-before.webp",
+        "cap": "Before: 27.1, 27.5, 31.8"
+       },
+       {
+        "src": "img/tx/ffa-6-after.webp",
+        "cap": "After: 25.5, 27, 28"
+       }
+      ]
+     },
+     {
+      "label": "Waist",
+      "sub": "Upper, middle and lower",
+      "cells": [
+       {
+        "src": "img/tx/ffa-18-before.webp",
+        "cap": "Before: 27, 30.5, 33"
+       },
+       {
+        "src": "img/tx/ffa-18-after.webp",
+        "cap": "After: 26, 29.5, 32.5"
+       }
+      ]
+     },
+     {
+      "label": "Right thigh",
+      "sub": "Upper and lower",
+      "cells": [
+       {
+        "src": "img/tx/ffa-14-before.webp",
+        "cap": "Before: 22.5, 20.5"
+       },
+       {
+        "src": "img/tx/ffa-14-after.webp",
+        "cap": "After: 21.5, 19.5"
        }
       ]
      }
@@ -1667,6 +1896,117 @@
      "full": "img/tx/leaflet-13.webp",
      "thumb": "img/tx/leaflet-13-t.webp",
      "alt": "Snorelase leaflet: who it suits and the study"
+    }
+   ]
+  },
+  {
+   "key": "exomind",
+   "order": 7,
+   "name": "Exomind",
+   "sym": "Ex",
+   "cls": "long",
+   "group": "longevity",
+   "goal": "energy",
+   "tile": {
+    "page": "Magnetic brain stimulation",
+    "home": "25 to 30 min, no downtime"
+   },
+   "temp": [
+    "Longevity",
+    "25 to 30 minutes"
+   ],
+   "bench": {
+    "time": "25 to 30 min, no downtime",
+    "desc": "Magnetic pulses on the front of the brain, studied for food cravings, stress and sleep."
+   },
+   "longCard": "Magnetic pulses reach the front of the brain in 25 to 30 minutes, studied for food cravings, stress and sleep.",
+   "note": {
+    "h": "How magnetic pulses reach the brain",
+    "p": "A coil on your head sends pulses through the skull to the area behind your forehead.",
+    "mins": 4
+   },
+   "desc": "Exomind at Apex Slim and Longevity uses magnetic pulses on the front of the brain for food cravings, stress and sleep, in 25 to 30 minutes a session.",
+   "hook": [
+    "Exomind is a machine by BTL that sends magnetic pulses through your skull to the front of your brain, the part behind your forehead that helps you plan, hold back and calm down. Doctors call this transcranial magnetic stimulation (TMS), and hospitals have used it to treat depression in the US since 2008.",
+    "At Apex Slim we offer Exomind for people who think about food all day, feel stressed or sleep badly. Each session takes 25 to 30 minutes, you stay awake and you go back to your day straight after."
+   ],
+   "protocol": [
+    {
+     "k": "Session time",
+     "v": "25 to 30 minutes"
+    },
+    {
+     "k": "Sessions",
+     "v": "4 to 6, 3 to 7 days apart in the studies"
+    },
+    {
+     "k": "Machine",
+     "v": "Exomind by BTL (ExoTMS)"
+    },
+    {
+     "k": "Treated",
+     "v": "The front of the brain behind your forehead"
+    },
+    {
+     "k": "Feels like",
+     "v": "Tapping on the scalp, like a head massage"
+    },
+    {
+     "k": "Downtime",
+     "v": "None"
+    },
+    {
+     "k": "Before",
+     "v": "Take off metal jewellery, glasses and hair clips"
+    }
+   ],
+   "extra": "",
+   "body": "<h2>How it works</h2>\n<p>The coil sits on your head and makes a magnetic field that switches on and off very fast. The field passes through the skull without heating it and makes small electric currents in the brain cells under the coil. Repeated pulses make that area more active and help it link up better with the rest of the brain.</p>\n<p>Exomind aims at the dorsolateral prefrontal cortex. This area helps you control urges, stick to plans and handle stress, and it tends to be less active in people with depression and in people who overeat. BTL calls its version ExoTMS and says it needs fewer sessions than older TMS machines, which often take 20 to 36 visits.</p>\n\n<h2>What it's approved for</h2>\n<p>The US FDA cleared Exomind to treat depression. In Europe and Canada it is also approved for anxiety, obsessive compulsive disorder and binge eating. Using it for food cravings, stress and sleep, as we do at Apex Slim, goes beyond those approvals and rests on the studies below.</p>\n\n<h2>Results from studies</h2>\n<p>All of these studies were small, run with BTL and short. Only two had a group that got a fake treatment to compare with.</p>\n<ul>\n<li><b>Food cravings.</b> 23 adults had 4 to 6 sessions. One month later their food craving score was 36 percent lower, and they had lost 2.3 kg on average.</li>\n<li><b>Self-control.</b> 51 adults had 6 sessions, and 12 of them got a fake treatment. One month later 76 percent of the treated group said their self-control had improved, and their self-control score went up 3 times more than in the fake group.</li>\n<li><b>Binge eating.</b> 38 adults had 6 sessions. One month later 28 of them, or 74 percent, no longer scored as binge eaters.</li>\n<li><b>Sleep and stress.</b> 43 adults with poor sleep had 6 sessions 3 to 7 days apart, and 12 of them got a fake treatment. In the treated group the sleep quality score fell from 9.5 to 5.8, where a lower score means better sleep.</li>\n</ul>\n<p>We don't yet know how long these changes last past 1 to 3 months, or how Exomind compares with diet support, counselling or medicine.</p>\n\n<h2>Your sessions</h2>\n<ol>\n<li>You take off metal jewellery, glasses and hair clips, then sit back in a chair and stay awake. Nothing goes through the skin and you don't need an anaesthetic.</li>\n<li>The coil is placed on your head over the treatment area. You hear clicking and feel tapping on your scalp, and the muscles of your face or jaw may twitch with the pulses.</li>\n<li>Each session takes 25 to 30 minutes. You can drive and go back to work after.</li>\n</ol>\n<p>The studies used 4 to 6 sessions spaced 3 to 7 days apart. The doctor plans yours at the consult.</p>\n\n<h2>Side effects</h2>\n<ul>\n<li>a headache or a sore scalp on the day, which usually passes within hours</li>\n<li>twitching of the face or jaw during the pulses</li>\n<li>a seizure, which is rare with TMS</li>\n</ul>\n<p>Most people in the studies found the sessions comfortable and none had a serious side effect.</p>\n\n<h2>Who can't have it</h2>\n<p>You can't have Exomind if you have metal in or near your head, like aneurysm clips, a cochlear implant or a brain stimulator. Tell the doctor if you have a pacemaker, if you have ever had a seizure or epilepsy, or if you're pregnant. If you have depression or another mental health condition, keep seeing your own doctor and don't stop any medicine since Exomind doesn't replace that treatment.</p>",
+   "faq": [
+    {
+     "q": "Does it hurt?",
+     "a": "It feels like tapping on your scalp. Some people get a mild headache afterwards that passes within hours."
+    },
+    {
+     "q": "Will it change my personality?",
+     "a": "No. It makes the area that controls urges and stress more active, and you stay fully awake and in control during the session."
+    },
+    {
+     "q": "How many sessions do I need?",
+     "a": "The studies used 4 to 6 sessions, 3 to 7 days apart. The doctor plans yours at the consult."
+    },
+    {
+     "q": "Can I have it with 1 Week 1 Kilo?",
+     "a": "Yes. Ask the doctor at your consult, since the food cravings study is the closest match for people trying to lose weight."
+    }
+   ],
+   "refs": [
+    "Apex Hospital &amp; Clinics. Exomind brochures and information sheet, 2026.",
+    "Klírová M. Mind over cravings: ExoTMS as the novel rTMS technology for food cravings reduction. BTL clinical summary, 2025.",
+    "Cady L, Nanda R, Eberwein R, Johnston H, Tvrdik N. Novel ExoTMS technology for the improvement of self-control and food cravings: 1-month preliminary results. BTL clinical summary, 2025.",
+    "Nanos G, Silva M, Patel C. Novel ExoTMS technology for the improvement of sleep quality and reduction of stress: preliminary data. BTL clinical summary, 2025.",
+    "Pánek D, Donchev TS. Novel ExoTMS technology for the reduction of binge eating symptoms. <i>PCN Reports</i>. 2025. <a href=\"https://doi.org/10.1002/pcn5.70200\" target=\"_blank\" rel=\"noopener\">doi:10.1002/pcn5.70200</a>",
+    "Dees M, Halaas Y, McCoy JD. ExoTMS technology: a breakthrough in transcranial stimulation for enhancing mental well-being. <i>J Psychiatry Psychiatr Disord</i>. 2025. <a href=\"https://doi.org/10.26502/jppd.2572-519X0255\" target=\"_blank\" rel=\"noopener\">doi:10.26502/jppd.2572-519X0255</a>",
+    "BTL. Exomind. <a href=\"https://www.bodybybtl.com/exomind/\" target=\"_blank\" rel=\"noopener\">bodybybtl.com</a>"
+   ],
+   "pair": {
+    "to": "one-week-one-kilo",
+    "text": "People on 1 Week 1 Kilo who still think about food all day can ask the doctor about adding Exomind."
+   },
+   "device": {
+    "src": "img/tx/device-exomind.webp",
+    "cap": "The Exomind coil sits over the front of your head while you lie back."
+   },
+   "leaflets": [
+    {
+     "full": "img/tx/leaflet-21.webp",
+     "thumb": "img/tx/leaflet-21-t.webp",
+     "alt": "Exomind leaflet: the machine and what it does"
+    },
+    {
+     "full": "img/tx/leaflet-22.webp",
+     "thumb": "img/tx/leaflet-22-t.webp",
+     "alt": "Exomind leaflet: a client under the coil"
     }
    ]
   }

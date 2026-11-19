@@ -131,6 +131,11 @@ function slim_check(): array {
 	if ( empty( $s['notify'] ) ) $warn( 'Apex Slim › Settings has no address for new requests, so they go to ' . get_option( 'admin_email' ) . '.' );
 	if ( empty( $s['consult']['consent'] ) ) $err( 'The consult form has no consent line.' );
 	if ( empty( $s['permit'] ) ) $warn( 'No advertising permit number yet (Apex Slim › Settings).' );
+	if ( function_exists( 'slim_ig' ) ) {
+		$ig = slim_ig();
+		if ( $ig['token'] === '' ) $warn( 'Apex Slim › Instagram has no access token, so the home page shows no Instagram posts.' );
+		elseif ( $ig['error'] !== '' ) $err( 'The Instagram feed failed: ' . $ig['error'] );
+	}
 	$pics( $s, 'Settings' );
 	$syms = [];
 	$keys = array_column( slim_treatments( true ), 'key' );

@@ -11,7 +11,7 @@ from playwright.sync_api import sync_playwright
 
 STATIC, WP = sys.argv[1].rstrip('/') + '/', sys.argv[2].rstrip('/') + '/'
 PAGES = [('index.html', ''), ('lab.html', 'lab/')] + [(f'{s}.html', f'treatments/{s}/') for s in
-         ['one-week-one-kilo', 'coolsculpting', 'emsculpt-neo', 'fit-firm', 'iv-therapy', 'hbot', 'snorelase']]
+         ['one-week-one-kilo', 'coolsculpting', 'emsculpt-neo', 'fit-firm', 'iv-therapy', 'hbot', 'snorelase', 'exomind']]
 
 GRAB = """() => {
   document.querySelectorAll('.consent a').forEach(a => a.remove());   // on purpose: WordPress links the privacy policy there

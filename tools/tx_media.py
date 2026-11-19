@@ -4,7 +4,17 @@
 CS_STAGES = ("Before", "4 weeks after the 1st session", "8 weeks after the 2nd session")
 
 MEDIA = {
-"one-week-one-kilo": dict(),
+"one-week-one-kilo": dict(
+    gallery=dict(
+        title="Our clients",
+        note="Eight of our clients on 1 Week 1 Kilo, with their weight at the start and now. The black and white photo is from the start of the program. Results depend on each person.",
+        cases=[(f"{a} kg to {b} kg", [(f"wk-{n}.webp", f"{who}, {t}")]) for n, who, a, b, t in [
+            (47, "Khun JJ", 91, 69, "4 months"), (48, "Khun Praewa", 66, 54, "4 months"),
+            (43, "Khun Chompoo", 57, 47, "4 months"), (49, "Khun App", 58, 46, "2.5 months"),
+            (44, "Khun Nam", 60, 51, "3 months"), (50, "Chef Pom", 67, 59, "4 months"),
+            (46, "Khun James", 88, 81, "3 months"), (45, "Khun Little", 57, 50, "2 months")]],
+    ),
+),
 
 "coolsculpting": dict(
     leaflets=[17, 18, 19, 20],
@@ -36,8 +46,12 @@ MEDIA = {
     device=("device-coolsculpting-elite.webp", "Our CoolSculpting Elite machine, with two applicators."),
     gallery=dict(
         title="Case photos",
-        note="Each case is the same person before and after CoolSculpting. The first six photos are from Allergan, the maker of CoolSculpting.",
+        note="Each case is the same person before and after CoolSculpting. The first three are our clients at Apex. The next six are from Allergan, the maker of CoolSculpting.",
         cases=[
+            ("Kru Uan, belly", [("csa-uan-then.webp", "20 Dec 2025"), ("csa-uan-now.webp", "17 Apr 2026")], "Our client, about 4 months apart"),
+            ("Khun Khun, belly", [("csa-khun-then.webp", "27 Oct 2025"), ("csa-khun-now.webp", "15 Jan 2026")], "Our client, about 11 weeks apart"),
+            ("Khun Kelly, belly", [("csa-kelly-then.webp", "10 May 2026"), ("csa-kelly-now.webp", "10 Jun 2026")], "Our client, 1 month apart"),
+
             ("Belly", [("ppt-case-14-0.webp", "Before"), ("ppt-case-14-1.webp", "3 months after the 2nd session")], "10 cycles over 2 sessions, 5 in each"),
             ("Flanks", [("ppt-case-15-0.webp", "Before"), ("ppt-case-15-1.webp", "17 weeks after the 2nd session")], "8 cycles over 2 sessions, 6 then 2"),
             ("Inner and outer thighs", [("ppt-case-16-0.webp", "Before"), ("ppt-case-16-1.webp", "19 weeks after the 2nd session")], "6 cycles over 2 sessions, 4 then 2"),
@@ -64,13 +78,25 @@ MEDIA = {
     leaflets=[8, 9, 10],
     gallery=dict(
         title="Case photos",
-        note="The belly measured around the navel before and after FIT FIRM.",
-        cases=[("Belly", [("ff-1-before.webp", "Before: 31 inches"), ("ff-1-after.webp", "After: 29.5 inches")])],
+        note="Our clients, measured in inches before a session and again straight after it. The waist is measured at three heights: upper, middle and lower.",
+        cases=[("Belly", [("ff-1-before.webp", "Before: 31"), ("ff-1-after.webp", "After: 29.5")], "Around the navel")] + [
+            (label, [(f"ffa-{n}-before.webp", f"Before: {b}"), (f"ffa-{n}-after.webp", f"After: {a}")], sub)
+            for n, label, sub, b, a in [
+                (12, "Waist", "Upper, middle and lower", "32, 34, 37", "31.5, 32.6, 35.7"),
+                (20, "Waist", "Upper, middle and lower", "26.5, 29.5, 31.6", "25.5, 26.5, 29"),
+                (6, "Waist", "Upper, middle and lower", "27.1, 27.5, 31.8", "25.5, 27, 28"),
+                (18, "Waist", "Upper, middle and lower", "27, 30.5, 33", "26, 29.5, 32.5"),
+                (14, "Right thigh", "Upper and lower", "22.5, 20.5", "21.5, 19.5")]],
     ),
 ),
 
 "iv-therapy": dict(
     leaflets=[5, 6, 7],
+),
+
+"exomind": dict(
+    leaflets=[21, 22],
+    device=("device-exomind.webp", "The Exomind coil sits over the front of your head while you lie back."),
 ),
 
 "hbot": dict(
@@ -125,4 +151,6 @@ LEAFLET_ALT = {
 18: "CoolSculpting Elite leaflet: before and after photos",
 19: "CoolSculpting Elite leaflet: more before and after photos",
 20: "CoolSculpting Elite leaflet: how it works",
+21: "Exomind leaflet: the machine and what it does",
+22: "Exomind leaflet: a client under the coil",
 }

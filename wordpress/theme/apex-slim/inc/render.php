@@ -292,6 +292,21 @@ function slim_view_home(): void {
   </div>
 </section>
 
+<?php $docs = (array) ( $P['docs'] ?? [] ); if ( $docs ) : ?>
+<section class="sec docs" id="doctors" aria-labelledby="h-docs">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="h-docs"><?php echo $g( 'docsH', 'Our doctors' ); ?></h2>
+      <p><?php echo $g( 'docsP' ); ?></p>
+    </div>
+<?php if ( ! empty( $P['docsPhoto'] ) ) echo '    <figure class="docs-photo">' . slim_img_tag( (string) $P['docsPhoto'], (string) ( $P['docsAlt'] ?? '' ) ) . "</figure>\n"; ?>
+    <ol class="docs-list">
+<?php foreach ( $docs as $d ) echo '        <li><b>' . slim_t( $d['en'] ?? '' ) . '</b><span lang="th">' . slim_t( $d['th'] ?? '' ) . '</span><small>Licence ว.' . slim_t( $d['lic'] ?? '' ) . "</small></li>\n"; ?>
+    </ol>
+  </div>
+</section>
+
+<?php endif; ?>
 <section class="sec longevity" id="longevity" aria-labelledby="h-long">
   <div class="wrap">
     <svg class="ecg" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 55H170L182 47 194 55H250L258 61 268 12 280 82 290 50H300L318 55H520L532 47 544 55H600L608 61 618 12 630 82 640 50H650L668 55H870L882 47 894 55H950L958 61 968 12 980 82 990 50H1000L1018 55H1200"/></svg>
@@ -369,6 +384,7 @@ function slim_view_home(): void {
   </div>
 </section>
 
+<?php slim_ig_section(); ?>
 <section class="sec" id="play" aria-labelledby="h-play">
   <div class="wrap">
     <div class="play">

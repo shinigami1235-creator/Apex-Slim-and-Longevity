@@ -12,8 +12,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = "30"
-JS = '<script src="assets/js/slim.js?v=11"></script>\n<script src="assets/js/tx.js?v=3"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
+CSS_V = 31
+JS = '<script src="assets/js/slim.js?v=12"></script>\n<script src="assets/js/tx.js?v=3"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
 GOALS = [("weight", "Lose weight"), ("fat", "Belly and flank fat"), ("tone", "Muscle tone"),
@@ -68,7 +68,7 @@ def gallery(m, name):
     for case in g["cases"]:
         label, cells = case[0], case[1]
         sub = f'<p class="tx-case-sub">{case[2]}</p>' if len(case) > 2 else ""
-        figs = "".join(f'<figure><button type="button" class="zoomable" data-full="{IMG}{f}"><img src="{IMG}{f}" alt="{html.escape(label)}, {html.escape(c.lower())}" loading="lazy"></button><figcaption>{c}</figcaption></figure>' for f, c in cells)
+        figs = "".join(f'<figure><button type="button" class="zoomable" data-full="{IMG}{f}"><img src="{IMG}{f}" alt="{html.escape(label)}, {html.escape(c if c.split()[0] in ("Khun", "Kru", "Chef") or c[:1].isdigit() else c.lower())}" loading="lazy"></button><figcaption>{c}</figcaption></figure>' for f, c in cells)
         n = 2 if len(cells) == 4 else len(cells)
         cases.append(f'<div class="tx-case" style="--n:{n}"><h3>{label}</h3>{sub}<div class="tx-cells">{figs}</div></div>')
     return f"""

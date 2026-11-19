@@ -356,4 +356,58 @@ faq=[
 ("My partner says I stop breathing at night.", "Get a sleep test before you book Snorelase since stopping breathing is a sign of sleep apnoea, which needs its own treatment."),
 ],
 ),
+
+# ---------------------------------------------------------------- Exomind
+"exomind": dict(
+desc="Exomind at Apex Slim and Longevity uses magnetic pulses on the front of the brain for food cravings, stress and sleep, in 25 to 30 minutes a session.",
+note=("How magnetic pulses reach the brain", "A coil on your head sends pulses through the skull to the area behind your forehead."),
+pair="People on 1 Week 1 Kilo who still think about food all day can ask the doctor about adding Exomind.",
+hook=[
+"Exomind is a machine by BTL that sends magnetic pulses through your skull to the front of your brain, the part behind your forehead that helps you plan, hold back and calm down. Doctors call this transcranial magnetic stimulation (TMS), and hospitals have used it to treat depression in the US since 2008.",
+"At Apex Slim we offer Exomind for people who think about food all day, feel stressed or sleep badly. Each session takes 25 to 30 minutes, you stay awake and you go back to your day straight after.",
+],
+body="""
+<h2>How it works</h2>
+<p>The coil sits on your head and makes a magnetic field that switches on and off very fast. The field passes through the skull without heating it and makes small electric currents in the brain cells under the coil. Repeated pulses make that area more active and help it link up better with the rest of the brain.</p>
+<p>Exomind aims at the dorsolateral prefrontal cortex. This area helps you control urges, stick to plans and handle stress, and it tends to be less active in people with depression and in people who overeat. BTL calls its version ExoTMS and says it needs fewer sessions than older TMS machines, which often take 20 to 36 visits.</p>
+
+<h2>What it's approved for</h2>
+<p>The US FDA cleared Exomind to treat depression. In Europe and Canada it is also approved for anxiety, obsessive compulsive disorder and binge eating. Using it for food cravings, stress and sleep, as we do at Apex Slim, goes beyond those approvals and rests on the studies below.</p>
+
+<h2>Results from studies</h2>
+<p>All of these studies were small, run with BTL and short. Only two had a group that got a fake treatment to compare with.</p>
+<ul>
+<li><b>Food cravings.</b> 23 adults had 4 to 6 sessions. One month later their food craving score was 36 percent lower, and they had lost 2.3 kg on average.</li>
+<li><b>Self-control.</b> 51 adults had 6 sessions, and 12 of them got a fake treatment. One month later 76 percent of the treated group said their self-control had improved, and their self-control score went up 3 times more than in the fake group.</li>
+<li><b>Binge eating.</b> 38 adults had 6 sessions. One month later 28 of them, or 74 percent, no longer scored as binge eaters.</li>
+<li><b>Sleep and stress.</b> 43 adults with poor sleep had 6 sessions 3 to 7 days apart, and 12 of them got a fake treatment. In the treated group the sleep quality score fell from 9.5 to 5.8, where a lower score means better sleep.</li>
+</ul>
+<p>We don't yet know how long these changes last past 1 to 3 months, or how Exomind compares with diet support, counselling or medicine.</p>
+
+<h2>Your sessions</h2>
+<ol>
+<li>You take off metal jewellery, glasses and hair clips, then sit back in a chair and stay awake. Nothing goes through the skin and you don't need an anaesthetic.</li>
+<li>The coil is placed on your head over the treatment area. You hear clicking and feel tapping on your scalp, and the muscles of your face or jaw may twitch with the pulses.</li>
+<li>Each session takes 25 to 30 minutes. You can drive and go back to work after.</li>
+</ol>
+<p>The studies used 4 to 6 sessions spaced 3 to 7 days apart. The doctor plans yours at the consult.</p>
+
+<h2>Side effects</h2>
+<ul>
+<li>a headache or a sore scalp on the day, which usually passes within hours</li>
+<li>twitching of the face or jaw during the pulses</li>
+<li>a seizure, which is rare with TMS</li>
+</ul>
+<p>Most people in the studies found the sessions comfortable and none had a serious side effect.</p>
+
+<h2>Who can't have it</h2>
+<p>You can't have Exomind if you have metal in or near your head, like aneurysm clips, a cochlear implant or a brain stimulator. Tell the doctor if you have a pacemaker, if you have ever had a seizure or epilepsy, or if you're pregnant. If you have depression or another mental health condition, keep seeing your own doctor and don't stop any medicine since Exomind doesn't replace that treatment.</p>
+""",
+faq=[
+("Does it hurt?", "It feels like tapping on your scalp. Some people get a mild headache afterwards that passes within hours."),
+("Will it change my personality?", "No. It makes the area that controls urges and stress more active, and you stay fully awake and in control during the session."),
+("How many sessions do I need?", "The studies used 4 to 6 sessions, 3 to 7 days apart. The doctor plans yours at the consult."),
+("Can I have it with 1 Week 1 Kilo?", "Yes. Ask the doctor at your consult, since the food cravings study is the closest match for people trying to lose weight."),
+],
+),
 }

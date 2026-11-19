@@ -116,6 +116,8 @@ section{position:relative}
 .specimen .el .ic{width:44px;height:44px;top:18px;right:18px}
 .table .el:nth-child(2){--gd:1.1s}.table .el:nth-child(3){--gd:2.2s}.table .el:nth-child(4){--gd:3.3s}
 .table .el:nth-child(6){--gd:.55s}.table .el:nth-child(7){--gd:1.65s}.table .el:nth-child(8){--gd:2.75s}.table .el:nth-child(9){--gd:3.85s}
+.table .el.ask{grid-column:1/-1;aspect-ratio:auto;flex-direction:row;align-items:center;justify-content:flex-start;gap:20px;padding:16px 20px}
+.table .el.ask .ic{top:50%;right:20px;translate:0 -50%}
 @media (prefers-reduced-motion:reduce){.el:hover,.el:focus-visible{transform:none}}
 
 .table{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -209,7 +211,7 @@ section{position:relative}
 .longevity .sec-head p{color:var(--on-night-2)}
 .ecg{width:100%;height:72px;margin:0 0 24px}
 .ecg path{fill:none;stroke:var(--mint);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
-.long-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.long-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 .long-card{display:grid;grid-template-columns:84px minmax(0,1fr);gap:16px;padding:22px;border:1px solid rgba(134,211,190,.35);border-radius:14px;color:var(--on-night);text-decoration:none;transition:border-color .3s var(--ease),background .3s var(--ease)}
 .long-card:hover{border-color:var(--mint);background:rgba(134,211,190,.06);color:var(--on-night)}
 .long-card .el{aspect-ratio:1;padding:8px 8px 6px;pointer-events:none}
@@ -217,9 +219,26 @@ section{position:relative}
 .long-card h3{font-size:1.1875rem;margin-bottom:6px}
 .long-card p{font-size:1rem;color:var(--on-night-2);margin:0}
 @media (max-width:899px){.long-grid{grid-template-columns:1fr}}
+/* Instagram feed (WordPress only) */
+.ig-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.ig-grid a{display:block;border:var(--line) solid var(--lilac-300);border-radius:12px;overflow:hidden;background:#fff}
+.ig-grid img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;display:block;transition:transform .35s var(--ease)}
+.ig-grid a:hover img,.ig-grid a:focus-visible img{transform:scale(1.04)}
+@media (max-width:899px){.ig-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){.ig-grid img{transition:none}}
+/* our doctors */
+.docs-photo{margin:0;border:var(--line) solid var(--lilac-300);border-radius:16px;overflow:hidden;background:#fff}
+.docs-photo img{width:100%;height:auto;display:block}
+.docs-list{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.docs-list li{display:flex;flex-direction:column;gap:3px;padding:12px 14px;border:var(--line) solid var(--lilac-300);border-radius:12px;background:#fff}
+.docs-list b{font-size:1rem;line-height:1.25}
+.docs-list span{font-size:0.9375rem;line-height:1.35}
+.docs-list small{font-size:0.875rem;color:var(--ink-2)}
+@media (max-width:899px){.docs-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:499px){.docs-list{grid-template-columns:1fr}}
 
 /* lab notes */
-.notes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .note{position:relative;display:flex;flex-direction:column;min-height:320px;padding:26px 24px 22px 40px;background-color:#fff;color:var(--ink);text-decoration:none;border:1px solid var(--lilac-300);
   background-image:linear-gradient(transparent 27px,rgba(168,134,205,.35) 27px 28px);background-size:100% 28px;background-position:0 12px}
 .note::before{content:"";position:absolute;left:22px;top:0;bottom:0;border-left:1.5px solid rgba(204,51,102,.35)}

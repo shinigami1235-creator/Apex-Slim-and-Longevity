@@ -25,8 +25,9 @@ const SLIM_ICONS = [
 	'Iv' => '<path d="M7 3.5h10v8.5a5 5 0 0 1-10 0z"/><path d="M7 8h10M12 17v2.5M12 19.5c0 1.4 1 2 2.5 2"/><path d="M10 11.5h4"/>',
 	'Hb' => '<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7.5" r="3.5"/><circle cx="18.5" cy="16.5" r="2"/><path d="M7.4 12.4a2.3 2.3 0 0 1 2.4-1"/>',
 	'Sl' => '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/><path d="M15 3.5h4l-4 4h4"/>',
+	'Ex' => '<path d="M12 5.5a3.5 3.5 0 0 0-6.4-1.2A3.4 3.4 0 0 0 4 10.6a3.4 3.4 0 0 0 1.6 5.6A3.5 3.5 0 0 0 12 18.5z"/><path d="M12 5.5a3.5 3.5 0 0 1 6.4-1.2 3.4 3.4 0 0 1 1.6 6.3 3.4 3.4 0 0 1-1.6 5.6A3.5 3.5 0 0 1 12 18.5"/><path d="M12 5.5v13M8.5 9.5h1.5M14 13h1.5"/>',
 ];
-const SLIM_ICON_NAMES = [ 'Wk' => 'Scale (1 Week 1 Kilo)', 'Cs' => 'Snowflake (CoolSculpting)', 'En' => 'Lightning (Emsculpt Neo)', 'Ff' => 'Waves (FIT FIRM)', 'Iv' => 'Drip bag (IV Therapy)', 'Hb' => 'Bubbles (HBOT)', 'Sl' => 'Moon (Snorelase)' ];
+const SLIM_ICON_NAMES = [ 'Wk' => 'Scale (1 Week 1 Kilo)', 'Cs' => 'Snowflake (CoolSculpting)', 'En' => 'Lightning (Emsculpt Neo)', 'Ff' => 'Waves (FIT FIRM)', 'Iv' => 'Drip bag (IV Therapy)', 'Hb' => 'Bubbles (HBOT)', 'Sl' => 'Moon (Snorelase)', 'Ex' => 'Brain (Exomind)' ];
 const SLIM_ASK_ICON = '<path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16"/><circle cx="12" cy="8.2" r="1.8"/><path d="M8.8 17v-2.2a3.2 3.2 0 0 1 6.4 0V17"/>';
 
 /** Labels over the CoolSculpting body map (img/tx/ppt-map.webp, Allergan's figure with its own labels removed). */

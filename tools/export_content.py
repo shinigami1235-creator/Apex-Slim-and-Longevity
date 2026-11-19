@@ -20,7 +20,8 @@ TX = "img/tx/"
 
 # what the home page tiles, the mixing bench and the body check say about each treatment
 HOME_TILE = {'one-week-one-kilo': 'Weekly with the doctor', 'coolsculpting': '35 to 75 min per area', 'emsculpt-neo': '30 min, 4 to 6 sessions',
-             'fit-firm': 'Cellulite and firmer skin', 'iv-therapy': '30 to 60 min drip', 'hbot': '60 min in the chamber', 'snorelase': '30 min, no cuts'}
+             'fit-firm': 'Cellulite and firmer skin', 'iv-therapy': '30 to 60 min drip', 'hbot': '60 min in the chamber', 'snorelase': '30 min, no cuts',
+             'exomind': '25 to 30 min, no downtime'}
 BENCH = {
     'one-week-one-kilo': ('Weekly visits for 3 months or more', 'A weekly program prescribed by the doctor that works on the hunger that rises when you eat less.'),
     'coolsculpting': ('35 to 75 min per area', 'Cools a fold of fat until the fat cells in it die, and you go back to work the same day.'),
@@ -29,11 +30,13 @@ BENCH = {
     'iv-therapy': ('30 to 60 min drip', 'Vitamins, minerals and fluids through a drip, mixed by the doctor for your goal.'),
     'hbot': ('60 min in the chamber', 'You breathe pure oxygen in a pressurised chamber, which raises the oxygen carried in your blood.'),
     'snorelase': ('3 to 6 sessions, no cuts', 'A laser tightens the soft palate to reduce snoring, with no anaesthetic.'),
+    'exomind': ('25 to 30 min, no downtime', 'Magnetic pulses on the front of the brain, studied for food cravings, stress and sleep.'),
 }
 LONG_CARD = {
     'iv-therapy': 'Vitamins, minerals and fluids given through a drip in 30 to 60 minutes, mixed by the doctor for your goal.',
     'hbot': 'You breathe pure oxygen in a pressurised chamber for 60 minutes, which raises the oxygen carried in your blood.',
     'snorelase': 'A laser tightens the soft palate to reduce snoring over 3 to 6 sessions of about 30 minutes with no cuts and no anaesthetic.',
+    'exomind': 'Magnetic pulses reach the front of the brain in 25 to 30 minutes, studied for food cravings, stress and sleep.',
 }
 AREAS_INTRO = ('A cycle is one round of cooling on one spot. A bigger area takes more cycles since each applicator covers a set size, '
                'and the Elite can run two cycles at once. These are the usual starting numbers, and the doctor plans yours at the consult.')
@@ -133,7 +136,7 @@ SETTINGS = {
 
 HOME = {
     'seoTitle': 'Apex Slim and Longevity | Slim science and wellness',
-    'seoDesc': 'Body fat, muscle tone, energy and sleep treatments at Apex Slim and Longevity, part of the Apex Medical Center group. CoolSculpting, Emsculpt Neo, 1 Week 1 Kilo, FIT FIRM, IV Therapy, HBOT and Snorelase.',
+    'seoDesc': 'Body fat, muscle tone, energy and sleep treatments at Apex Slim and Longevity, part of the Apex Medical Center group. CoolSculpting, Emsculpt Neo, 1 Week 1 Kilo, FIT FIRM, IV Therapy, HBOT, Snorelase and Exomind.',
     'h1': 'Slim science and wellness',
     'lede': 'Apex Slim and Longevity treats body fat, muscle tone and the health behind them, and is part of the Apex Medical Center group.',
     'shelf': 'Tap the ingredients you want, then mix them.',
@@ -145,6 +148,9 @@ HOME = {
               'steps': [{'b': 'Body composition scan', 's': 'Fat mass, muscle mass and body water, measured on the day.'},
                         {'b': 'Doctor consultation', 's': 'The doctor reads the scan with you and goes over your health history.'},
                         {'b': 'Plan with a nutritionist', 's': 'Meals and treatment sessions planned around your week.'}]},
+    'docsH': 'Our doctors', 'docsP': "Five doctors from Apex Medical Center see Apex Slim clients. The number under each name is the doctor's licence from the Medical Council of Thailand.",
+    'docsPhoto': 'img/doctors.webp', 'docsAlt': 'The five Apex Slim doctors, from left: Dr. Eung, Dr. Annie, Dr. Tor, Dr. Yung and Dr. Ann',
+    'docs': [{'en': 'Dr. Eung', 'th': 'พญ.ปรณีย์ ฉัตรธานี', 'lic': '57758'}, {'en': 'Dr. Annie', 'th': 'พญ.วรพร ประทีปชัยบูรณ์', 'lic': '66171'}, {'en': 'Dr. Tor', 'th': 'นพ.ต่อศักดิ์ ทิพย์ไพโรจน์', 'lic': '15855'}, {'en': 'Dr. Yung', 'th': 'พญ.ศิริรัตน์ พูลทรัพย์', 'lic': '23897'}, {'en': 'Dr. Ann', 'th': 'พญ.ธนัชพร ลาภาธารกุล', 'lic': '66289'}],
     'longH': 'Longevity', 'longP': 'Longevity at Apex Slim covers recovery, energy and sleep, and each treatment can run alongside a slimming plan.',
     'resultsH': 'Results', 'resultsP': 'Pick a case and the pod runs it, then sends the before and after to the terminal.',
     'notesH': 'Lab Notes', 'notesP': 'How each treatment works, how long it takes and what to expect after.',

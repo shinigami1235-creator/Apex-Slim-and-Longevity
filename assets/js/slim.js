@@ -17,14 +17,16 @@
     hb: { sym: 'Hb', name: 'HBOT', url: 'hbot.html', cls: 'long', time: '60 min in the chamber',
       desc: 'You breathe pure oxygen in a pressurised chamber, which raises the oxygen carried in your blood.' },
     sl: { sym: 'Sl', name: 'Snorelase', url: 'snorelase.html', cls: 'long', time: '3 to 6 sessions, no cuts',
-      desc: 'A laser tightens the soft palate to reduce snoring, with no anaesthetic.' }
+      desc: 'A laser tightens the soft palate to reduce snoring, with no anaesthetic.' },
+    ex: { sym: 'Ex', name: 'Exomind', url: 'exomind.html', cls: 'long', time: '25 to 30 min, no downtime',
+      desc: 'Magnetic pulses on the front of the brain, studied for food cravings, stress and sleep.' }
   };
   const GOALS = {
     weight: { label: 'Lose weight', color: '#D27FD0', t: ['wk'] },
     fat: { label: 'Belly and flank fat', color: '#5DB3E8', t: ['cs'] },
     tone: { label: 'Muscle tone', color: '#8B4FC4', t: ['en'] },
     firm: { label: 'Firmer buttocks', color: '#F07E7E', t: ['ff'] },
-    energy: { label: 'Energy and recovery', color: '#F2B33D', t: ['iv', 'hb'] },
+    energy: { label: 'Energy and recovery', color: '#F2B33D', t: ['iv', 'hb', 'ex'] },
     sleep: { label: 'Sleep without snoring', color: '#86DCCB', t: ['sl'] }
   };
   if (D.T) {   // each treatment names its goal in the admin

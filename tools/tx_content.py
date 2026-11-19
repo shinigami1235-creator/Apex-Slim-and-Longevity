@@ -14,6 +14,7 @@ ICONS = {
     "Iv": '<path d="M7 3.5h10v8.5a5 5 0 0 1-10 0z"/><path d="M7 8h10M12 17v2.5M12 19.5c0 1.4 1 2 2.5 2"/><path d="M10 11.5h4"/>',
     "Hb": '<circle cx="9" cy="14" r="5.5"/><circle cx="17" cy="7.5" r="3.5"/><circle cx="18.5" cy="16.5" r="2"/><path d="M7.4 12.4a2.3 2.3 0 0 1 2.4-1"/>',
     "Sl": '<path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10z"/><path d="M15 3.5h4l-4 4h4"/>',
+    "Ex": '<path d="M12 5.5a3.5 3.5 0 0 0-6.4-1.2A3.4 3.4 0 0 0 4 10.6a3.4 3.4 0 0 0 1.6 5.6A3.5 3.5 0 0 0 12 18.5z"/><path d="M12 5.5a3.5 3.5 0 0 1 6.4-1.2 3.4 3.4 0 0 1 1.6 6.3 3.4 3.4 0 0 1-1.6 5.6A3.5 3.5 0 0 1 12 18.5"/><path d="M12 5.5v13M8.5 9.5h1.5M14 13h1.5"/>',
 }
 
 from tx_body import TEXT
@@ -145,6 +146,27 @@ refs=[
 'Neruntarat C, Khuancharee K, Shoowit P. Er:YAG laser for snoring: a systemic review and meta-analysis. <i>Lasers Med Sci</i>. 2020;35(6):1231-1238. <a href="https://doi.org/10.1007/s10103-020-02987-3" target="_blank" rel="noopener">doi:10.1007/s10103-020-02987-3</a>',
 'Dembicka-Mączka D, Gryka-Deszczyńska M, Sitkiewicz J, Makara A, Fiegler-Rudol J, Wiench R. Effectiveness of the Er:YAG laser in snoring treatment based on systematic review and meta-analysis results. <i>J Clin Med</i>. 2025;14(12):4371. <a href="https://doi.org/10.3390/jcm14124371" target="_blank" rel="noopener">doi:10.3390/jcm14124371</a>',
 'Apex Medical Center. SnoreLase page. <a href="https://www.apexmedicalcenter.co.th/" target="_blank" rel="noopener">apexmedicalcenter.co.th</a>',
+],
+),
+dict(
+slug='exomind',
+sym='Ex',
+cls='long',
+group='longevity',
+name='Exomind',
+ft='Magnetic brain stimulation',
+temp=('Longevity', '25 to 30 minutes'),
+goal='energy',
+protocol=[('Session time', '25 to 30 minutes'), ('Sessions', '4 to 6, 3 to 7 days apart in the studies'), ('Machine', 'Exomind by BTL (ExoTMS)'), ('Treated', 'The front of the brain behind your forehead'), ('Feels like', 'Tapping on the scalp, like a head massage'), ('Downtime', 'None'), ('Before', 'Take off metal jewellery, glasses and hair clips')],
+pair_to=('Wk', '1 Week 1 Kilo', 'one-week-one-kilo.html', ''),
+refs=[
+'Apex Hospital &amp; Clinics. Exomind brochures and information sheet, 2026.',
+'Klírová M. Mind over cravings: ExoTMS as the novel rTMS technology for food cravings reduction. BTL clinical summary, 2025.',
+'Cady L, Nanda R, Eberwein R, Johnston H, Tvrdik N. Novel ExoTMS technology for the improvement of self-control and food cravings: 1-month preliminary results. BTL clinical summary, 2025.',
+'Nanos G, Silva M, Patel C. Novel ExoTMS technology for the improvement of sleep quality and reduction of stress: preliminary data. BTL clinical summary, 2025.',
+'Pánek D, Donchev TS. Novel ExoTMS technology for the reduction of binge eating symptoms. <i>PCN Reports</i>. 2025. <a href="https://doi.org/10.1002/pcn5.70200" target="_blank" rel="noopener">doi:10.1002/pcn5.70200</a>',
+'Dees M, Halaas Y, McCoy JD. ExoTMS technology: a breakthrough in transcranial stimulation for enhancing mental well-being. <i>J Psychiatry Psychiatr Disord</i>. 2025. <a href="https://doi.org/10.26502/jppd.2572-519X0255" target="_blank" rel="noopener">doi:10.26502/jppd.2572-519X0255</a>',
+'BTL. Exomind. <a href="https://www.bodybybtl.com/exomind/" target="_blank" rel="noopener">bodybybtl.com</a>',
 ],
 ),
 ]
