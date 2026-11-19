@@ -739,6 +739,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .bn-sub{display:block;font-size:0.875rem;color:var(--ink-2);margin-top:2px}
 .bn-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .bn-pair img{aspect-ratio:3/4}
+.bn-pair.one{grid-template-columns:1fr}
+.bn-pair.one img{aspect-ratio:4/3}
 .bn-leaf img{aspect-ratio:auto}
 .bn-leaf .bn-name{font-weight:400;font-size:0.9375rem;color:var(--ink-2)}
 .bn-more{font-weight:700;color:var(--plum);text-align:center}

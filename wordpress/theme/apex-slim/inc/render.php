@@ -632,7 +632,7 @@ function slim_banners( array $t ): string {
 			if ( ! $cells ) continue;
 			$b4 = $cells[0]; $af = $cells[ count( $cells ) - 1 ];
 			$sub = ( $c['sub'] ?? '' ) !== '' ? '<span class="bn-sub">' . slim_t( $c['sub'] ) . '</span>' : '';
-			$out[] = '<a class="bn bn-case" href="#h-cases"><span class="bn-kick">Before and after</span><span class="bn-pair">' . slim_img_tag( (string) $b4['src'], '' ) . slim_img_tag( (string) $af['src'], '' ) . '</span><span class="bn-name">' . slim_t( $c['label'] ) . '</span>' . $sub . '<span class="bn-sub">' . slim_t( $af['cap'] ) . '</span></a>';
+			$out[] = '<a class="bn bn-case" href="#h-cases"><span class="bn-kick">Before and after</span>' . ( count( $cells ) === 1 ? '<span class="bn-pair one">' . slim_img_tag( (string) $b4['src'], '' ) : '<span class="bn-pair">' . slim_img_tag( (string) $b4['src'], '' ) . slim_img_tag( (string) $af['src'], '' ) ) . '</span><span class="bn-name">' . slim_t( $c['label'] ) . '</span>' . $sub . '<span class="bn-sub">' . slim_t( $af['cap'] ) . '</span></a>';
 		}
 		$more = [ '#h-cases', 'See all the cases' ];
 	} elseif ( $t['leaflets'] ) {

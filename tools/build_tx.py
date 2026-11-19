@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from tx_content import PAGES, ICONS  # noqa: E402
 from tx_media import MEDIA, LEAFLET_ALT  # noqa: E402
 
-CSS_V = 31
+CSS_V = "32"
 JS = '<script src="assets/js/slim.js?v=12"></script>\n<script src="assets/js/tx.js?v=3"></script>\n<script type="module" src="assets/js/buddy.js?v=17"></script>'
 STAGES = (ROOT / "tools" / "tx_stages.html").read_text()
 
@@ -197,7 +197,8 @@ def banners(m):
             sub = f'<span class="bn-sub">{case[2]}</span>' if len(case) > 2 else ""
             b4, af = cells[0], cells[-1]
             out.append(f'<a class="bn bn-case" href="#h-cases"><span class="bn-kick">Before and after</span>'
-                       f'<span class="bn-pair"><img src="{IMG}{b4[0]}" alt="" loading="lazy"><img src="{IMG}{af[0]}" alt="" loading="lazy"></span>'
+                       + (f'<span class="bn-pair one"><img src="{IMG}{b4[0]}" alt="" loading="lazy"></span>' if len(cells) == 1 else
+                          f'<span class="bn-pair"><img src="{IMG}{b4[0]}" alt="" loading="lazy"><img src="{IMG}{af[0]}" alt="" loading="lazy"></span>') +
                        f'<span class="bn-name">{label}</span>{sub}<span class="bn-sub">{af[1]}</span></a>')
         more = ("#h-cases", "See all the cases")
     elif m.get("leaflets"):
