@@ -148,4 +148,4 @@ Before a big change, Tools › Apex Slim content › **Download content.json** k
 | Version | Date | What changed |
 |---|---|---|
 | 1.0.0 | 15 November 2026 | First release: home, 7 treatment pages, Slim Wellness Lab, privacy policy, Enquiries inbox, import, export and check. |
-| 1.0.1 | 19 November 2026 | Exomind page. Our doctors on the home page. Apex's own client photos on 1 Week 1 Kilo, CoolSculpting and FIT FIRM. Instagram feed (Apex Slim › Instagram). |
+| 1.0.1 | 19 November 2026 | Exomind page. Our doctors on the home page. Apex's own client photos on 1 Week 1 Kilo, CoolSculpting, Emsculpt Neo and FIT FIRM. FIT FIRM brochure labels corrected. Instagram feed (Apex Slim › Instagram). |

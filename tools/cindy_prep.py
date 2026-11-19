@@ -3,7 +3,8 @@
 
 Source posters: assets/From Cindy on Gid's laptop, copied to /home/claude/cindy/src/01..20.jpg
 (the album's images 21 to 40 are duplicates of 1 to 20). Boxes come from the transcription
-notes in tools/cindy_notes/. Run: python3 tools/cindy_prep.py
+notes in tools/cindy_notes/. Run: python3 tools/cindy_prep.py, then tools/cindy2_prep.py, which writes leaflet 10
+again with its arm and thigh labels on the right photos.
 """
 from pathlib import Path
 from PIL import Image, ImageFilter

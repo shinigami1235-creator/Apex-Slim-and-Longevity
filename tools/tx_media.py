@@ -46,11 +46,12 @@ MEDIA = {
     device=("device-coolsculpting-elite.webp", "Our CoolSculpting Elite machine, with two applicators."),
     gallery=dict(
         title="Case photos",
-        note="Each case is the same person before and after CoolSculpting. The first three are our clients at Apex. The next six are from Allergan, the maker of CoolSculpting.",
+        note="Each case is the same person before and after CoolSculpting. The first four are our clients at Apex. The next six are from Allergan, the maker of CoolSculpting.",
         cases=[
             ("Kru Uan, belly", [("csa-uan-then.webp", "20 Dec 2025"), ("csa-uan-now.webp", "17 Apr 2026")], "Our client, about 4 months apart"),
             ("Khun Khun, belly", [("csa-khun-then.webp", "27 Oct 2025"), ("csa-khun-now.webp", "15 Jan 2026")], "Our client, about 11 weeks apart"),
             ("Khun Kelly, belly", [("csa-kelly-then.webp", "10 May 2026"), ("csa-kelly-now.webp", "10 Jun 2026")], "Our client, 1 month apart"),
+            ("Khun Noon, belly", [("csa-noon-then.webp", "Before"), ("csa-noon-now.webp", "Straight after the session")], "Our client, 28 May 2026"),
 
             ("Belly", [("ppt-case-14-0.webp", "Before"), ("ppt-case-14-1.webp", "3 months after the 2nd session")], "10 cycles over 2 sessions, 5 in each"),
             ("Flanks", [("ppt-case-15-0.webp", "Before"), ("ppt-case-15-1.webp", "17 weeks after the 2nd session")], "8 cycles over 2 sessions, 6 then 2"),
@@ -69,8 +70,9 @@ MEDIA = {
     device=("device-emsculpt-neo.webp", "The Emsculpt Neo machine. The applicator on the left is strapped over the area."),
     gallery=dict(
         title="Case photos",
-        note="Each case is the same person before and 12 weeks after the 4th treatment. Photos courtesy of Arash Akhavan, M.D.",
-        cases=[(f"Case {i}", [(f"em-{i:02d}-before.webp", "Before"), (f"em-{i:02d}-after.webp", "12 weeks after")]) for i in range(1, 11)],
+        note="Each case is the same person before and after Emsculpt Neo. The first is our client at Apex, photographed straight after a session. The other ten are before and 12 weeks after the 4th treatment, courtesy of Arash Akhavan, M.D.",
+        cases=[("Khun Am, belly", [("ema-1-before.webp", "Before"), ("ema-1-after.webp", "Straight after the session")], "Our client")]
+              + [(f"Case {i}", [(f"em-{i:02d}-before.webp", "Before"), (f"em-{i:02d}-after.webp", "12 weeks after")]) for i in range(1, 11)],
     ),
 ),
 
@@ -78,8 +80,9 @@ MEDIA = {
     leaflets=[8, 9, 10],
     gallery=dict(
         title="Case photos",
-        note="Our clients, measured in inches before a session and again straight after it. The waist is measured at three heights: upper, middle and lower.",
-        cases=[("Belly", [("ff-1-before.webp", "Before: 31"), ("ff-1-after.webp", "After: 29.5")], "Around the navel")] + [
+        note="Our clients, measured in inches. The waist and right thigh cases were measured before a session and again straight after it, with the waist taken at three heights: upper, middle and lower.",
+        cases=[("Belly", [("ff-1-before.webp", "Before: 31"), ("ff-1-after.webp", "After: 29.5")], "Around the navel"),
+               ("Thigh", [("ff-3-before.webp", "Before: 21.8"), ("ff-3-after.webp", "After: 21")], "Around the upper thigh")] + [
             (label, [(f"ffa-{n}-before.webp", f"Before: {b}"), (f"ffa-{n}-after.webp", f"After: {a}")], sub)
             for n, label, sub, b, a in [
                 (12, "Waist", "Upper, middle and lower", "32, 34, 37", "31.5, 32.6, 35.7"),
@@ -140,7 +143,7 @@ LEAFLET_ALT = {
 7: "Drip B-A-R menu with Premium NAD+",
 8: "FIT FIRM leaflet: the program and its steps",
 9: "FIT FIRM leaflet: areas and questions",
-10: "FIT FIRM leaflet: before and after photos",
+10: "FIT FIRM leaflet: before and after measurements of the belly, arm and thigh",
 11: "Snorelase leaflet: why you snore",
 12: "Snorelase leaflet: reviews from Ping Adison, Khun Lindy and Bew Kittipat",
 13: "Snorelase leaflet: who it suits and the study",

@@ -42,14 +42,28 @@ for n, (b, a) in FF_BOX.items():
     cut(FF.format(n), b, f'ffa-{n}-before.webp')
     cut(FF.format(n), a, f'ffa-{n}-after.webp')
 
-# CoolSculpting: Apex clients, THEN and NOW photos from their posters. คุณนุ่น is left out: both photos are dated the same day.
-CS = {'uan': 'ครูอ้วน', 'khun': 'คุณขุน', 'kelly': 'คุณเคลลี่'}
+# CoolSculpting: Apex clients, THEN and NOW photos from their posters. คุณนุ่น's pair was taken straight after the session, on purpose.
+CS = {'uan': 'ครูอ้วน', 'khun': 'คุณขุน', 'noon': 'คุณนุ่น', 'kelly': 'คุณเคลลี่'}
 for slug, thai in CS.items():
     rel = f'CoolSculpting/Resize Coolsculpting Elite {thai}_0.png'
     cut(rel, (0.045, 0.38, 0.475, 0.68), f'csa-{slug}-then.webp')
     cut(rel, (0.045, 0.69, 0.475, 0.97), f'csa-{slug}-now.webp')
 
-# Emsculpt Neo: คุณอั้ม's poster is left out, since its after photo was taken straight after the session.
+# Emsculpt Neo: Apex client คุณอั้ม, before and straight after the session
+cut('Emsculpt/Emsculpt Neo_1080x1350 V2-04.png', (0.10, 0.26, 0.39, 0.51), 'ema-1-before.webp')
+cut('Emsculpt/Emsculpt Neo_1080x1350 V2-04.png', (0.10, 0.53, 0.39, 0.76), 'ema-1-after.webp')
+
+# FIT FIRM brochure page 3 (leaflet 10): the arm and thigh labels were on the wrong photos. Swap them so the arm
+# reads 11 to 10 inches and the thigh 21.8 to 21, then write leaflet 10 again. Run after tools/cindy_prep.py.
+ff = Image.open(SRC / 'FitFirm/information/170825_Sale_Kit_Data_โปรแกรม_Fit_Firm-03.png').convert('RGB')
+Y = {2: (1152, 1199), 3: (1626, 1673)}; X = {'b': (267, 528), 'a': (704, 965)}
+inner = lambda c, r: (X[c][0] + 4, Y[r][0] + 3, X[c][1] - 4, Y[r][1] - 3)
+fixed = ff.copy()
+for src, dst in ((('b', 3), ('b', 2)), (('b', 2), ('a', 2)), (('a', 3), ('b', 3)), (('a', 2), ('a', 3))):
+    fixed.paste(ff.crop(inner(*src)), inner(*dst)[:2])
+fixed.save(OUT.parent.parent.parent / 'tools/cindy_notes/fit-firm-page3-fixed.png')
+a = fixed.copy(); a.thumbnail((1400, 1400), Image.LANCZOS); a.save(OUT / 'leaflet-10.webp', 'WEBP', quality=80, method=6)
+t = fixed.copy(); t.thumbnail((420, 420), Image.LANCZOS); t.save(OUT / 'leaflet-10-t.webp', 'WEBP', quality=76, method=6)
 
 # 1 Week 1 Kilo: Apex clients, the two photos without the poster's headline
 WK = {43: 'คุณชมพู่', 44: 'คุณน้ำ', 45: 'คุณลิตเติ้ล', 46: 'คุณเจมส์', 47: 'คุณเจเจ', 48: 'คุณแพรววา', 49: 'คุณแอ๊ป', 50: 'เชฟป้อม'}

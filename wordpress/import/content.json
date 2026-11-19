@@ -578,7 +578,7 @@
    },
    "gallery": {
     "title": "Case photos",
-    "note": "Each case is the same person before and after CoolSculpting. The first three are our clients at Apex. The next six are from Allergan, the maker of CoolSculpting.",
+    "note": "Each case is the same person before and after CoolSculpting. The first four are our clients at Apex. The next six are from Allergan, the maker of CoolSculpting.",
     "cases": [
      {
       "label": "Kru Uan, belly",
@@ -619,6 +619,20 @@
        {
         "src": "img/tx/csa-kelly-now.webp",
         "cap": "10 Jun 2026"
+       }
+      ]
+     },
+     {
+      "label": "Khun Noon, belly",
+      "sub": "Our client, 28 May 2026",
+      "cells": [
+       {
+        "src": "img/tx/csa-noon-then.webp",
+        "cap": "Before"
+       },
+       {
+        "src": "img/tx/csa-noon-now.webp",
+        "cap": "Straight after the session"
        }
       ]
      },
@@ -1149,8 +1163,22 @@
    },
    "gallery": {
     "title": "Case photos",
-    "note": "Each case is the same person before and 12 weeks after the 4th treatment. Photos courtesy of Arash Akhavan, M.D.",
+    "note": "Each case is the same person before and after Emsculpt Neo. The first is our client at Apex, photographed straight after a session. The other ten are before and 12 weeks after the 4th treatment, courtesy of Arash Akhavan, M.D.",
     "cases": [
+     {
+      "label": "Khun Am, belly",
+      "sub": "Our client",
+      "cells": [
+       {
+        "src": "img/tx/ema-1-before.webp",
+        "cap": "Before"
+       },
+       {
+        "src": "img/tx/ema-1-after.webp",
+        "cap": "Straight after the session"
+       }
+      ]
+     },
      {
       "label": "Case 1",
       "sub": "",
@@ -1406,7 +1434,7 @@
    },
    "gallery": {
     "title": "Case photos",
-    "note": "Our clients, measured in inches before a session and again straight after it. The waist is measured at three heights: upper, middle and lower.",
+    "note": "Our clients, measured in inches. The waist and right thigh cases were measured before a session and again straight after it, with the waist taken at three heights: upper, middle and lower.",
     "cases": [
      {
       "label": "Belly",
@@ -1419,6 +1447,20 @@
        {
         "src": "img/tx/ff-1-after.webp",
         "cap": "After: 29.5"
+       }
+      ]
+     },
+     {
+      "label": "Thigh",
+      "sub": "Around the upper thigh",
+      "cells": [
+       {
+        "src": "img/tx/ff-3-before.webp",
+        "cap": "Before: 21.8"
+       },
+       {
+        "src": "img/tx/ff-3-after.webp",
+        "cap": "After: 21"
        }
       ]
      },
@@ -1508,7 +1550,7 @@
     {
      "full": "img/tx/leaflet-10.webp",
      "thumb": "img/tx/leaflet-10-t.webp",
-     "alt": "FIT FIRM leaflet: before and after photos"
+     "alt": "FIT FIRM leaflet: before and after measurements of the belly, arm and thigh"
     }
    ]
   },
