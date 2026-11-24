@@ -56,17 +56,17 @@ const PERCHES = [
 /* quips: one when it lands in a section, at most once per section per visit (or again after 4 minutes),
    never within 25 seconds of another line. The next visit starts from the next quip in the list. */
 const QUIPS = {
-  bench: ["You've got this!", "Let's mix something!", 'Hi again!'],
-  treatments: ['Take your time.', 'One step at a time.', 'So many options!'],
-  longevity: ['Rest counts too.', 'Sleep is self-care!', 'Be kind to yourself.'],
-  results: ['Ooh, look!', 'So exciting!', 'Look at that change!'],
-  notes: ['Nice, a reader!', 'Learning is fun!', 'Smart move.'],
-  play: ['Wanna play?', 'This part is fun!', 'Come try the lab!'],
-  consult: ["You're almost there!", 'Big step, nice!', "We'd love to meet you!"],
-  'body-check': ['No judging here!', "You're doing great!", 'Every body is welcome.'],
-  'goal-photo': [{ t: "I won't peek!", pose: 'cover', expr: 'shy', ms: 2600 }, 'Dream big!', 'Goals are good!'],
-  meals: ['Yum!', 'Hungry yet?', 'Eat well, feel well.'],
-  how: ['Brr, chilly!', 'Cool stuff!', 'Ooh, science!']
+  bench: ['Pick a few bottles.', "Mix when you're ready.", 'Hi again.'],
+  treatments: ['Take your time.', 'One step at a time.', 'Tap one to read more.'],
+  longevity: ['Rest counts too.', 'Sleep is part of the plan.', 'Be kind to yourself.'],
+  results: ['Pick a case to start.', 'Watch the doors open.', "That's a big change."],
+  notes: ['Good idea to read up.', 'Short reads, I promise.', 'Smart move.'],
+  play: ['Want to try the lab?', 'The lab is this way.', 'Try the body check.'],
+  consult: ['Almost there.', 'Big step, nice.', "We'd love to meet you."],
+  'body-check': ['No judging here.', 'Your numbers stay on this device.', 'Every body is welcome.'],
+  'goal-photo': [{ t: "I won't peek.", pose: 'cover', expr: 'shy', ms: 2600 }, 'Pick a goal you like.', 'Your photo stays with you.'],
+  meals: ['Hungry yet?', 'Eat well, feel well.', 'Try one tomorrow.'],
+  how: ['Brr, chilly.', 'Cold does the work.', 'Science, up close.']
 };
 const QUIP_GAP = 25000, QUIP_AGAIN = 240000;
 const quipped = (() => { try { return JSON.parse(sessionStorage.getItem('buddy-quipped') || '{}'); } catch (e) { return {}; } })();
@@ -171,7 +171,7 @@ function wakeByTap() {
   rig.set({ pose: 'cheer', expr: 'surprised', ms: 160 }); move('startle');
   busyUntil = Date.now() + 1900;
   actTimer = setTimeout(() => {
-    rig.set({ pose: 'cover', expr: 'giggle', ms: 260 }); move('giggle'); hehe('hehe!');
+    rig.set({ pose: 'cover', expr: 'giggle', ms: 260 }); move('giggle'); hehe('hehe');
     actTimer = setTimeout(() => { busyUntil = 0; rest(); }, 1200);
   }, 650);
 }

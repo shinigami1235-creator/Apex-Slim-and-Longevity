@@ -14,7 +14,7 @@ This is the Apex Slim and Longevity website as a WordPress theme, in English. It
 
 | File | What it is |
 |---|---|
-| `apex-slim-1.0.1.zip` | The theme. Every page of the site is drawn by it. It holds the styles, scripts, fonts, pictures and `content.json`, the site's content as it was designed. |
+| `apex-slim-1.0.2.zip` | The theme. Every page of the site is drawn by it. It holds the styles, scripts, fonts, pictures and `content.json`, the site's content as it was designed. |
 | `HANDOVER.pdf` | This document. |
 
 The source is in the repository `shinigami1235-creator/Apex-Slim-and-Longevity` under `wordpress/theme/apex-slim/`. `python3 tools/build_theme.py` builds the zip from it.
@@ -36,7 +36,7 @@ No other plugin is needed. An SEO plugin (Yoast, Rank Math, SEOPress, All in One
 
 1. Install WordPress on staging. In Settings › General set the site language to English and the time zone to Bangkok.
 2. Settings › Permalinks: choose **Post name**.
-3. Appearance › Themes › Add New › Upload Theme: upload `apex-slim-1.0.1.zip`, then **Activate**.
+3. Appearance › Themes › Add New › Upload Theme: upload `apex-slim-1.0.2.zip`, then **Activate**.
 4. Tools › Apex Slim content › **Import the content that came with the theme**. This makes the Home, Slim Wellness Lab and Privacy policy pages, sets Home as the front page, and adds the 8 treatments and 4 Results cases. On the command line it is `wp slim import`.
 5. Apex Slim › Settings: put the Apex Slim team's email addresses in **Send new requests to**, separated by commas. Check the footer lines and the LINE link.
 6. Pages › Privacy policy: the import publishes Apex Medical Center's own privacy policy, the same text and contacts as apexmedicalcenter.co.th/en/privacy-policy/, as Apex asked. A short "This website" section is added for the consult form and the lab. It states that requests are kept 365 days, the same as **Keep requests for (days)** in Settings; change both together. When Apex Medical Center's policy changes, paste the new text here too.
@@ -139,7 +139,7 @@ When the สบส. permit is issued, its number goes in Apex Slim › Settings 
 
 Gid sends a new zip with a higher version. Appearance › Themes › Add New › Upload Theme, upload it and choose **Replace current with uploaded**. Content lives in the database, so it stays. Do it on staging first. The version shows at the bottom right of every admin page.
 
-Going from 1.0.0 to 1.0.1: after replacing the theme, use Tools › Apex Slim content › **Import the content that came with the theme**, since 1.0.1 adds the Exomind page, the doctors and new case photos. Import writes over the text of the pages and treatments it brings, so on a site where staff have already edited content, download content.json first.
+Going from 1.0.0 to 1.0.2: after replacing the theme, use Tools › Apex Slim content › **Import the content that came with the theme**, since 1.0.1 added the Exomind page, the doctors and new case photos. Import writes over the text of the pages and treatments it brings, so on a site where staff have already edited content, download content.json first.
 
 Before a big change, Tools › Apex Slim content › **Download content.json** keeps a copy of every text and picture address; importing it puts them back.
 
@@ -149,3 +149,4 @@ Before a big change, Tools › Apex Slim content › **Download content.json** k
 |---|---|---|
 | 1.0.0 | 15 November 2026 | First release: home, 7 treatment pages, Slim Wellness Lab, privacy policy, Enquiries inbox, import, export and check. |
 | 1.0.1 | 19 November 2026 | Exomind page. Our doctors on the home page. Apex's own client photos on 1 Week 1 Kilo, CoolSculpting, Emsculpt Neo and FIT FIRM. FIT FIRM brochure labels corrected. Instagram feed (Apex Slim › Instagram). |
+| 1.0.2 | 24 November 2026 | Design pass: home headline on two lines, flat body check and goal photo panels, plain labels, Nong Tape's lines without exclamation marks, sample menu note. |

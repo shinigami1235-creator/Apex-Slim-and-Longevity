@@ -24,7 +24,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 
-define( 'SLIM_VERSION', '1.0.1' );   // keep in step with Version in style.css; tools/build_theme.py checks both
+define( 'SLIM_VERSION', '1.0.2' );   // keep in step with Version in style.css; tools/build_theme.py checks both
 define( 'SLIM_DIR', __DIR__ );
 define( 'SLIM_URI', get_template_directory_uri() );
 
